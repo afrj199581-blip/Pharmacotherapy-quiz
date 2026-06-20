@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacotherapy 2: Epilepsy Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background: #ffffff;
+            width: 90%;
+            max-width: 650px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 24px; }
+        .header p { margin: 5px 0 0; color: #e74c3c; font-size: 15px; font-weight: bold;}
+        .progress {
+            font-size: 15px;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #1a252f;
+            font-weight: 700;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            direction: ltr;
+        }
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #2c3e50;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 500;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #ecf0f1;
+            border-color: #95a5a6;
+        }
+        /* اللون الفاتح المريح للإجابة الصحيحة */
+        .option-btn.correct {
+            background-color: #fff9c4 !important; /* لون أصفر فاتح جداً */
+            border-color: #fbc02d !important;
+            color: #000 !important;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+        }
+        .option-btn:disabled { cursor: not-allowed; }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 2px solid #e1e8ed;
+            padding-top: 20px;
+        }
+        .hint-btn, .next-btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .hint-btn { background-color: #ffeaa7; color: #d35400; display: none;}
+        .hint-btn:hover { background-color: #f1c40f; color: #fff; }
+        .next-btn { background-color: #3498db; color: #ffffff; display: none; }
+        .next-btn:hover { background-color: #2980b9; }
+        
+        .hint-box {
+            background-color: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 15px;
+            color: #856404;
+            border-radius: 4px 0 0 4px;
+            display: none;
+            line-height: 1.6;
+            animation: fadeIn 0.5s;
+        }
+        .hint-box strong { color: #d35400; }
+        
+        .result-container { text-align: center; display: none; }
+        .result-container h2 { color: #2c3e50; font-size: 30px; }
+        .result-container p { color: #7f8c8d; font-size: 20px; font-weight: bold;}
+        .restart-btn {
+            background-color: #2ecc71; color: white; border: none; padding: 15px 30px;
+            border-radius: 8px; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: 18px; cursor: pointer; margin-top: 25px;
+        }
+        .restart-btn:hover { background-color: #27ae60; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        @media (max-width: 480px) {
+            .quiz-container { padding: 20px; width: 95%; }
+            .question-text { font-size: 16px; }
+            .option-btn { font-size: 14px; padding: 12px; }
+            .hint-btn, .next-btn { font-size: 14px; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="header">
+            <h1>Pharmacotherapy 2 💊</h1>
+            <p>Interactive Quiz: Batch 4 - Epilepsy (100 Unique Qs)</p>
+        </div>
+        
+        <div class="progress" id="progress-text">السؤال 1 من 100</div>
+        
+        <div class="question-text" id="question-text"></div>
+        <div class="options-container" id="options-container"></div>
+        
+        <div class="hint-box" id="hint-box"></div>
+        
+        <div class="actions">
+            <button class="hint-btn" id="hint-btn" onclick="showHint()">إظهار التلميح 💡</button>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">التالي ⏭️</button>
+        </div>
+    </div>
+
+    <div class="quiz-container result-container" id="result-box">
+        <h2>النتيجة النهائية 🏆</h2>
+        <p>لقد أجبت بشكل صحيح على <span id="score-text" style="color:#fbc02d; font-size: 28px; background:#fff9c4; padding:2px 5px; border-radius:5px;">0</span> من أصل 100 سؤال.</p>
+        <button class="restart-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    </div>
+
+    <script>
+        const questionsData = [{"q": "A patient on chronic Valproic acid therapy is prescribed Lamotrigine. What is the critical interaction?", "options": ["A) Increased Lamotrigine levels, high risk of SJS rash", "B) Decreased Lamotrigine levels", "C) Valproic acid is neutralized", "D) No interaction"], "correct": 0, "hint": "الفالبروات يثبط الإنزيمات المسؤولة عن تكسير اللاموتريجين، فيرفع مستواه في الدم ويزيد خطر الطفح الجلدي المميت."}, {"q": "Which neuroleptic is preferred in a patient with Parkinson’s disease if psychosis must be treated?", "options": ["A) Haloperidol", "B) Quetiapine or Clozapine", "C) Risperidone", "D) Chlorpromazine"], "correct": 1, "hint": "الأدوية الحديثة (Atypicals) مثل كويتيابين لها أثر ضعيف جداً على مستقبلات الدوبامين الحركية، لذا فهي آمنة لمرضى باركنسون."}, {"q": "A patient with Gout is on Allopurinol. If he needs to start Azathioprine, the dose of Azathioprine must be:", "options": ["A) Increased", "B) Reduced by 75%", "C) Kept the same", "D) Stopped"], "correct": 1, "hint": "الألوبيورينول يثبط إنزيم Xanthine Oxidase الذي يكسر الأزاثيوبرين، مما يؤدي لتسمم شديد بالنخاع العظمي."}, {"q": "Which opioid has a metabolite that can cause seizures in patients with renal failure?", "options": ["A) Morphine", "B) Meperidine", "C) Fentanyl", "D) Methadone"], "correct": 1, "hint": "الميتابوليت 'نورميبيريدين' يُطرد عبر الكلى؛ فشلها يعني تراكمه وتسببه في تشنجات."}, {"q": "Which AED induces its own metabolism (Auto-induction)?", "options": ["A) Valproic Acid", "B) Carbamazepine", "C) Gabapentin", "D) Ethosuximide"], "correct": 1, "hint": "الكاربامازيبين يحفز الإنزيمات التي تكسره هو شخصياً."}, {"q": "Topiramate is associated with which renal side effect?", "options": ["A) Nephritis", "B) Kidney stones (Nephrolithiasis)", "C) Glomerulonephritis", "D) Polyuria"], "correct": 1, "hint": "تثبيط الكربونيك أنهيدريز يغير درجة حموضة البول ويساعد في تكون الحصوات."}, {"q": "What is the classic ECG abnormality associated with Ziprasidone?", "options": ["A) PR prolongation", "B) QTc prolongation", "C) T-wave inversion", "D) ST depression"], "correct": 1, "hint": "إطالة فترة الـ QT تزيد من خطر اضطراب ضربات القلب المميت."}, {"q": "Opioids cause miosis because they stimulate the:", "options": ["A) Sympathetic system", "B) Edinger-Westphal nucleus of the Oculomotor nerve (Parasympathetic)", "C) Optic nerve", "D) Trigeminal nerve"], "correct": 1, "hint": "تنشيط الجهاز الباراسيمبثاوي يضيق الحدقة."}, {"q": "Which AED is best for a patient who needs migraine prophylaxis AND epilepsy control?", "options": ["A) Ethosuximide", "B) Topiramate", "C) Gabapentin", "D) Phenytoin"], "correct": 1, "hint": "التوبيراميت جوكر يعالج الصرع والصداع النصفي معاً."}, {"q": "The 'lead-pipe' rigidity in NMS is caused by:", "options": ["A) Excessive GABA", "B) Severe Dopamine blockade in the CNS", "C) Histamine release", "D) Cholinergic excess"], "correct": 1, "hint": "نقص الدوبامين الحاد في المخ هو المسؤول عن التخشب العضلي المرعب في NMS."}, {"q": "A patient taking Levodopa for Parkinson's should AVOID which class of drugs?", "options": ["A) Typical Neuroleptics", "B) SSRIs", "C) Beta-blockers", "D) Antihistamines"], "correct": 0, "hint": "مضادات الذهان تغلق مستقبلات الدوبامين فتبطل مفعول الـ Levodopa فوراً."}, {"q": "Which drug is the safest for an asthmatic patient needing a mild analgesic?", "options": ["A) Aspirin", "B) Paracetamol (Acetaminophen)", "C) Ibuprofen", "D) Diclofenac"], "correct": 1, "hint": "لا يسبب أي مشاكل تنفسية لمرضى الربو."}, {"q": "Why is the use of Meperidine (Pethidine) limited?", "options": ["A) Low potency", "B) Toxic metabolite risk and DDI with MAOIs", "C) High cost", "D) Causes diarrhea"], "correct": 1, "hint": "التداخل مع مضادات الاكتئاب وتراكم النورميبيريدين قلل من استخدامه."}, {"q": "The main reason for preferring Monotherapy in epilepsy is:", "options": ["A) To use the cheapest drug", "B) To avoid compounding neurotoxicity and drug interactions", "C) To cure the patient faster", "D) To prevent seizures from spreading"], "correct": 1, "hint": "تقليل السمية العصبية والخمول الدراسي للأطفال."}, {"q": "Which enzyme converts arachidonic acid to Thromboxane A2?", "options": ["A) COX-1", "B) COX-2", "C) 5-LOX", "D) Lipase"], "correct": 0, "hint": "COX-1 موجود بكثرة في الصفائح الدموية ويصنع الـ TXA2."}, {"q": "Aspirin is contraindicated in surgery because it affects:", "options": ["A) Coagulation factors", "B) Platelet aggregation irreversibly", "C) Vessel dilation", "D) Liver synthesis of fibrinogen"], "correct": 1, "hint": "يدمر إنزيم الصفائح للأبد."}, {"q": "Which drug treats biliary colic pain effectively without constricting the sphincter of Oddi?", "options": ["A) Morphine", "B) Meperidine", "C) Buprenorphine", "D) Atropine"], "correct": 1, "hint": "الميبيريدين أقل تأثيراً على عضلات القنوات المرارية مقارنة بالمورفين."}, {"q": "Sumatriptan mechanism involves:", "options": ["A) 5-HT1B/1D agonism", "B) 5-HT2A antagonism", "C) COX-2 blockade", "D) GABA stimulation"], "correct": 0, "hint": "يقلد السيروتونين ليقبض أوعية الدماغ."}, {"q": "Which AED is most associated with weight loss?", "options": ["A) Valproate", "B) Topiramate", "C) Gabapentin", "D) Phenobarbital"], "correct": 1, "hint": "يستخدم للصرع والصداع ويسبب النحافة."}, {"q": "Gingival hyperplasia is a classic side effect of:", "options": ["A) Valproate", "B) Phenytoin", "C) Ethosuximide", "D) Levetiracetam"], "correct": 1, "hint": "تضخم اللثة مع دواء الصرع هذا شهير جداً."}, {"q": "Which AED induces liver enzymes and speeds up oral contraceptive metabolism?", "options": ["A) Gabapentin", "B) Carbamazepine", "C) Levetiracetam", "D) Ethosuximide"], "correct": 1, "hint": "الكاربامازيبين (محفز إنزيمي) قد يؤدي لحمل غير مخطط له."}, {"q": "The 'ceiling effect' is a property of:", "options": ["A) Full Mu agonists", "B) Partial Mu agonists", "C) Pure antagonists", "D) NSAIDs"], "correct": 1, "hint": "مفعول الدواء له حد أقصى لا يتجاوزه مهما زادت الجرعة."}, {"q": "Which drug is used for Alcohol dependence and opioid maintenance?", "options": ["A) Naloxone", "B) Naltrexone", "C) Fentanyl", "D) Tramadol"], "correct": 1, "hint": "النالتريكسون يحمي المدمن من الانتكاسة."}, {"q": "Extrapyramidal symptoms are minimized in which drug due to D4 affinity?", "options": ["A) Haloperidol", "B) Clozapine", "C) Chlorpromazine", "D) Fluphenazine"], "correct": 1, "hint": "الكلوزابين مميز بغلقه لـ D4 بقوة."}, {"q": "Why is Aspirin used in low doses for MI prevention?", "options": ["A) To stop pain", "B) Selective inhibition of platelet TXA2", "C) To reduce fever", "D) To block inflammation"], "correct": 1, "hint": "جرعة صغيرة تكفي لغلق إنزيم الصفائح ومنع الجلطة."}, {"q": "Which enzyme do NSAIDs inhibit?", "options": ["A) Lipoxygenase", "B) Cyclooxygenase (COX)", "C) Phospholipase", "D) Xanthine oxidase"], "correct": 1, "hint": "الـ COX هو الهدف الأساسي للمسكنات."}, {"q": "Misoprostol is a prostaglandin analog used to protect:", "options": ["A) The heart", "B) The stomach from NSAID ulcers", "C) The kidneys", "D) The liver"], "correct": 1, "hint": "يحمي جدار المعدة من قرحة المسكنات."}, {"q": "Which side effect of Valproic acid is cosmetic?", "options": ["A) Spina Bifida", "B) Hair loss", "C) Kidney stones", "D) Hyperthermia"], "correct": 1, "hint": "تساقط الشعر مشكلة تؤرق المرضى."}, {"q": "Does Morphine cause pinpoint pupils?", "options": ["A) Yes", "B) No", "C) Only in overdose", "D) Only in children"], "correct": 0, "hint": "علامة أساسية للتعاطي أو التسمم."}, {"q": "What is the emergency reversal agent for Heroin overdose?", "options": ["A) Naloxone", "B) Atropine", "C) Methadone", "D) Morphine"], "correct": 0, "hint": "ينقذ المريض من الغيبوبة في ثوانٍ."}, {"q": "How do opioids affect CO2 sensitivity?", "options": ["A) Increase it", "B) Decrease it (leading to respiratory depression)", "C) No effect", "D) Reverse it"], "correct": 1, "hint": "المخ لا يشعر بتراكم ثاني أكسيد الكربون."}, {"q": "Which drug treats Bipolar disorder?", "options": ["A) Haloperidol", "B) Valproic Acid", "C) Aspirin", "D) Codeine"], "correct": 1, "hint": "الفالبروات مثبت مزاج قوي."}, {"q": "Tardive Dyskinesia is caused by:", "options": ["A) Dopamine deficiency", "B) Dopamine receptor supersensitivity", "C) Serotonin depletion", "D) Histamine excess"], "correct": 1, "hint": "زيادة حساسية مستقبلات الدوبامين."}, {"q": "Aspirin induces respiratory:", "options": ["A) Acidosis", "B) Alkalosis", "C) Failure", "D) Apnea"], "correct": 1, "hint": "بسبب طرد الـ CO2 بزيادة التنفس."}, {"q": "Which drug is an anti-tussive?", "options": ["A) Morphine", "B) Dextromethorphan", "C) Aspirin", "D) Indomethacin"], "correct": 1, "hint": "يستخدم للكحة دون أن يسبب إدمان."}, {"q": "Carbamazepine causes:", "options": ["A) Hyponatremia", "B) Hypernatremia", "C) Hyperkalemia", "D) Hypoglycemia"], "correct": 0, "hint": "يقلل الصوديوم في الدم."}, {"q": "Which AED is safe in pregnancy?", "options": ["A) Valproic acid", "B) Levetiracetam", "C) Phenytoin", "D) Carbamazepine"], "correct": 1, "hint": "ليفيتيراسيتام من أكثر الأدوية أماناً."}, {"q": "What treats acute gout pain in a single joint?", "options": ["A) Allopurinol", "B) Intra-articular steroid injection", "C) Surgery", "D) Fluids only"], "correct": 1, "hint": "الحقن الموضعي سريع وفعال جداً."}, {"q": "Does Codeine work on its own?", "options": ["A) Yes", "B) No, it's a prodrug for morphine", "C) Only IV", "D) Never"], "correct": 1, "hint": "يحتاج الكبد ليحوله لمورفين."}, {"q": "What is Reye's syndrome?", "options": ["A) Liver/brain failure after Aspirin use in viral infection", "B) A type of gout", "C) A seizure disorder", "D) Asthma"], "correct": 0, "hint": "مضاعفة خطيرة للأسبرين مع الفيروسات."}, {"q": "Is Acetaminophen an anti-inflammatory?", "options": ["A) Yes", "B) Very weak/None peripherally", "C) Stronger than Aspirin", "D) Only for gout"], "correct": 1, "hint": "يعمل في المخ ولا يقلل التهاب المفاصل."}, {"q": "What do neuroleptics do to the seizure threshold?", "options": ["A) Increase it", "B) Lower it (bad for epileptics)", "C) No effect", "D) Cure epilepsy"], "correct": 1, "hint": "تزيد من فرص حدوث النوبات."}, {"q": "Why is Fentanyl used in surgery?", "options": ["A) Fast onset, short duration", "B) Low cost", "C) High risk", "D) Long acting"], "correct": 0, "hint": "يعمل بسرعة ويخرج من الجسم بسرعة."}, {"q": "What is the main danger of Felbamate?", "options": ["A) Hair loss", "B) Fatal aplastic anemia", "C) Weight loss", "D) Sedation"], "correct": 1, "hint": "دواء الملاذ الأخير لخطورته."}, {"q": "Valproic acid inhibits:", "options": ["A) GABA breakdown", "B) Glutamate", "C) Sodium", "D) Calcium"], "correct": 0, "hint": "يمنع تكسير الجابة المهديء."}, {"q": "Aspirin is for:", "options": ["A) Gout", "B) MI prevention", "C) Asthma", "D) Biliary colic"], "correct": 1, "hint": "يمنع الجلطات بجرعات صغيرة."}, {"q": "Neuroleptics cause POIKILOTHERMIA because they affect:", "options": ["A) Heart", "B) Hypothalamus", "C) Lungs", "D) Kidneys"], "correct": 1, "hint": "يعطل ترموستات الجسم."}, {"q": "How does Meperidine cause pupil dilation?", "options": ["A) Anticholinergic effect", "B) Alpha blockade", "C) D2 block", "D) Serotonin block"], "correct": 0, "hint": "يشبه الأتروبين في عمله."}, {"q": "Probenecid helps in:", "options": ["A) Gout prophylaxis (urate excretion)", "B) Asthma", "C) Pain", "D) Fever"], "correct": 0, "hint": "يساعد في طرد اليوريك أسيد في البول."}, {"q": "Can Topiramate cause kidney stones?", "options": ["A) Yes", "B) No", "C) Only in men", "D) Only in elderly"], "correct": 0, "hint": "بسبب تثبيط الكربونيك أنهيدريز."}, {"q": "Does Clozapine cause EPS?", "options": ["A) Yes", "B) Very rarely", "C) Only in elderly", "D) Always"], "correct": 1, "hint": "ميزته الكبرى غيابه أو ندرة حدوثه."}, {"q": "What is the antidote for Paracetamol?", "options": ["A) NAC", "B) Naloxone", "C) Atropine", "D) Flumazenil"], "correct": 0, "hint": "المنقذ للكبد."}, {"q": "Is Aspirin an irreversible inhibitor?", "options": ["A) Yes", "B) No", "C) Only for COX-2", "D) Only for platelets"], "correct": 0, "hint": "نعم، للأبد حتى تتجدد الصفائح."}, {"q": "Topiramate treats:", "options": ["A) Migraine prophylaxis", "B) Asthma", "C) Nausea", "D) Fever"], "correct": 0, "hint": "يمنع نوبات الصداع."}, {"q": "What causes NMS?", "options": ["A) Excessive dopamine", "B) Severe dopamine blockade", "C) Histamine", "D) Calcium"], "correct": 1, "hint": "غلق الدوبامين العنيف يسبب تخشب العضلات."}, {"q": "Why avoid opioids in head injury?", "options": ["A) ICP increase", "B) Seizures", "C) Bleeding", "D) Allergy"], "correct": 0, "hint": "رفع الضغط داخل الجمجمة."}, {"q": "Does morphine cause diarrhea?", "options": ["A) Yes", "B) No, constipation"], "correct": 1, "hint": "الإمساك عرض دائم."}, {"q": "Is Codeine a prodrug?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "يتحول لمورفين في الكبد."}, {"q": "Which drug treats Neuropathic pain?", "options": ["A) Pregabalin", "B) Paracetamol", "C) Aspirin", "D) Codeine"], "correct": 0, "hint": "ليريكا هو العلاج الأشهر."}, {"q": "What causes Gingival hyperplasia?", "options": ["A) Phenytoin", "B) Valproate", "C) Ethosuximide", "D) Gabapentin"], "correct": 0, "hint": "أثر جانبي مشهور للفينيتوين."}, {"q": "Is Valproic acid safe in pregnancy?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "تسبب تشوهات للجنين."}, {"q": "Does Meperidine cause pinpoint pupils?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "يسبب اتساعاً (Mydriasis)."}, {"q": "Does Aspirin cause Reye's syndrome?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "نعم مع الفيروسات."}, {"q": "Do NSAIDs stop RA?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "مجرد مسكن."}, {"q": "Is Naproxen safe?", "options": ["A) Relatively safe", "B) Not at all"], "correct": 0, "hint": "من المسكنات الأقل سمية."}, {"q": "Does Tramadol lower seizure threshold?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "خطير لمرضى الصرع."}, {"q": "What is status epilepticus?", "options": ["A) Normal seizure", "B) Continuous seizure emergency"], "correct": 1, "hint": "حالة طوارئ."}, {"q": "Is Diazepam used for status epilepticus?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "الخيار الأول."}, {"q": "Does Carbamazepine induce enzymes?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "محفز قوي للكبد."}, {"q": "Is Gabapentin metabolized by the liver?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "يخرج من الكلى مباشرة."}, {"q": "Does Topiramate cause weight loss?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "يقلل الشهية."}, {"q": "Are neuroleptics curative for schizophrenia?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "مجرد إدارة للأعراض."}, {"q": "Do neuroleptics cure nausea?", "options": ["A) Yes (drug induced)", "B) No"], "correct": 0, "hint": "مضادات قيء قوية."}, {"q": "Does Clozapine cause Agranulocytosis?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "خطره الحقيقي."}, {"q": "Is Morphine good for asthmatics?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "يسبب ضيقاً بالتنفس."}, {"q": "Is Naloxone an antagonist?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "يقلب مفعول الأفيون."}, {"q": "Do opioids release Histamine?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "المورفين يفرزه ويسبب حكة."}, {"q": "Is Codeine an antitussive?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "كان يستخدم للكحة."}, {"q": "Does Valproate cause hepatotoxicity?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "سام للكبد."}, {"q": "Is Phenytoin a generalized CNS depressant?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "ميزته غياب الخمول."}, {"q": "Is VNS non-pharmacological?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "تحفيز العصب جراحياً."}, {"q": "Is Ketogenic diet high protein?", "options": ["A) Yes", "B) No, high fat"], "correct": 1, "hint": "يعتمد على الدهون والكيتونات."}, {"q": "Does Indomethacin treat acute gout?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "مسكن قوي للنقرس."}, {"q": "Can NSAIDs cause AKI?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "خاصة في الجفاف."}, {"q": "Does Aspirin cause Tinnitus?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "علامة سمية."}, {"q": "Are Triptans safe in pregnancy?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "خطر."}, {"q": "Does Tramadol block serotonin uptake?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "ميكانيزم إضافي."}, {"q": "Is Carbamazepine an inducer?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "يحفز إنزيمات الكبد."}, {"q": "Does Topiramate treat migraines?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "وقائي."}, {"q": "Are atypical neuroleptics safe for metabolic health?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "تسبب سمنة وسكر."}, {"q": "Does Fluphenazine have depot forms?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "حقن طويلة المفعول."}, {"q": "Is Status Epilepticus an emergency?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "قاتلة."}, {"q": "Is Propoxyphene safe?", "options": ["A) Yes", "B) No, cardiotoxic"], "correct": 1, "hint": "سحب من السوق."}, {"q": "Does Valproic acid increase GABA?", "options": ["A) Yes", "B) No"], "correct": 0, "hint": "يمنع تكسيرها."}, {"q": "Is Gabapentin liver metabolized?", "options": ["A) Yes", "B) No"], "correct": 1, "hint": "يخرج كلوياً."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const hintBox = document.getElementById('hint-box');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const progressText = document.getElementById('progress-text');
+        const quizBox = document.getElementById('quiz-box');
+        const resultBox = document.getElementById('result-box');
+        const scoreText = document.getElementById('score-text');
+
+        function loadQuestion() {
+            answered = false;
+            hintBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            hintBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const currentQ = questionsData[currentQuestionIndex];
+            progressText.innerText = `السؤال ${currentQuestionIndex + 1} من ${questionsData.length}`;
+            questionTextElement.innerText = `Q${currentQuestionIndex + 1}: ${currentQ.q}`;
+            
+            hintBox.innerHTML = `<strong>💡 تلميح:</strong> ${currentQ.hint}`;
+
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index, btn, currentQ.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, btnElement, correctIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+            
+            hintBtn.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizBox.style.display = 'none';
+            resultBox.style.display = 'block';
+            scoreText.innerText = score;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

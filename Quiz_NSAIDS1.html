@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار تفاعلي: المحاضرة الأولى (100 سؤال)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background: #ffffff;
+            width: 95%;
+            max-width: 650px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 22px; }
+        .header p { margin: 5px 0 0; color: #c0392b; font-size: 14px; font-weight: bold;}
+        .progress {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #ecf0f1;
+            padding: 6px;
+            border-radius: 6px;
+        }
+        .question-text {
+            font-size: 17px;
+            color: #1a252f;
+            font-weight: 700;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            direction: ltr;
+        }
+        .option-btn {
+            background-color: #fdfbf7;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            padding: 12px 15px;
+            font-size: 14px;
+            color: #2c3e50;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: bold;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #ecf0f1;
+        }
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724 !important;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+        }
+        .option-btn:disabled { cursor: not-allowed; }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 2px solid #ecf0f1;
+            padding-top: 15px;
+        }
+        .hint-btn, .next-btn {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        .hint-btn { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; display: none;}
+        .hint-btn:hover { background-color: #ffe8a1; }
+        .next-btn { background-color: #2980b9; color: #ffffff; display: none; }
+        .next-btn:hover { background-color: #2471a3; }
+        
+        .hint-box {
+            background-color: #e8f6f3;
+            border-right: 4px solid #1abc9c;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #16a085;
+            border-radius: 4px 0 0 4px;
+            display: none;
+            line-height: 1.5;
+            animation: fadeIn 0.4s;
+        }
+        .hint-box strong { color: #d35400; }
+        
+        .result-container { text-align: center; display: none; }
+        .result-container h2 { color: #2c3e50; font-size: 26px; }
+        .result-container p { color: #7f8c8d; font-size: 18px; font-weight: bold;}
+        .restart-btn {
+            background-color: #27ae60; color: white; border: none; padding: 12px 25px;
+            border-radius: 6px; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: 16px; cursor: pointer; margin-top: 20px;
+        }
+        .restart-btn:hover { background-color: #2ecc71; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        @media (max-width: 480px) {
+            .quiz-container { padding: 15px; width: 92%; }
+            .question-text { font-size: 15px; }
+            .option-btn { font-size: 13px; padding: 10px; }
+            .hint-btn, .next-btn { font-size: 13px; padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="header">
+            <h1>Pharmacotherapy 2 💊</h1>
+            <p>Interactive Quiz: Lecture 1 (100 Unique Questions)</p>
+        </div>
+        
+        <div class="progress" id="progress-text">السؤال 1 من 100</div>
+        
+        <div class="question-text" id="question-text"></div>
+        <div class="options-container" id="options-container"></div>
+        
+        <div class="hint-box" id="hint-box"></div>
+        
+        <div class="actions">
+            <button class="hint-btn" id="hint-btn" onclick="showHint()">إظهار التلميح 💡</button>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">التالي ⏭️</button>
+        </div>
+    </div>
+
+    <div class="quiz-container result-container" id="result-box">
+        <h2>النتيجة النهائية 🏆</h2>
+        <p>لقد أجبت بشكل صحيح على <span id="score-text" style="color:#27ae60; font-size: 26px;">0</span> من أصل 100 سؤال.</p>
+        <button class="restart-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    </div>
+
+    <script>
+        // إدراج بيانات الـ JSON بشكل آمن عبر الاستبدال لتجنب خطأ بايثون
+        const questionsData = [{"q": "Which mediators directly stimulate pain receptors upon tissue injury?", "options": ["A) Prostaglandins", "B) Bradykinin and Histamine", "C) Leukotrienes", "D) Thromboxane"], "correct": 1, "hint": "كما شرح الدكتور، البراديكينين والهيستامين يحفزان مستقبلات الألم مباشرة، بينما البروستاجلاندين يزيد من حساسيتها فقط (Sensitization)."}, {"q": "What is the primary function of Prostaglandins in pain perception?", "options": ["A) Direct stimulation of nociceptors", "B) Sensitization of nerve endings", "C) Central anesthesia", "D) Vasoconstriction"], "correct": 1, "hint": "البروستاجلاندين لا تسبب ألماً مباشراً بل تجعل الأعصاب حساسة جداً للألم (Sensitization)."}, {"q": "Phospholipase A2 releases which precursor from cell membranes?", "options": ["A) Cyclooxygenase", "B) Arachidonic acid", "C) Lipoxygenase", "D) Leukotrienes"], "correct": 1, "hint": "حمض الأراشيدونيك هو المادة الخام التي تُصنع منها البروستاجلاندين والليكوترينات."}, {"q": "Which enzyme is constitutively expressed and responsible for gastric cytoprotection?", "options": ["A) COX-1", "B) COX-2", "C) 5-LOX", "D) Phospholipase C"], "correct": 0, "hint": "إنزيم COX-1 هو الإنزيم 'الطيب' الموجود طبيعياً لحماية المعدة وتنظيم الكلى."}, {"q": "Which drug naturally inhibits the expression of COX-2 enzymes?", "options": ["A) Aspirin", "B) Glucocorticoids (Steroids)", "C) Ibuprofen", "D) Montelukast"], "correct": 1, "hint": "الكورتيزون يمنع تصنيع إنزيم COX-2 من الجذور، مما يجعله مضاد التهاب قوي جداً."}, {"q": "Why are NSAIDs dangerous for asthmatic patients?", "options": ["A) They release histamine", "B) They block bronchodilators", "C) They shunt arachidonic acid to the LOX pathway, increasing leukotrienes", "D) They paralyze the diaphragm"], "correct": 2, "hint": "هذا هو فخ الربو: غلق COX يوجه كل الحمض لمسار الليكوترينات القابضة للشعب."}, {"q": "Aspirin uniquely inhibits cyclooxygenase via:", "options": ["A) Reversible competitive binding", "B) Irreversible covalent acetylation", "C) Allosteric modulation", "D) Receptor downregulation"], "correct": 1, "hint": "الأسبرين يدمر الإنزيم للأبد (Irreversible)، ولهذا مفعوله المانع للتجلط يستمر طويلاً."}, {"q": "How long does the antiplatelet effect of Aspirin last?", "options": ["A) 6 hours", "B) 24 hours", "C) 7-10 days (lifetime of platelet)", "D) 1 month"], "correct": 2, "hint": "الصفائح لا تملك أنوية لتصنيع إنزيم جديد، فيستمر المفعول حتى تموت الصفيحة."}, {"q": "Aspirin is contraindicated in children with viral infections to prevent:", "options": ["A) Asthma", "B) Reye's Syndrome", "C) Aplastic Anemia", "D) Gastric ulcers"], "correct": 1, "hint": "متلازمة راي تسبب فشلاً كبدياً وتورماً في الدماغ وهي قاتلة."}, {"q": "Acetaminophen lacks significant anti-inflammatory action because:", "options": ["A) It blocks COX-1 only", "B) It is inactivated by peroxides in inflamed tissues", "C) It is excreted immediately", "D) It cannot cross cell membranes"], "correct": 1, "hint": "يعمل مركزياً في المخ، لكنه يفشل في الأطراف الملتهبة بسبب وجود البيروكسيدات."}, {"q": "Severe Acetaminophen overdose causes toxic accumulation of:", "options": ["A) Salicylic acid", "B) NAPQI", "C) Arachidonic acid", "D) Glutathione"], "correct": 1, "hint": "NAPQI هو الميتابوليت السام الذي يدمر الكبد إذا انتهى مخزون الجلوتاثيون."}, {"q": "The specific antidote for Acetaminophen toxicity is:", "options": ["A) Naloxone", "B) N-acetylcysteine (NAC)", "C) Flumazenil", "D) Atropine"], "correct": 1, "hint": "يوفر الـ NAC مجموعة السلفهيدريل لتجديد الجلوتاثيون وحماية الكبد."}, {"q": "Diflunisal does NOT reduce fever because:", "options": ["A) It is destroyed by stomach acid", "B) It cannot cross the Blood-Brain Barrier (BBB)", "C) It is a pro-drug", "D) It only inhibits LOX"], "correct": 1, "hint": "لأنه لا يعبر للمخ، لا يمكنه الوصول لمركز تنظيم الحرارة في الهايبوثلامس."}, {"q": "NSAIDs reduce fever by inhibiting PGE2 synthesis in the:", "options": ["A) Pituitary", "B) Hypothalamus thermoregulatory center", "C) Thalamus", "D) Medulla"], "correct": 1, "hint": "PGE2 هو الذي يرفع 'ترموستات' الجسم، وإيقافه يعيد الحرارة لطبيعتها."}, {"q": "Misoprostol is specifically used to:", "options": ["A) Cure asthma", "B) Prevent NSAID-induced gastric ulcers", "C) Treat gout", "D) Lower blood pressure"], "correct": 1, "hint": "هو نظير للبروستاجلاندين (PGE1) يعوض النقص الذي تسببه المسكنات لحماية المعدة."}, {"q": "NSAIDs can cause Acute Kidney Injury (AKI) especially in dehydrated patients by:", "options": ["A) Dilating the efferent arteriole", "B) Constricting the afferent arteriole (blocking PG vasodilation)", "C) Destroying nephrons directly", "D) Causing kidney stones"], "correct": 1, "hint": "البروستاجلاندين تحافظ على الشريان الكلوي مفتوحاً، غلقها بالمسكنات يسبب فشلاً كلوياً حاداً."}, {"q": "Toxic doses of Salicylates initially cause which acid-base disturbance?", "options": ["A) Metabolic acidosis", "B) Respiratory alkalosis (due to hyperventilation)", "C) Respiratory acidosis", "D) Metabolic alkalosis"], "correct": 1, "hint": "الأسبرين يحفز مركز التنفس فيجعلك تلهث وتطرد CO2، مما يرفع قلوية الدم تنفسياً."}, {"q": "At very high (toxic) levels, salicylates uncouple oxidative phosphorylation, causing:", "options": ["A) Hypothermia", "B) Severe Hyperthermia (heat dissipation)", "C) Bradycardia", "D) Paralysis"], "correct": 1, "hint": "تدمير مصانع الطاقة بالخلية يحرر الطاقة على شكل حرارة مميتة."}, {"q": "To treat severe Aspirin overdose (Salicylism), the urine should be:", "options": ["A) Acidified", "B) Alkalinized (using Sodium Bicarbonate)", "C) Concentrated", "D) Diluted only"], "correct": 1, "hint": "جعل البول قاعدياً يؤين الأسبرين فيحبسه في البول ويطرده خارج الجسم."}, {"q": "Aspirin competes with and displaces which highly protein-bound drug, increasing bleeding risk?", "options": ["A) Acetaminophen", "B) Warfarin", "C) Penicillin", "D) Omeprazole"], "correct": 1, "hint": "طرد الوارفرين من بروتينات الدم يزيد تركيزه الحر، مما يسبب نزيفاً مميتاً."}, {"q": "Gout is characterized by the deposition of which crystals in the joints?", "options": ["A) Calcium Oxalate", "B) Sodium Urate", "C) Cholesterol", "D) Pyrophosphate"], "correct": 1, "hint": "النقرس ينتج عن ارتفاع حمض اليوريك وترسب بلورات يورات الصوديوم."}, {"q": "The intense pain of acute gout is caused by the release of lysosomal enzymes from:", "options": ["A) Red blood cells", "B) Platelets", "C) Granulocytes (Neutrophils) phagocytizing the crystals", "D) Neurons"], "correct": 2, "hint": "خلايا المناعة تبتلع البلورات الحادة فتتمزق وتفرز إنزيمات حارقة تسبب الالتهاب."}, {"q": "Why is Aspirin contraindicated during an acute gout attack?", "options": ["A) It causes GI bleeding", "B) Low doses decrease uric acid secretion, worsening hyperuricemia", "C) It dissolves crystals too quickly", "D) It interacts with Colchicine"], "correct": 1, "hint": "الأسبرين يتنافس مع حمض اليوريك في الكلى ويمنع طرده، مما يزيد الطين بلة."}, {"q": "Colchicine relieves acute gout by:", "options": ["A) Inhibiting xanthine oxidase", "B) Binding to tubulin and preventing granulocyte migration", "C) Promoting uric acid excretion", "D) Dissolving crystals"], "correct": 1, "hint": "يشل حركة الخلايا المناعية فيمنعها من الوصول للمفصل لإحداث الالتهاب."}, {"q": "The most common dose-limiting side effect of Colchicine is:", "options": ["A) Renal failure", "B) Severe GI upset (diarrhea, nausea)", "C) Blindness", "D) Tachycardia"], "correct": 1, "hint": "الإسهال الشديد هو العلامة الأولى للوصول للجرعة القصوى من الكولشيسين."}, {"q": "Allopurinol reduces serum uric acid levels by:", "options": ["A) Promoting renal clearance", "B) Competitively inhibiting Xanthine Oxidase", "C) Binding to tubulin", "D) Destroying dietary purines"], "correct": 1, "hint": "يوقف الإنزيم المسؤول عن تصنيع حمض اليوريك من الأساس."}, {"q": "Probenecid and Sulfinpyrazone belong to which class of anti-gout drugs?", "options": ["A) Xanthine oxidase inhibitors", "B) Uricosurics (increase renal excretion)", "C) NSAIDs", "D) Steroids"], "correct": 1, "hint": "هذه الأدوية تمنع الكلى من إعادة امتصاص حمض اليوريك فتطرده في البول."}, {"q": "Uric acid is the metabolic end-product of which cellular components?", "options": ["A) Carbohydrates", "B) Purines", "C) Fats", "D) Vitamins"], "correct": 1, "hint": "تكسير البيورينات (الموجودة في اللحوم والـ DNA) ينتج حمض اليوريك."}, {"q": "Allopurinol is the preferred treatment for patients with gout who are:", "options": ["A) Underexcretors", "B) Overproducers or have kidney stones", "C) Currently having an acute attack", "D) Pregnant"], "correct": 1, "hint": "إذا كانت الكلى مريضة أو المريض ينتج يوريك أسيد بكثرة، فالألوبيورينول هو الخيار الآمن."}, {"q": "Which NSAID is typically considered the drug of choice for acute gouty arthritis?", "options": ["A) Aspirin", "B) Acetaminophen", "C) Indomethacin", "D) Celecoxib"], "correct": 2, "hint": "الإندوميثاسين مسكن ومضاد التهاب قوي جداً ومثالي لإخماد هجمة النقرس."}, {"q": "Which drug naturally inhibits the expression of COX-2 enzymes?", "options": ["A) Glucocorticoids", "B) Aspirin", "C) Ibuprofen", "D) Probenecid"], "correct": 0, "hint": "الكورتيزون يمنع تكوين الإنزيم من الأساس."}, {"q": "Which pathway leads to the synthesis of Leukotrienes?", "options": ["A) COX", "B) Lipoxygenase (LOX)", "C) Phospholipase", "D) Thromboxane synthase"], "correct": 1, "hint": "مسار LOX يصنع الليكوترينات التي تقبض الشعب الهوائية."}, {"q": "Montelukast is used to treat:", "options": ["A) Gastric ulcers", "B) Allergic asthma", "C) Gout", "D) Fever"], "correct": 1, "hint": "لأنه مضاد لليكوترينات، فهو يحمي مرضى الربو."}, {"q": "Aspirin is rapidly deacetylated to form:", "options": ["A) Salicylate", "B) NAPQI", "C) Acetic acid", "D) Paracetamol"], "correct": 0, "hint": "الساليسيلات هو المستقلب النشط الذي يكمل عملية التسكين."}, {"q": "Salicylates lower fever by acting on the:", "options": ["A) Pituitary", "B) Hypothalamus", "C) Liver", "D) Lungs"], "correct": 1, "hint": "حيث يوجد مركز تنظيم حرارة الجسم."}, {"q": "Do NSAIDs arrest the progression of Rheumatoid Arthritis?", "options": ["A) Yes", "B) No, they only provide symptomatic relief", "C) Only at high doses", "D) Only Aspirin does"], "correct": 1, "hint": "المسكنات تعالج العرض ولا تعالج المرض."}, {"q": "PGI2 in the stomach acts to:", "options": ["A) Increase acid", "B) Inhibit gastric acid secretion", "C) Increase digestion", "D) Cause ulcers"], "correct": 1, "hint": "يحمي المعدة بمنع الإفراز الحمضي."}, {"q": "H2-antihistamines like Ranitidine may mask the symptoms of:", "options": ["A) Asthma", "B) NSAID-induced ulcers", "C) Gout", "D) Fever"], "correct": 1, "hint": "لأنها تخفف ألم المعدة ظاهرياً فقط."}, {"q": "Methyl salicylate is used:", "options": ["A) Orally for gout", "B) Topically for muscle pain", "C) IV for fever", "D) Rectally for asthma"], "correct": 1, "hint": "دهان الكافور المعروف لتسكين العضلات موضعياً."}, {"q": "Low dose aspirin targets which enzyme specifically in platelets?", "options": ["A) COX-2", "B) COX-1", "C) LOX", "D) P450"], "correct": 1, "hint": "لإيقاف تصنيع الثرومبوكسان (TXA2)."}, {"q": "Aspirin should be stopped how many days before surgery?", "options": ["A) 1", "B) 3", "C) 7", "D) 30"], "correct": 2, "hint": "لإعطاء الجسم فرصة لصنع صفائح جديدة لا تنزف."}, {"q": "Children with chickenpox given Aspirin may develop:", "options": ["A) Reye's syndrome", "B) Gout", "C) Asthma", "D) Ulcers"], "correct": 0, "hint": "متلازمة راي تدمر الكبد والمخ."}, {"q": "Tinnitus (ringing in ears) is a classic early sign of:", "options": ["A) Gout", "B) Salicylism (Aspirin toxicity)", "C) Paracetamol overdose", "D) Asthma"], "correct": 1, "hint": "الجرس التحذيري الأول لتسمم الأسبرين."}, {"q": "Alkalinization of urine is used to treat toxicity of:", "options": ["A) Paracetamol", "B) Salicylates", "C) Allopurinol", "D) Colchicine"], "correct": 1, "hint": "لأن الساليسيلات حمض، فجعل البول قاعدي يطرده (Ion trapping)."}, {"q": "Which NSAID is considered one of the safest?", "options": ["A) Naproxen", "B) Indomethacin", "C) Ketorolac", "D) Celecoxib"], "correct": 0, "hint": "يتمتع بسمعة جيدة لأمانه القلبي."}, {"q": "Celecoxib has a black box warning for:", "options": ["A) GI bleeding", "B) Cardiovascular events (MI/Stroke)", "C) Asthma", "D) Hair loss"], "correct": 1, "hint": "يمنع PGI2 الموسع للأوعية فيزيد خطر الجلطات."}, {"q": "Celecoxib is contraindicated in patients with allergy to:", "options": ["A) Penicillin", "B) Sulfonamides", "C) Peanuts", "D) Iodine"], "correct": 1, "hint": "لأنه يحتوي على مجموعة السلفا."}, {"q": "Acetaminophen acts centrally and is inactivated peripherally by:", "options": ["A) Acid", "B) Peroxides", "C) Oxygen", "D) Histamine"], "correct": 1, "hint": "لذلك لا يعالج الالتهابات المفاصلية."}, {"q": "Acetaminophen is preferred over Aspirin in gout patients taking Probenecid because:", "options": ["A) It is stronger", "B) It does not antagonize the uricosuric effect of Probenecid", "C) It cures gout", "D) It dissolves crystals"], "correct": 1, "hint": "الأسبرين يفسد عمل دواء النقرس، الباراسيتامول آمن."}, {"q": "Normal metabolism of Acetaminophen yields:", "options": ["A) NAPQI", "B) Glucuronidated/Sulfated inactive metabolites", "C) Salicylate", "D) Uric acid"], "correct": 1, "hint": "المسار الآمن والطبيعي في الكبد."}, {"q": "NAPQI is neutralized in the liver by:", "options": ["A) Albumin", "B) Glutathione", "C) CYP450", "D) Acid"], "correct": 1, "hint": "الجلوتاثيون هو المدافع الأول."}, {"q": "N-acetylcysteine (NAC) saves lives in paracetamol overdose by providing:", "options": ["A) Acid", "B) Sulfhydryl groups to replenish glutathione", "C) Oxygen", "D) Base"], "correct": 1, "hint": "يعوض الجلوتاثيون المفقود لإنقاذ الكبد."}, {"q": "Monitoring of which test is crucial in paracetamol overdose?", "options": ["A) CBC", "B) Liver enzymes", "C) ECG", "D) Urine pH"], "correct": 1, "hint": "لمراقبة النخر الكبدي."}, {"q": "Uric acid deposits as what crystals in joints?", "options": ["A) Calcium", "B) Sodium Urate", "C) Cholesterol", "D) Oxalate"], "correct": 1, "hint": "بلورات النقرس الحادة."}, {"q": "During a gout attack, neutrophils release:", "options": ["A) Histamine", "B) Lysosomal enzymes", "C) Leukotrienes", "D) Prostaglandins"], "correct": 1, "hint": "تأكل البلورات وتنفجر محتوياتها الحارقة."}, {"q": "Why is Aspirin contraindicated in gout?", "options": ["A) Causes bleeding", "B) Competes with uric acid for renal secretion", "C) Causes asthma", "D) Interacts with Colchicine"], "correct": 1, "hint": "يمنع الكلى من طرد اليوريك أسيد."}, {"q": "Colchicine acts by:", "options": ["A) Dissolving crystals", "B) Binding to tubulin and blocking granulocyte migration", "C) Blocking COX", "D) Inhibiting Xanthine Oxidase"], "correct": 1, "hint": "يشل حركة الخلايا المناعية نحو المفصل."}, {"q": "Colchicine must be given within what time for max efficacy?", "options": ["A) 1 hr", "B) 24-48 hrs", "C) 1 week", "D) 1 month"], "correct": 1, "hint": "يعمل بشكل مثالي في بداية الهجمة فقط."}, {"q": "Allopurinol acts by inhibiting:", "options": ["A) Xanthine Oxidase", "B) COX", "C) LOX", "D) Phospholipase"], "correct": 0, "hint": "يوقف تصنيع اليوريك أسيد."}, {"q": "The active metabolite of Allopurinol is:", "options": ["A) Alloxanthine", "B) Hypoxanthine", "C) Uric acid", "D) Purine"], "correct": 0, "hint": "يساهم في مفعوله الطويل وإمكانية أخذ جرعة واحدة يومياً."}, {"q": "Probenecid acts in the kidney at the:", "options": ["A) Loop of Henle", "B) Proximal tubule (urate-anion exchanger)", "C) Distal tubule", "D) Collecting duct"], "correct": 1, "hint": "يمنع إعادة سحب اليوريك أسيد للدم."}, {"q": "Allopurinol is preferred in patients who are:", "options": ["A) Overproducers of uric acid", "B) Underexcretors", "C) Pregnant", "D) Asthmatics"], "correct": 0, "hint": "يمنع الإنتاج الغزير لليوريك أسيد وآمن لمرضى حصوات الكلى."}, {"q": "Chemotherapy can cause gout by massive release of:", "options": ["A) Lipids", "B) Purines from destroyed cells", "C) Glucose", "D) Calcium"], "correct": 1, "hint": "تكسير الخلايا السرطانية يحرر بيورينات تتحول ليوريك أسيد."}, {"q": "NSAIDs and Colchicine are given early during Allopurinol initiation to prevent:", "options": ["A) GI bleeding", "B) Acute gout flares triggered by shifting urate levels", "C) Asthma", "D) Renal failure"], "correct": 1, "hint": "نزول مستوى اليوريك أسيد فجأة يذيب البلورات القديمة ويثير المناعة مسبباً هجمة حادة."}, {"q": "Which route for glucocorticoids is excellent for an acute gout attack in a single joint?", "options": ["A) IV", "B) Intra-articular (joint injection)", "C) Oral", "D) Inhaled"], "correct": 1, "hint": "الحقن الموضعي سريع وآمن إذا كان الالتهاب في مفصل واحد فقط."}, {"q": "Bradykinin is released after tissue injury to:", "options": ["A) Sensitize nerves", "B) Directly activate pain receptors", "C) Dilate bronchi", "D) Clot blood"], "correct": 1, "hint": "يدق جرس الألم مباشرة."}, {"q": "Which drug covalently acetylates COX?", "options": ["A) Ibuprofen", "B) Aspirin", "C) Paracetamol", "D) Celecoxib"], "correct": 1, "hint": "الأسبرين (Irreversible)."}, {"q": "Aspirin toxicity causes hyperventilation due to:", "options": ["A) Asthma", "B) Direct stimulation of the respiratory center", "C) Kidney failure", "D) Heart block"], "correct": 1, "hint": "ينتج عنه قلوية تنفسية مبدئية."}, {"q": "PGE2 specifically contributes to:", "options": ["A) Acid secretion", "B) Fever generation in hypothalamus", "C) Bronchodilation", "D) Crystal dissolution"], "correct": 1, "hint": "الترموستات الذي يرفع الحرارة."}, {"q": "The primary danger of NSAIDs in heart failure is:", "options": ["A) Cardiac arrest", "B) Fluid and sodium retention worsening the failure", "C) Bradycardia", "D) Tachycardia"], "correct": 1, "hint": "تحبس السوائل مما يزيد العبء على القلب (Preload)."}, {"q": "Which enzyme converts arachidonic acid to protective gastric prostaglandins?", "options": ["A) COX-2", "B) COX-1", "C) LOX", "D) Phospholipase"], "correct": 1, "hint": "الإنزيم الطبيعي الفسيولوجي."}, {"q": "The antidote for Paracetamol overdose must be given within:", "options": ["A) 2 hrs", "B) 10 hrs", "C) 48 hrs", "D) 1 week"], "correct": 1, "hint": "الـ N-acetylcysteine ينقذ الكبد إذا أخذ مبكراً."}, {"q": "Aspirin given with Warfarin leads to:", "options": ["A) Clotting", "B) Displacement interaction causing severe bleeding", "C) No effect", "D) Asthma"], "correct": 1, "hint": "تنافس على بروتينات الدم (Albumin)."}, {"q": "Colchicine treats gout but NOT by:", "options": ["A) Lowering blood uric acid", "B) Blocking tubulin", "C) Decreasing neutrophil migration", "D) Relieving pain"], "correct": 0, "hint": "الكولشيسين لا يقلل اليوريك أسيد في الدم، هو مضاد التهاب مناعي فقط."}, {"q": "Probenecid interacts with Penicillin by:", "options": ["A) Destroying it", "B) Blocking its tubular secretion (increasing its blood levels)", "C) Enhancing its absorption", "D) Decreasing its effect"], "correct": 1, "hint": "يُطيل مفعول البنسلين في الجسم."}, {"q": "The main goal of Allopurinol therapy is to:", "options": ["A) Stop an acute attack", "B) Prevent future attacks by lowering urate production", "C) Cure asthma", "D) Treat ulcers"], "correct": 1, "hint": "دواء وقائي مزمن (Chronic)."}, {"q": "Which NSAID does not cross the BBB?", "options": ["A) Aspirin", "B) Diflunisal", "C) Ibuprofen", "D) Paracetamol"], "correct": 1, "hint": "لذلك ليس له تأثير خافض للحرارة."}, {"q": "Which condition is a strict contraindication for Celecoxib?", "options": ["A) Migraine", "B) Sulfonamide allergy", "C) Gout", "D) Diabetes"], "correct": 1, "hint": "بسبب التركيب الكيميائي السلفاوي."}, {"q": "Indomethacin is frequently used to treat:", "options": ["A) Acute Gout", "B) Asthma", "C) Peptic ulcers", "D) Tinnitus"], "correct": 0, "hint": "مسكن قوي جداً للهجمات الحادة."}, {"q": "NAPQI causes hepatic necrosis when it reacts with cellular proteins after the depletion of:", "options": ["A) Albumin", "B) Glutathione", "C) Glucose", "D) Water"], "correct": 1, "hint": "المدافع الطبيعي للكبد."}, {"q": "Which NSAID is considered an irreversible inhibitor?", "options": ["A) Naproxen", "B) Aspirin", "C) Ibuprofen", "D) Diclofenac"], "correct": 1, "hint": "يدمر الإنزيم تساهمياً."}, {"q": "What happens if a patient on Aspirin takes Probenecid?", "options": ["A) Gout is cured", "B) Aspirin blocks the uricosuric effect of Probenecid", "C) Bleeding stops", "D) Fever increases"], "correct": 1, "hint": "تداخل عكسي يفسد علاج النقرس."}, {"q": "A normal body temperature is NOT affected by Aspirin because:", "options": ["A) Aspirin only works on COX-2", "B) It only resets an elevated hypothalamic thermostat", "C) It is destroyed", "D) It causes heat generation"], "correct": 1, "hint": "يعالج الحمى ولا يسبب هبوطاً في الحرارة الطبيعية."}, {"q": "Why is Paracetamol safe for the stomach?", "options": ["A) It increases mucus", "B) It does not block COX-1 in the periphery", "C) It blocks acid", "D) It is an antacid"], "correct": 1, "hint": "يعمل مركزياً فقط في الدماغ."}, {"q": "Hypersensitivity to Aspirin (Asthma, rash) occurs in what percentage of patients?", "options": ["A) 1%", "B) 15%", "C) 50%", "D) 90%"], "correct": 1, "hint": "نسبة ملحوظة تستدعي سؤال المريض قبل الوصف."}, {"q": "Reye's syndrome affects which two major organs?", "options": ["A) Heart and Lungs", "B) Liver and Brain (Encephalopathy)", "C) Kidneys and Skin", "D) Stomach and Intestines"], "correct": 1, "hint": "مرض قاتل للأطفال يسببه الأسبرين."}, {"q": "Which drug provides sulfhydryl groups for paracetamol toxicity?", "options": ["A) N-acetylcysteine", "B) Naloxone", "C) Atropine", "D) Allopurinol"], "correct": 0, "hint": "الترياق المنقذ للكبد."}, {"q": "Which drug is used for Gout but has NO analgesic or antipyretic properties?", "options": ["A) Indomethacin", "B) Aspirin", "C) Colchicine", "D) Ibuprofen"], "correct": 2, "hint": "لا يسكن الألم إلا عن طريق إيقاف الالتهاب المناعي للنقرس."}, {"q": "Aspirin is pregnancy category:", "options": ["A) A", "B) C (and X in 3rd trimester)", "C) Safe entirely", "D) B"], "correct": 1, "hint": "خطر جداً في الثلث الأخير."}, {"q": "Acute gout involves crystal phagocytosis by:", "options": ["A) RBCs", "B) Neutrophils", "C) Lymphocytes", "D) Platelets"], "correct": 1, "hint": "كرات الدم البيضاء التي تأكل البلورات وتنفجر."}, {"q": "Which is an active metabolite of Allopurinol?", "options": ["A) Alloxanthine", "B) Hypoxanthine", "C) Uric acid", "D) NAPQI"], "correct": 0, "hint": "يمدد مفعول الدواء لـ 24 ساعة."}, {"q": "Aspirin's antiplatelet action is used clinically for:", "options": ["A) Gout prophylaxis", "B) Prevention of MI and Stroke", "C) Asthma cure", "D) Ulcer healing"], "correct": 1, "hint": "سيولة الدم بجرعات منخفضة (75-100 مجم)."}, {"q": "Which drug naturally stops COX-2 synthesis entirely?", "options": ["A) Cortisol (Glucocorticoids)", "B) Aspirin", "C) Paracetamol", "D) Montelukast"], "correct": 0, "hint": "يوقف تكوين الإنزيم من جذوره في النواة."}, {"q": "Which pathway causes bronchospasm if COX is blocked?", "options": ["A) Phospholipase", "B) Lipoxygenase (LOX)", "C) Uricase", "D) Xanthine oxidase"], "correct": 1, "hint": "فخ الربو بإنتاج الليكوترينات."}, {"q": "Which drug causes 'Salicylism' (Tinnitus, hyperventilation)?", "options": ["A) Paracetamol", "B) Aspirin", "C) Colchicine", "D) Allopurinol"], "correct": 1, "hint": "تسمم الأسبرين المميز بصوت طنين الأذن."}, {"q": "Alkalinizing the urine treats Aspirin toxicity via:", "options": ["A) Ion trapping", "B) Acidification", "C) First pass metabolism", "D) Hemodialysis"], "correct": 0, "hint": "يحول الأسبرين لمركب مشحون ينحبس في البول ويخرج."}, {"q": "Which NSAID is formulated often for topical use on skin?", "options": ["A) Celecoxib", "B) Methyl salicylate", "C) Indomethacin", "D) Diflunisal"], "correct": 1, "hint": "يمتص عبر الجلد (كريمات وزيوت العضلات)."}, {"q": "Misoprostol prevents ulcers but is contraindicated in:", "options": ["A) Asthma", "B) Pregnancy (causes abortion)", "C) Gout", "D) Diabetes"], "correct": 1, "hint": "يسبب انقباضات شديدة في الرحم."}, {"q": "Which is a uricosuric drug?", "options": ["A) Allopurinol", "B) Probenecid", "C) Colchicine", "D) Aspirin"], "correct": 1, "hint": "يطرد اليوريك أسيد في البول."}, {"q": "The primary role of PGE2 in fever is to:", "options": ["A) Cause sweating", "B) Reset the hypothalamic thermostat upwards", "C) Kill bacteria", "D) Dilate pupils"], "correct": 1, "hint": "هو المسؤول عن رفع الحرارة في المخ."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const hintBox = document.getElementById('hint-box');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const progressText = document.getElementById('progress-text');
+        const quizBox = document.getElementById('quiz-box');
+        const resultBox = document.getElementById('result-box');
+        const scoreText = document.getElementById('score-text');
+
+        function loadQuestion() {
+            answered = false;
+            hintBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            hintBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const currentQ = questionsData[currentQuestionIndex];
+            progressText.innerText = `السؤال ${currentQuestionIndex + 1} من ${questionsData.length}`;
+            questionTextElement.innerText = `Q${currentQuestionIndex + 1}: ${currentQ.q}`;
+            
+            hintBox.innerHTML = `<strong>💡 تلميح:</strong> ${currentQ.hint}`;
+
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index, btn, currentQ.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, btnElement, correctIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+            
+            hintBtn.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizBox.style.display = 'none';
+            resultBox.style.display = 'block';
+            scoreText.innerText = score;
+        }
+
+        // بدء الاختبار
+        loadQuestion();
+    </script>
+</body>
+</html>

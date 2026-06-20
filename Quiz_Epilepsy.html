@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacotherapy 2: Epilepsy Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background: #ffffff;
+            width: 90%;
+            max-width: 650px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 24px; }
+        .header p { margin: 5px 0 0; color: #e74c3c; font-size: 15px; font-weight: bold;}
+        .progress {
+            font-size: 15px;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #1a252f;
+            font-weight: 700;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            direction: ltr;
+        }
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #2c3e50;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 500;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #ecf0f1;
+            border-color: #95a5a6;
+        }
+        /* اللون الفاتح المريح للإجابة الصحيحة */
+        .option-btn.correct {
+            background-color: #fff9c4 !important; /* لون أصفر فاتح جداً */
+            border-color: #fbc02d !important;
+            color: #000 !important;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+        }
+        .option-btn:disabled { cursor: not-allowed; }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 2px solid #e1e8ed;
+            padding-top: 20px;
+        }
+        .hint-btn, .next-btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .hint-btn { background-color: #ffeaa7; color: #d35400; display: none;}
+        .hint-btn:hover { background-color: #f1c40f; color: #fff; }
+        .next-btn { background-color: #3498db; color: #ffffff; display: none; }
+        .next-btn:hover { background-color: #2980b9; }
+        
+        .hint-box {
+            background-color: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 15px;
+            color: #856404;
+            border-radius: 4px 0 0 4px;
+            display: none;
+            line-height: 1.6;
+            animation: fadeIn 0.5s;
+        }
+        .hint-box strong { color: #d35400; }
+        
+        .result-container { text-align: center; display: none; }
+        .result-container h2 { color: #2c3e50; font-size: 30px; }
+        .result-container p { color: #7f8c8d; font-size: 20px; font-weight: bold;}
+        .restart-btn {
+            background-color: #2ecc71; color: white; border: none; padding: 15px 30px;
+            border-radius: 8px; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: 18px; cursor: pointer; margin-top: 25px;
+        }
+        .restart-btn:hover { background-color: #27ae60; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        @media (max-width: 480px) {
+            .quiz-container { padding: 20px; width: 95%; }
+            .question-text { font-size: 16px; }
+            .option-btn { font-size: 14px; padding: 12px; }
+            .hint-btn, .next-btn { font-size: 14px; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="header">
+            <h1>Pharmacotherapy 2 💊</h1>
+            <p>Interactive Quiz: Batch 4 - Epilepsy (100 Unique Qs)</p>
+        </div>
+        
+        <div class="progress" id="progress-text">السؤال 1 من 100</div>
+        
+        <div class="question-text" id="question-text"></div>
+        <div class="options-container" id="options-container"></div>
+        
+        <div class="hint-box" id="hint-box"></div>
+        
+        <div class="actions">
+            <button class="hint-btn" id="hint-btn" onclick="showHint()">إظهار التلميح 💡</button>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">التالي ⏭️</button>
+        </div>
+    </div>
+
+    <div class="quiz-container result-container" id="result-box">
+        <h2>النتيجة النهائية 🏆</h2>
+        <p>لقد أجبت بشكل صحيح على <span id="score-text" style="color:#fbc02d; font-size: 28px; background:#fff9c4; padding:2px 5px; border-radius:5px;">0</span> من أصل 100 سؤال.</p>
+        <button class="restart-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    </div>
+
+    <script>
+        const questionsData = [{"q": "Which of the following describes a Simple Partial Seizure?", "options": ["A) Electrical discharge spreads to both hemispheres", "B) Patient loses consciousness immediately", "C) Electrical discharge does not spread, and consciousness is preserved", "D) Accompanied by high fever only"], "correct": 2, "hint": "في النوبة الجزئية البسيطة، يبقى المريض بكامل وعيه (No loss of consciousness)."}, {"q": "Complex Partial Seizures typically originate before what age?", "options": ["A) 5 years", "B) 20 years", "C) 40 years", "D) 60 years"], "correct": 1, "hint": "غالباً ما تبدأ النوبات الجزئية المعقدة قبل سن العشرين."}, {"q": "Which type of seizure is characterized by sensory hallucinations, mental distortion, and loss of consciousness?", "options": ["A) Simple partial", "B) Complex partial", "C) Absence", "D) Myoclonic"], "correct": 1, "hint": "النوبة الجزئية المعقدة تتضمن غياباً عن الوعي وهلاوس حسية."}, {"q": "Automatisms, such as involuntary chewing movements, are classic signs of:", "options": ["A) Complex partial seizures", "B) Absence seizures", "C) Status epilepticus", "D) Simple partial seizures"], "correct": 0, "hint": "حركات المضغ والبلع اللاإرادية تصاحب غياب الوعي في الـ Complex Partial."}, {"q": "The 'Tonic' phase of a Generalized Tonic-Clonic (Grand mal) seizure refers to:", "options": ["A) Muscle relaxation", "B) Sustained muscle stiffening and contraction", "C) Symmetrical muscle jerking", "D) The post-ictal confusion state"], "correct": 1, "hint": "مرحلة التونيك (Tonic) هي التخشب والتصلب العضلي الكامل."}, {"q": "The 'Clonic' phase of a Grand mal seizure involves:", "options": ["A) Sustained rigidity", "B) Symmetrical convulsive jerking", "C) Rapid eye blinking", "D) Sleep"], "correct": 1, "hint": "الكلونيك (Clonic) هي مرحلة الارتعاش والاهتزاز العنيف."}, {"q": "Absence (Petit mal) seizures are primarily characterized by:", "options": ["A) Violent convulsions", "B) Brief, abrupt loss of consciousness with staring", "C) Complete memory loss", "D) High fever"], "correct": 1, "hint": "نوبات التغيب تستمر لثوانٍ معدودة، يبدو فيها المريض وكأنه يسرح في الفراغ."}, {"q": "How long does a typical Absence (Petit mal) seizure last?", "options": ["A) 1-2 minutes", "B) 3-5 seconds", "C) 10-15 minutes", "D) Half an hour"], "correct": 1, "hint": "ثوانٍ قليلة جداً ثم يعود المريض لنشاطه الطبيعي وكأن شيئاً لم يكن."}, {"q": "Febrile seizures most commonly occur in which age group?", "options": ["A) Newborns to 2 months", "B) 3 months to 5 years", "C) 6 to 12 years", "D) Adults over 65"], "correct": 1, "hint": "التشنج الحراري شائع جداً في الأطفال من 3 شهور حتى 5 سنوات."}, {"q": "Are febrile seizures typically considered a form of chronic epilepsy requiring daily medication?", "options": ["A) Yes, they require lifelong treatment", "B) No, they are benign, self-limiting, and rarely require medication", "C) Yes, they cause severe brain damage", "D) Only if they occur without fever"], "correct": 1, "hint": "الدكتور أكد أنها حميدة ولا تسبب ضرراً عصبياً وتختفي مع نمو الطفل."}, {"q": "Status Epilepticus is defined as:", "options": ["A) A seizure lasting less than 10 seconds", "B) Continuous or rapidly recurring seizures without recovery of consciousness", "C) Seizures triggered by flashing lights", "D) Seizures during sleep"], "correct": 1, "hint": "عاصفة كهربائية مستمرة في الدماغ تعتبر حالة طوارئ طبية."}, {"q": "Phenytoin, Carbamazepine, and Lamotrigine all prevent seizure spread primarily by blocking:", "options": ["A) T-type Ca++ channels", "B) Voltage-gated Na+ channels", "C) GABA receptors", "D) Glutamate release"], "correct": 1, "hint": "غلق قنوات الصوديوم يمنع إطلاق الإشارات الكهربائية المتتالية."}, {"q": "Ethosuximide controls Absence seizures specifically by blocking:", "options": ["A) Na+ channels", "B) T-type Ca++ channels in the thalamus", "C) K+ channels", "D) Cl- channels"], "correct": 1, "hint": "نوبات التغيب تعتمد حصرياً على تيارات الكالسيوم في المهاد."}, {"q": "Benzodiazepines increase GABAergic inhibition by:", "options": ["A) Increasing the DURATION of Cl- channel opening", "B) Increasing the FREQUENCY of Cl- channel opening", "C) Blocking Na+ influx", "D) Activating NMDA receptors"], "correct": 1, "hint": "البنزوديازيبينات تزيد عدد مرات (Frequency) فتح قنوات الكلور."}, {"q": "Barbiturates (like Phenobarbital) enhance GABA effects by:", "options": ["A) Increasing the DURATION of Cl- channel opening", "B) Increasing the FREQUENCY of Cl- channel opening", "C) Inhibiting GABA transaminase", "D) Stimulating glutamate"], "correct": 0, "hint": "الباربيتورات تبقي القناة مفتوحة لفترة أطول (Duration)، مما يفسر تأثيرها المنوم الأقوى."}, {"q": "Valproic Acid acts as a broad-spectrum AED because it:", "options": ["A) Only blocks Na+ channels", "B) Blocks Na+, blocks T-type Ca++, and increases GABA levels", "C) Only increases GABA", "D) Blocks K+ channels"], "correct": 1, "hint": "الجوكر يضرب الصرع بثلاث ميكانزمات مختلفة، لذا يعالج كل الأنواع."}, {"q": "Topiramate and Lamotrigine reduce seizures in part by decreasing the excitatory effect of:", "options": ["A) Dopamine", "B) Acetylcholine", "C) Glutamic acid (Glutamate)", "D) Glycine"], "correct": 2, "hint": "الجلوتامات هو المحفز الأساسي في الدماغ. غلقه يهدئ الكهرباء."}, {"q": "What is the Golden Rule when starting Antiepileptic Drug (AED) therapy?", "options": ["A) Start with 3 drugs immediately", "B) Initiate with Monotherapy (a single drug) first", "C) Give maximum dose on day one", "D) Combine inducers with inhibitors"], "correct": 1, "hint": "الدواء الواحد يقلل الآثار الجانبية المزعجة ويمنع التداخلات المعقدة."}, {"q": "The primary clinical reason to avoid polytherapy in epilepsy, especially in children, is to minimize:", "options": ["A) Hair loss", "B) Severe cognitive dulling, sedation, and drug interactions", "C) Kidney stones", "D) Heart failure"], "correct": 1, "hint": "الأدوية المتعددة تجعل الطفل مخدراً ومشتتاً مما يدمر مستواه الدراسي."}, {"q": "What is the most dangerous consequence of abruptly stopping AED therapy?", "options": ["A) Rebound insomnia", "B) Precipitation of Status Epilepticus", "C) Severe hypertension", "D) Immediate weight loss"], "correct": 1, "hint": "التوقيف المفاجئ يسقط حماية الدماغ ويدخله في تشنجات مستمرة مميتة."}, {"q": "A common dose-dependent adverse effect of most AEDs is:", "options": ["A) Renal failure", "B) Sedation, drowsiness, and ataxia", "C) Blindness", "D) Peptic ulcers"], "correct": 1, "hint": "كل أدوية الصرع تقريباً تثبط الجهاز العصبي مسببة خمولاً وترنحاً."}, {"q": "Carbamazepine is the drug of first choice for:", "options": ["A) Absence seizures", "B) Partial seizures (simple and complex)", "C) Myoclonic seizures", "D) Status epilepticus"], "correct": 1, "hint": "ممتاز جداً للصرع الجزئي، وفعال أيضاً في التونيك-كلونيك."}, {"q": "Carbamazepine is STRICTLY contraindicated in which type of seizure because it may worsen it?", "options": ["A) Tonic-clonic", "B) Absence seizures", "C) Simple partial", "D) Complex partial"], "correct": 1, "hint": "أدوية غلق الصوديوم تفاقم نوبات التغيب وتزيدها سوءاً."}, {"q": "Carbamazepine exhibits 'Auto-induction'. What does this mean?", "options": ["A) It completely stops liver function", "B) It induces its own metabolizing enzymes, decreasing its half-life over time", "C) It absorbs itself from the gut", "D) It cures epilepsy automatically"], "correct": 1, "hint": "يحفز إنزيمات الكبد التي تكسره هو شخصياً، فتضعف فعاليته ويحتاج لزيادة الجرعة."}, {"q": "Chronic administration of Carbamazepine produces an epoxide metabolite associated with which fatal toxicity?", "options": ["A) Aplastic anemia and leukopenia", "B) Gingival hyperplasia", "C) Renal stones", "D) Osteoporosis"], "correct": 0, "hint": "هذا الميتابوليت يدمر نخاع العظم ويحتاج فحص دم دوري."}, {"q": "Which of the following is a known side effect of Carbamazepine, particularly in the elderly?", "options": ["A) Hypernatremia", "B) Hyponatremia (low blood sodium)", "C) Hyperkalemia", "D) Hypercalcemia"], "correct": 1, "hint": "الكاربامازيبين يسبب احتباس الماء وتخفيف الصوديوم في الدم."}, {"q": "If Carbamazepine is co-administered with Erythromycin or Cimetidine, what happens?", "options": ["A) Carbamazepine levels drop", "B) Erythromycin and Cimetidine INHIBIT its metabolism, causing Carbamazepine toxicity", "C) The drugs neutralize each other", "D) Erythromycin causes seizures directly"], "correct": 1, "hint": "الإريثرومايسين والسيميتيدين مثبطات للإنزيمات، مما يراكم الكاربامازيبين لدرجة السمية."}, {"q": "Valproic Acid differs from Carbamazepine and Phenytoin in its effect on hepatic enzymes because it is a:", "options": ["A) Hepatic enzyme INDUCER", "B) Hepatic enzyme INHIBITOR", "C) Pro-drug", "D) Completely un-metabolized drug"], "correct": 1, "hint": "الفالبروات هو المثبط (Inhibitor) الوحيد المهم في هذه المجموعة."}, {"q": "Valproic Acid displaces Phenytoin from plasma proteins. This results in:", "options": ["A) Decreased free Phenytoin", "B) Increased free Phenytoin levels, risking sudden toxicity", "C) Complete excretion of Phenytoin", "D) Phenytoin losing its efficacy"], "correct": 1, "hint": "طرد الفينيتوين من الألبومين يجعله حراً ونشطاً بتركيزات سامة تضرب المخ."}, {"q": "A serious, potentially fatal adverse effect of Valproic Acid, requiring frequent monitoring, is:", "options": ["A) Renal failure", "B) Hepatotoxicity", "C) Pulmonary fibrosis", "D) Heart block"], "correct": 1, "hint": "الفالبروات شديد السمية للكبد (خاصة في الأطفال)، ويجب مراقبة إنزيمات الكبد."}, {"q": "Which cosmetic side effects are classically associated with Valproic Acid?", "options": ["A) Gingival hyperplasia and hirsutism", "B) Transient hair loss (Alopecia) and weight gain", "C) Skin thinning and weight loss", "D) Blue skin discoloration"], "correct": 1, "hint": "تساقط الشعر وزيادة الوزن المفرطة هي مشاكل تجميلية مزعجة للفالبروات."}, {"q": "Valproic Acid is highly teratogenic and classically causes which fetal malformation?", "options": ["A) Cleft palate", "B) Spina Bifida (Neural tube defect)", "C) Phocomelia", "D) Blindness"], "correct": 1, "hint": "يمنع حمض الفوليك من إغلاق القناة الشوكية للجنين بشكل سليم."}, {"q": "Ethosuximide is the absolute drug of choice for:", "options": ["A) Grand mal seizures", "B) Absence (Petit mal) seizures", "C) Status epilepticus", "D) Complex partial seizures"], "correct": 1, "hint": "قناص قنوات الكالسيوم T-type المخصص لنوبات التغيب."}, {"q": "Pharmacokinetically, Ethosuximide is unique because it is:", "options": ["A) Highly bound to plasma proteins", "B) NOT bound to plasma proteins", "C) An enzyme inducer", "D) Excreted unchanged in feces"], "correct": 1, "hint": "لأنه لا يرتبط بالبروتينات، فهو آمن تماماً من التداخلات الدوائية الإزاحية."}, {"q": "Phenytoin stabilizes excitable membranes, but unlike Barbiturates, at normal doses it is NOT a:", "options": ["A) Na+ channel blocker", "B) Generalized CNS depressant", "C) Antiarrhythmic", "D) Teratogen"], "correct": 1, "hint": "ميزة الفينيتوين الكبرى أنه يمنع التشنج دون أن يسبب تخديراً ونوماً عميقاً."}, {"q": "Because Phenytoin stabilizes all excitable membranes, it is used clinically to treat:", "options": ["A) Asthma", "B) Peptic ulcers", "C) Arrhythmias, especially Digitalis-induced", "D) Hypertension"], "correct": 2, "hint": "يثبت كهربية القلب تماماً كما يثبت كهربية الدماغ."}, {"q": "A classic cosmetic side effect of Phenytoin, especially in children, requiring strict dental hygiene is:", "options": ["A) Tooth decay", "B) Gingival hyperplasia", "C) Enamel erosion", "D) Oral thrush"], "correct": 1, "hint": "تضخم اللثة يصيب نسبة كبيرة من مرضى الفينيتوين."}, {"q": "Ataxia, Nystagmus, and Diplopia are signs of Phenytoin toxicity affecting which brain region?", "options": ["A) Frontal lobe", "B) Cerebello-Vestibular system", "C) Medulla", "D) Hypothalamus"], "correct": 1, "hint": "تسمم المخيخ يسبب ترنحاً في المشي ورأرأة (حركة سريعة) في العين."}, {"q": "Phenytoin exhibits 'Zero-Order Kinetics' at higher doses. What does this mean?", "options": ["A) It stops working", "B) Liver enzymes saturate; a small dose increase causes a massive spike in plasma levels and toxicity", "C) It is excreted instantly", "D) It cures the disease completely"], "correct": 1, "hint": "الإنزيمات تتشبع بسرعة، وأي حبة إضافية تتراكم في الدم لمستويات سامة."}, {"q": "Chronic use of enzyme inducers like Phenytoin and Carbamazepine increases the breakdown of Vitamin D, leading to:", "options": ["A) Anemia", "B) Osteoporosis", "C) Night blindness", "D) Scurvy"], "correct": 1, "hint": "تكسير فيتامين د يقلل امتصاص الكالسيوم، مما يسبب هشاشة العظام."}, {"q": "Which of the following describes the mechanism of Gabapentin and Pregabalin?", "options": ["A) Direct GABA receptor agonists", "B) Bind to voltage-gated Calcium channels, inhibiting excitatory neurotransmitter release", "C) Block Na+ channels", "D) Inhibit GABA transaminase"], "correct": 1, "hint": "رغم اسمها المخادع، إلا أنها تعمل كسدادة لقنوات الكالسيوم في العصب."}, {"q": "Pregabalin is widely used not only for partial seizures but is highly effective for:", "options": ["A) Absence seizures", "B) Neuropathic pain (e.g., Diabetic neuropathy)", "C) Schizophrenia", "D) Gout"], "correct": 1, "hint": "البريجابالين (Lyrica) مسكن قوي جداً لآلام الأعصاب المحترقة."}, {"q": "Gabapentin has a unique pharmacokinetic profile because it:", "options": ["A) Induces CYP450", "B) Is heavily metabolized by the liver", "C) Is completely un-metabolized and excreted unchanged by the kidneys", "D) Binds 99% to albumin"], "correct": 2, "hint": "آمن جداً لمرضى الكبد ولا يتفاعل مع الأدوية الأخرى لأنه يخرج عبر الكلى كما دخل."}, {"q": "Levetiracetam (Keppra) has a highly unique mechanism of action; it binds to:", "options": ["A) NMDA receptors", "B) The SV2A synaptic vesicle protein", "C) GAT-1 transporter", "D) GABA-A receptors"], "correct": 1, "hint": "ميكانيزم فريد يمنع انطلاق النواقل العصبية المحفزة من الحويصلات."}, {"q": "A major clinical advantage of Levetiracetam over older AEDs is:", "options": ["A) It cures epilepsy in one dose", "B) It is remarkably free of pharmacokinetic drug interactions", "C) It causes intense euphoria", "D) It does not cause any sedation"], "correct": 1, "hint": "لا يرتبط بالبروتينات ولا يتدخل في إنزيمات الكبد، مما يجعله مثالياً للإضافة."}, {"q": "Topiramate reduces excitatory glutamate activity but also inhibits Carbonic Anhydrase, risking:", "options": ["A) Liver failure", "B) Renal stones", "C) Gastric ulcers", "D) Blindness"], "correct": 1, "hint": "تغيير حموضة البول يرسب الأملاح ويشكل حصوات كلوية."}, {"q": "A female patient on oral contraceptives taking Topiramate (or Carbamazepine) must be warned that:", "options": ["A) She will gain massive weight", "B) The AED induces estrogen metabolism, risking unintended pregnancy", "C) She must stop taking vitamins", "D) Her hair will fall out instantly"], "correct": 1, "hint": "المحفزات الإنزيمية تكسر حبوب منع الحمل بسرعة فتفقد فعاليتها."}, {"q": "Topiramate can cause 'Oligohydrosis'. What does this predispose children to?", "options": ["A) Severe dehydration", "B) Hyperthermia (heat stroke) due to decreased sweating", "C) Kidney failure", "D) Frostbite"], "correct": 1, "hint": "انقطاع العرق يمنع تبريد الجسم، مما يعرض الأطفال لضربات شمس قاتلة."}, {"q": "Unlike Valproic Acid, Topiramate is frequently associated with which effect on body weight?", "options": ["A) Massive weight gain", "B) Weight loss", "C) No effect", "D) Water retention"], "correct": 1, "hint": "التوبيراميت يسبب النحافة (فقدان الوزن)، عكس الفالبروات الذي يزيد الوزن."}, {"q": "Topiramate is officially approved and widely used not only for epilepsy but also for:", "options": ["A) Gout treatment", "B) Migraine headache prophylaxis", "C) Curing infections", "D) Local anesthesia"], "correct": 1, "hint": "مهدئ ممتاز لكهرباء الدماغ، مما يمنع نوبات الصداع النصفي."}, {"q": "Zonisamide is an effective AED but is absolutely contraindicated in patients with allergies to:", "options": ["A) Penicillin", "B) Sulfonamides", "C) Aspirin", "D) Peanuts"], "correct": 1, "hint": "الزونيساميد يحتوي على مجموعة السلفا الكيميائية."}, {"q": "Tiagabine enhances GABAergic inhibition by:", "options": ["A) Stimulating GABA synthesis", "B) Blocking GABA uptake into presynaptic neurons via GAT-1", "C) Opening sodium channels", "D) Blocking calcium channels"], "correct": 1, "hint": "التيجابين يمنع الشفاط من سحب الجابة، فتبقى في التشابك لتهدئة الدماغ."}, {"q": "Phenobarbital is a powerful barbiturate that acts by:", "options": ["A) Blocking Na+ channels directly", "B) Increasing the DURATION of chloride channel opening", "C) Blocking NMDA receptors", "D) Inhibiting carbonic anhydrase"], "correct": 1, "hint": "الباربيتورات تبقي قنوات الكلور مفتوحة لفترة أطول لتخدير الدماغ بقوة."}, {"q": "Primidone is a prodrug that relies on liver metabolism to convert it into its active form:", "options": ["A) Phenytoin", "B) Phenobarbital (and PEMA)", "C) Carbamazepine", "D) Valproic acid"], "correct": 1, "hint": "بمجرد دخوله الكبد يتحول إلى فينوباربيتال منوم ومضاد للتشنج."}, {"q": "Which drug is administered IV as the first-line emergency rescue for Status Epilepticus?", "options": ["A) Oral Valproate", "B) Diazepam or Lorazepam", "C) Ethosuximide", "D) Topiramate"], "correct": 1, "hint": "البنزوديازيبينات بالوريد توقف التشنج المستمر في ثوانٍ وتنقذ حياة المريض."}, {"q": "Felbamate is strictly reserved for refractory epilepsies (last resort) due to a high risk of:", "options": ["A) Gingival hyperplasia", "B) Aplastic anemia and severe hepatic failure", "C) Renal stones", "D) Alopecia"], "correct": 1, "hint": "دواء خطير قد يدمر نخاع العظم والكبد تماماً."}, {"q": "If a patient has been completely seizure-free for 2-3 years, what is the appropriate medical protocol?", "options": ["A) Stop the medication abruptly", "B) Continue the medication for life without question", "C) Attempt a very gradual, slow withdrawal while monitoring for relapse", "D) Double the dose to ensure a cure"], "correct": 2, "hint": "الدكتور أوضح أنه يمكن محاولة سحب الدواء ببطء شديد على مدار أشهر."}, {"q": "Which of the following is NOT an enzyme inducer?", "options": ["A) Phenytoin", "B) Carbamazepine", "C) Phenobarbital", "D) Valproic Acid"], "correct": 3, "hint": "الفالبروات مثبط (Inhibitor)، بينما الباقون محفزون (Inducers)."}, {"q": "Peripheral neuropathy is treated effectively with:", "options": ["A) Ethosuximide", "B) Pregabalin", "C) Phenobarbital", "D) Felbamate"], "correct": 1, "hint": "البريجابالين يعالج اعتلال الأعصاب الطرفية بفعالية."}, {"q": "A pregnant epileptic patient is taking Valproic acid. She must be counseled on the high risk of:", "options": ["A) Fetal blindness", "B) Spina bifida in the fetus", "C) Macrosomia", "D) Neonatal teeth discoloration"], "correct": 1, "hint": "يمنع انغلاق الأنبوب العصبي للجنين بشكل سليم."}, {"q": "A key reason to avoid Phenytoin intramuscular (IM) injection is:", "options": ["A) It is destroyed instantly", "B) It causes tissue necrosis and crystallization in the muscle", "C) It causes heart attacks", "D) It works too slowly"], "correct": 1, "hint": "الحقن العضلي للفينيتوين مؤلم جداً ويدمر الأنسجة."}, {"q": "The ultimate goal of antiepileptic therapy is:", "options": ["A) Complete seizure freedom with no debilitating side effects using Monotherapy", "B) Sedating the patient to prevent injury", "C) Using polytherapy to guarantee success", "D) Curing the genetic flaw"], "correct": 0, "hint": "الهدف هو حياة طبيعية باستخدام دواء واحد إن أمكن."}, {"q": "Oxcarbazepine is structurally similar to Carbamazepine but is preferred because it has less risk of:", "options": ["A) Sedation", "B) Aplastic anemia and hepatic toxicity (no epoxide metabolite)", "C) Hyponatremia", "D) Teratogenicity"], "correct": 1, "hint": "يتجنب الميتابوليت السام الذي يدمر النخاع العظمي."}, {"q": "Which of the following describes the mechanism of action of Tiagabine?", "options": ["A) GAT-1 inhibitor", "B) SV2A ligand", "C) Na+ channel blocker", "D) NMDA antagonist"], "correct": 0, "hint": "يغلق ناقل الـ GAT-1 المسؤول عن إعادة سحب الجابة."}, {"q": "Which AED is commonly associated with both weight loss and kidney stones?", "options": ["A) Valproic acid", "B) Topiramate", "C) Zonisamide", "D) Gabapentin"], "correct": 1, "hint": "التوبيراميت بسبب تثبيطه لإنزيم الكاربونيك أنهيدريز."}, {"q": "Carbamazepine's efficacy may decrease over time without dose adjustment because of:", "options": ["A) Renal clearance increase", "B) Auto-induction of liver enzymes", "C) Downregulation of Na+ channels", "D) Tachyphylaxis"], "correct": 1, "hint": "يحفز الإنزيمات التي تكسره هو شخصياً."}, {"q": "Which of the following drugs acts by binding to the alpha-2-delta subunit of voltage-gated calcium channels?", "options": ["A) Ethosuximide", "B) Pregabalin", "C) Lamotrigine", "D) Phenytoin"], "correct": 1, "hint": "البريجابالين والجابابنتين يرتبطان بهذه الوحدة الفرعية لمنع دخول الكالسيوم."}, {"q": "A patient on Phenytoin presents with swollen, bleeding gums. This condition is:", "options": ["A) Scurvy", "B) Gingival hyperplasia", "C) Oral thrush", "D) Aplastic anemia"], "correct": 1, "hint": "تضخم اللثة هو العرض التجميلي الأشهر للفينيتوين."}, {"q": "Which AED is virtually free of drug interactions and does not require hepatic metabolism?", "options": ["A) Valproic Acid", "B) Levetiracetam", "C) Carbamazepine", "D) Phenobarbital"], "correct": 1, "hint": "ليفيتيراسيتام (Keppra) آمن جداً للتداخلات الدوائية."}, {"q": "Ethosuximide is the drug of choice for which demographic primarily experiencing absence seizures?", "options": ["A) Elderly patients", "B) Young children", "C) Pregnant women", "D) Teenagers"], "correct": 1, "hint": "نوبات التغيب تصيب الأطفال بشكل أساسي في سن المدرسة."}, {"q": "Phenytoin at therapeutic doses suppresses seizures without causing:", "options": ["A) Nystagmus", "B) General CNS depression", "C) Gingival hyperplasia", "D) Vitamin D deficiency"], "correct": 1, "hint": "على عكس المهدئات القديمة، لا يسبب الفينيتوين تنويماً عاماً للمريض."}, {"q": "Which AED drug acts as a suicide inhibitor (irreversible) of GABA transaminase?", "options": ["A) Vigabatrin", "B) Tiagabine", "C) Valproic Acid", "D) Phenobarbital"], "correct": 0, "hint": "الفيجاباتاترين يدمر إنزيم تكسير الجابة للأبد، مما يرفع مستوياتها بقوة."}, {"q": "Which side effect limits the use of Vigabatrin?", "options": ["A) Permanent visual field defects (blindness)", "B) Aplastic anemia", "C) Renal stones", "D) Heart block"], "correct": 0, "hint": "يسبب فقدان رؤية محيطي دائم، لذا يستخدم بحذر شديد."}, {"q": "A distinguishing feature of complex partial seizures from simple partial is:", "options": ["A) Presence of an aura", "B) Loss or impairment of consciousness", "C) Muscle twitching", "D) Duration over 10 minutes"], "correct": 1, "hint": "في النوبة المعقدة، المريض يغيب عن الوعي تماماً."}, {"q": "A generalized seizure starting with stiffening of the body and falling is in the:", "options": ["A) Clonic phase", "B) Tonic phase", "C) Postictal phase", "D) Absence phase"], "correct": 1, "hint": "مرحلة التونيك هي التخشب العضلي والسقوط."}, {"q": "Which of the following is NOT a true generalized seizure?", "options": ["A) Tonic-clonic", "B) Absence", "C) Complex partial", "D) Myoclonic"], "correct": 2, "hint": "النوبة الجزئية (Focal) تبدأ في منطقة محددة من الدماغ، وليس كل الدماغ."}, {"q": "A typical non-pharmacological trigger for reflex seizures includes:", "options": ["A) Eating", "B) Flashing lights (strobe lights)", "C) Sleeping", "D) Walking"], "correct": 1, "hint": "الأضواء الساطعة والمتكررة تثير التشنجات الانعكاسية."}, {"q": "The period of confusion and exhaustion following a tonic-clonic seizure is called the:", "options": ["A) Aura", "B) Ictal phase", "C) Post-ictal state", "D) Prodrome"], "correct": 2, "hint": "مرحلة ما بعد النوبة حيث يكون الدماغ منهكاً تماماً."}, {"q": "Which AED has a mechanism involving BOTH Na+ channel blockade and T-type Ca++ channel blockade?", "options": ["A) Phenytoin", "B) Ethosuximide", "C) Zonisamide", "D) Tiagabine"], "correct": 2, "hint": "الزونيساميد يغلق القناتين معاً."}, {"q": "Which AED is commonly associated with an increased risk of cleft palate if used during pregnancy?", "options": ["A) Topiramate", "B) Phenytoin", "C) Valproic acid", "D) Gabapentin"], "correct": 1, "hint": "الفينيتوين يسبب متلازمة الجنين الفينيتويني ومنها الشفة الأرنبية."}, {"q": "The primary enzyme responsible for the auto-induction of Carbamazepine is:", "options": ["A) CYP2D6", "B) CYP3A4", "C) CYP1A2", "D) Xanthine oxidase"], "correct": 1, "hint": "إنزيمات الكبد 3A4 هي المسؤولة الأساسية عن أيضه."}, {"q": "Carbamazepine is structurally related to which class of psychiatric drugs?", "options": ["A) SSRIs", "B) Tricyclic antidepressants (TCAs)", "C) Benzodiazepines", "D) Phenothiazines"], "correct": 1, "hint": "يشبه مضادات الاكتئاب ثلاثية الحلقات كيميائياً."}, {"q": "Which AED can cause a rare but severe idiosyncratic reaction known as DRESS syndrome?", "options": ["A) Gabapentin", "B) Lamotrigine", "C) Pregabalin", "D) Tiagabine"], "correct": 1, "hint": "اللاموتريجين خطير جداً من حيث الطفح الجلدي ويجب زيادة جرعته ببطء شديد."}, {"q": "The risk of Steven-Johnson Syndrome (SJS) with Lamotrigine is significantly increased if co-administered with:", "options": ["A) Phenytoin", "B) Carbamazepine", "C) Valproic Acid", "D) Topiramate"], "correct": 2, "hint": "الفالبروات (مثبط إنزيمي) يرفع مستوى اللاموتريجين بقوة مسبباً طفحاً جلدياً مميتاً."}, {"q": "Which of the following describes the kinetics of Gabapentin absorption?", "options": ["A) Linear and complete", "B) Saturable (zero-order) absorption at high doses", "C) Destroyed by stomach acid", "D) Enhances its own absorption"], "correct": 1, "hint": "نواقل الجابابنتين في الأمعاء تتشبع، فكلما زادت الجرعة قل الامتصاص النسبي."}, {"q": "Which BZD is often given rectally for aborting prolonged seizures in children at home?", "options": ["A) Diazepam", "B) Clonazepam", "C) Midazolam", "D) Lorazepam"], "correct": 0, "hint": "اللبوس الشرجي للديازيبام منقذ وسريع للأطفال في المنزل قبل الوصول للمستشفى."}, {"q": "Lorazepam is often preferred over Diazepam for IV treatment of Status Epilepticus because it:", "options": ["A) Is less potent", "B) Has a longer duration of action in the CNS", "C) Has no side effects", "D) Is purely water soluble"], "correct": 1, "hint": "اللورازيبام يبقى في المخ لفترة أطول ليمنع عودة التشنج."}, {"q": "What is the consequence of Phenobarbital's long half-life?", "options": ["A) Requires administration every 4 hours", "B) Can take weeks to reach steady-state concentration", "C) Excreted instantly", "D) Causes immediate withdrawal"], "correct": 1, "hint": "عمره النصف طويل جداً (أيام)، فيتراكم ببطء في الجسم."}, {"q": "Which of the following is a classic sign of barbiturate toxicity?", "options": ["A) Hyperactivity", "B) Severe respiratory depression and coma", "C) Mydriasis", "D) Tachycardia"], "correct": 1, "hint": "الباربيتورات بجرعات عالية تثبط مركز التنفس وقد تؤدي للوفاة."}, {"q": "Primidone essential tremor treatment relies on which of its properties?", "options": ["A) Its conversion to Phenytoin", "B) Direct action and conversion to Phenobarbital", "C) Na+ block", "D) Serotonin increase"], "correct": 1, "hint": "يستخدم لعلاج الرعشة الأساسية بالإضافة للصرع."}, {"q": "Which of the following AEDs acts by binding to the NMDA receptor at the glycine site?", "options": ["A) Felbamate", "B) Topiramate", "C) Zonisamide", "D) Ethosuximide"], "correct": 0, "hint": "الفلباميت يغلق مستقبلات الجلوتامات بقوة."}, {"q": "What is the primary excretion route for Levetiracetam?", "options": ["A) Bile", "B) Feces", "C) Renal (largely unchanged)", "D) Sweat"], "correct": 2, "hint": "يخرج عن طريق الكلى دون المرور بالكبد."}, {"q": "Which AED is commonly known to cause cognitive slowing, word-finding difficulties, and confusion?", "options": ["A) Topiramate", "B) Gabapentin", "C) Lamotrigine", "D) Levetiracetam"], "correct": 0, "hint": "التوبيراميت يسبب 'ثقل' وبطء في التفكير."}, {"q": "A patient with bipolar disorder and epilepsy could benefit best from which single medication?", "options": ["A) Ethosuximide", "B) Valproic Acid", "C) Phenobarbital", "D) Gabapentin"], "correct": 1, "hint": "الفالبروات مثبت مزاج ممتاز لمضرى ثنائي القطب."}, {"q": "Which AED is noted for causing aggressive behavior, irritability, and mood swings, especially in children?", "options": ["A) Levetiracetam", "B) Phenytoin", "C) Valproic Acid", "D) Pregabalin"], "correct": 0, "hint": "الليفيتيراسيتام قد يسبب العصبية والعدوانية كأثر جانبي نفسي."}, {"q": "Vagus Nerve Stimulation (VNS) is a non-pharmacological treatment indicated for:", "options": ["A) First-time seizures", "B) Refractory epilepsy where multiple drugs failed", "C) Absence seizures only", "D) Febrile seizures"], "correct": 1, "hint": "جهاز يُزرع تحت الجلد لتحفيز العصب الحائر كعلاج أخير للصرع المستعصي."}, {"q": "The ketogenic diet, sometimes used for refractory childhood epilepsy, is characterized by being:", "options": ["A) High protein, low fat", "B) High fat, low carbohydrate", "C) High carbohydrate, low fat", "D) Balanced diet"], "correct": 1, "hint": "حمية الكيتو تجبر الدماغ على استخدام الكيتونات بدلاً من الجلوكوز، مما يقلل الكهرباء الزائدة."}, {"q": "Which parameter should be monitored regularly in a patient taking Carbamazepine?", "options": ["A) Serum calcium", "B) Complete Blood Count (CBC) and serum sodium", "C) Pulmonary function", "D) Vision"], "correct": 1, "hint": "لمراقبة نقص الصوديوم وتأثيره السام على نخاع العظم."}, {"q": "Valproic acid's inhibition of GABA transaminase results in:", "options": ["A) Increased breakdown of GABA", "B) Decreased levels of GABA", "C) Increased levels of GABA in the brain", "D) No change in GABA"], "correct": 2, "hint": "يمنع تكسير الجابة، فيرتفع مستواها المهدئ في الدماغ."}, {"q": "Which of the following is true about Phenytoin metabolism?", "options": ["A) It is constant regardless of dose", "B) It shifts from first-order to zero-order at therapeutic levels", "C) It is entirely renal", "D) It is not metabolized"], "correct": 1, "hint": "الإنزيمات تتشبع بسرعة، فيتحول التكسير إلى نسبة ثابتة وليس مئوية."}, {"q": "Abrupt withdrawal of Phenobarbital can lead to:", "options": ["A) Immediate cure", "B) Rebound Status Epilepticus", "C) Hypotension", "D) Blindness"], "correct": 1, "hint": "توقيف المهدئات القوية فجأة يسبب عاصفة صرعية خطيرة."}, {"q": "Which AED is an option for both partial seizures and generalized tonic-clonic, but NOT absence?", "options": ["A) Ethosuximide", "B) Carbamazepine", "C) Valproic acid", "D) Lamotrigine"], "correct": 1, "hint": "الكاربامازيبين يفيد في معظم النوبات إلا نوبات التغيب."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const hintBox = document.getElementById('hint-box');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const progressText = document.getElementById('progress-text');
+        const quizBox = document.getElementById('quiz-box');
+        const resultBox = document.getElementById('result-box');
+        const scoreText = document.getElementById('score-text');
+
+        function loadQuestion() {
+            answered = false;
+            hintBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            hintBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const currentQ = questionsData[currentQuestionIndex];
+            progressText.innerText = `السؤال ${currentQuestionIndex + 1} من ${questionsData.length}`;
+            questionTextElement.innerText = `Q${currentQuestionIndex + 1}: ${currentQ.q}`;
+            
+            hintBox.innerHTML = `<strong>💡 تلميح:</strong> ${currentQ.hint}`;
+
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index, btn, currentQ.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, btnElement, correctIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+            
+            hintBtn.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizBox.style.display = 'none';
+            resultBox.style.display = 'block';
+            scoreText.innerText = score;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

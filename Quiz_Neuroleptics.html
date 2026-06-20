@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacotherapy 2: Neuroleptics Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background: #ffffff;
+            width: 90%;
+            max-width: 650px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 24px; }
+        .header p { margin: 5px 0 0; color: #e74c3c; font-size: 15px; font-weight: bold;}
+        .progress {
+            font-size: 15px;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #1a252f;
+            font-weight: 700;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            direction: ltr;
+        }
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #2c3e50;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 500;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #ecf0f1;
+            border-color: #95a5a6;
+        }
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+        }
+        .option-btn:disabled { cursor: not-allowed; }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 2px solid #e1e8ed;
+            padding-top: 20px;
+        }
+        .hint-btn, .next-btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .hint-btn { background-color: #ffeaa7; color: #d35400; display: none;}
+        .hint-btn:hover { background-color: #f1c40f; color: #fff; }
+        .next-btn { background-color: #3498db; color: #ffffff; display: none; }
+        .next-btn:hover { background-color: #2980b9; }
+        
+        .hint-box {
+            background-color: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 15px;
+            color: #856404;
+            border-radius: 4px 0 0 4px;
+            display: none;
+            line-height: 1.6;
+            animation: fadeIn 0.5s;
+        }
+        .hint-box strong { color: #d35400; }
+        
+        .result-container { text-align: center; display: none; }
+        .result-container h2 { color: #2c3e50; font-size: 30px; }
+        .result-container p { color: #7f8c8d; font-size: 20px; font-weight: bold;}
+        .restart-btn {
+            background-color: #2ecc71; color: white; border: none; padding: 15px 30px;
+            border-radius: 8px; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: 18px; cursor: pointer; margin-top: 25px;
+        }
+        .restart-btn:hover { background-color: #27ae60; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        @media (max-width: 480px) {
+            .quiz-container { padding: 20px; width: 95%; }
+            .question-text { font-size: 16px; }
+            .option-btn { font-size: 14px; padding: 12px; }
+            .hint-btn, .next-btn { font-size: 14px; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="header">
+            <h1>Pharmacotherapy 2 💊</h1>
+            <p>Interactive Quiz: Batch 3 - Neuroleptics (100 Qs)</p>
+        </div>
+        
+        <div class="progress" id="progress-text">السؤال 1 من 100</div>
+        
+        <div class="question-text" id="question-text"></div>
+        <div class="options-container" id="options-container"></div>
+        
+        <div class="hint-box" id="hint-box"></div>
+        
+        <div class="actions">
+            <button class="hint-btn" id="hint-btn" onclick="showHint()">إظهار التلميح 💡</button>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">التالي ⏭️</button>
+        </div>
+    </div>
+
+    <div class="quiz-container result-container" id="result-box">
+        <h2>النتيجة النهائية 🏆</h2>
+        <p>لقد أجبت بشكل صحيح على <span id="score-text" style="color:#27ae60; font-size: 28px;">0</span> من أصل 100 سؤال.</p>
+        <button class="restart-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    </div>
+
+    <script>
+        const questionsData = [{"q": "Positive symptoms of Schizophrenia include which of the following?", "options": ["A) Blunted affect", "B) Hallucinations and Delusions", "C) Social withdrawal", "D) Anhedonia"], "correct": 1, "hint": "الأعراض الإيجابية تعني 'إضافة' شيء غير طبيعي لشخصية المريض، كالهلاوس السمعية والضلالات."}, {"q": "Psychosis and positive symptoms are hypothesized to result from excessive Dopamine activity in which brain pathway?", "options": ["A) Nigrostriatal", "B) Mesolimbic", "C) Tuberoinfundibular", "D) Mesocortical"], "correct": 1, "hint": "نظام الـ Mesolimbic هو المسؤول عن الهلاوس عند زيادة الدوبامين فيه."}, {"q": "Negative symptoms of Schizophrenia (like apathy and social withdrawal) respond better to:", "options": ["A) Low-potency typicals", "B) High-potency typicals", "C) Atypical antipsychotics (2nd Gen)", "D) Benzodiazepines"], "correct": 2, "hint": "الأدوية الحديثة (Atypicals) تعالج الانطواء والتبلد العاطفي بكفاءة أعلى من الأدوية القديمة."}, {"q": "Blocking Dopamine receptors in the Nigrostriatal pathway causes which unwanted effect?", "options": ["A) Therapeutic antipsychotic effect", "B) Extrapyramidal Symptoms (EPS)", "C) Hyperprolactinemia", "D) Sedation"], "correct": 1, "hint": "نظام الـ Nigrostriatal يتحكم بالحركة، وغلق الدوبامين فيه يسبب رعشة وتيبس (أعراض تشبه مرض باركنسون)."}, {"q": "Blocking Dopamine receptors in the Tuberoinfundibular pathway leads to:", "options": ["A) Extrapyramidal Symptoms", "B) Hyperprolactinemia (elevated prolactin)", "C) Worsening of negative symptoms", "D) Powerful anti-emetic effect"], "correct": 1, "hint": "الدوبامين يمنع إفراز البرولاكتين. غلق المستقبلات يزيل هذه 'الفرملة' فيرتفع هرمون الحليب."}, {"q": "Typical (First-Generation) antipsychotics primarily exert their main therapeutic effect by blocking:", "options": ["A) Serotonin 5-HT2A", "B) Dopamine D2 receptors", "C) Histamine H1", "D) Muscarinic M1"], "correct": 1, "hint": "الأدوية القديمة تعتمد كلياً وتنافسياً على غلق مستقبلات الدوبامين D2."}, {"q": "Why do Atypical antipsychotics have a significantly lower incidence of EPS compared to Typicals?", "options": ["A) They do not block Dopamine at all", "B) They strongly block Serotonin (5-HT2A) receptors alongside D2 blockade", "C) They block Muscarinic receptors exclusively", "D) They are metabolized much faster"], "correct": 1, "hint": "الغلق المزدوج (السيروتونين والدوبامين) يحمي المريض من التشنجات الحركية الخطيرة."}, {"q": "Antipsychotics are effective anti-emetics because they block D2-dopaminergic receptors in the:", "options": ["A) Vestibular apparatus", "B) Chemoreceptor Trigger Zone (CTZ)", "C) Vagus nerve", "D) Cortex"], "correct": 1, "hint": "توقف القيء الكيميائي (في الـ CTZ)، ولكنها لا تفيد في دوار الحركة."}, {"q": "Which of the following is NOT effectively treated by neuroleptics?", "options": ["A) Drug-induced nausea", "B) Motion sickness", "C) Schizophrenia positive symptoms", "D) Tourette's associated tics"], "correct": 1, "hint": "دوار البحر (Motion sickness) يعتمد على الهيستامين والأسيتيل كولين، وليس الدوبامين."}, {"q": "Sedation from antipsychotic drugs is primarily due to the potent blockade of which receptor?", "options": ["A) Dopamine D2", "B) Histamine H1", "C) Serotonin 5-HT2A", "D) Alpha-1"], "correct": 1, "hint": "غلق الهيستامين (كما في أدوية الحساسية القديمة) هو ما يسبب النعاس العميق."}, {"q": "Orthostatic hypotension associated with antipsychotics is caused by the blockade of:", "options": ["A) Muscarinic receptors", "B) Alpha-1 Adrenergic receptors", "C) Histamine receptors", "D) Dopamine receptors"], "correct": 1, "hint": "الأوعية تفقد قدرتها على الانقباض عند الوقوف بسبب غلق مستقبلات ألفا، فيهبط الضغط."}, {"q": "A patient on a neuroleptic presents with dry mouth, blurred vision, and urinary retention. This is due to:", "options": ["A) Dopamine blockade", "B) Alpha-1 blockade", "C) Antimuscarinic (Anticholinergic) blockade", "D) Histamine blockade"], "correct": 2, "hint": "هذه هي الأعراض الكلاسيكية لغلق مستقبلات الكولين."}, {"q": "Neuroleptics can cause 'Poikilothermia'. This means body temperature:", "options": ["A) Is fixed at 40°C", "B) Fluctuates with the environment because the hypothalamus is depressed", "C) Drops dangerously low at night", "D) Causes severe sweating"], "correct": 1, "hint": "الدواء يعطل 'ترموستات' الجسم في الهايبوثلامس."}, {"q": "If an elderly patient has BPH (enlarged prostate), which typical antipsychotic should be heavily avoided?", "options": ["A) Haloperidol", "B) Thioridazine", "C) Fluphenazine", "D) Pimozide"], "correct": 1, "hint": "الثيوريدازين له خصائص مضادة للكولين قوية جداً ستزيد من احتباس البول فوراً."}, {"q": "Sexual dysfunction, infertility, and amenorrhea in patients taking typical antipsychotics are primarily due to:", "options": ["A) Serotonin blockade", "B) Histamine blockade", "C) Elevation of Prolactin", "D) Alpha-blockade"], "correct": 2, "hint": "بسبب غلق الدوبامين في الغدة النخامية (Tuberoinfundibular pathway)."}, {"q": "A patient arrives at the ER with a fixed, twisting of the neck and sustained muscle contractions after starting a neuroleptic. Diagnosis?", "options": ["A) Tardive Dyskinesia", "B) Acute Dystonia", "C) Akathisia", "D) NMS"], "correct": 1, "hint": "التوتر العضلي الحاد (Dystonia) يحدث مبكراً ويسبب تشنجات مؤلمة في الرقبة أو الوجه."}, {"q": "Acute Dystonia and Parkinson-like EPS are treated immediately by administering:", "options": ["A) Levodopa", "B) Anticholinergic drugs (e.g., Benztropine)", "C) Diazepam", "D) Dantrolene"], "correct": 1, "hint": "البنزتروبين (مضاد الكولين) هو 'الترياق' السريع لفك التشنج العضلي العنيف."}, {"q": "If a patient experiencing Acute Dystonia is incorrectly given Levodopa instead of Benztropine, what will happen?", "options": ["A) Immediate cure", "B) The Levodopa's effect will be blocked by the neuroleptic, rendering it useless", "C) The patient falls asleep", "D) The dystonia resolves instantly"], "correct": 1, "hint": "إعطاء ليفودوبا لمريض يتعاطى مضاد ذهان هو مضيعة للوقت لأن المستقبلات مغلقة أصلاً بالدواء."}, {"q": "A patient taking Fluphenazine exhibits severe motor restlessness, an inability to sit still, and constant pacing. This is:", "options": ["A) Dystonia", "B) Akathisia", "C) Tardive Dyskinesia", "D) Parkinsonism"], "correct": 1, "hint": "الأكاثيسيا هي شعور داخلي قاتل بعدم الراحة يجبر المريض على المشي باستمرار."}, {"q": "Tardive Dyskinesia (involuntary tongue/lip movements) after long-term use is believed to be caused by:", "options": ["A) Dopamine depletion", "B) Compensatory up-regulation and supersensitivity of Dopamine receptors", "C) Serotonin excess", "D) Acetylcholine deficiency"], "correct": 1, "hint": "يصنع المخ مستقبلات جديدة تعويضية حساسة جداً للدوبامين، فتحدث حركات لاإرادية."}, {"q": "A 'drug holiday' (prolonged period without the neuroleptic) may be attempted specifically to help diminish the symptoms of:", "options": ["A) Acute Dystonia", "B) Tardive Dyskinesia", "C) Akathisia", "D) NMS"], "correct": 1, "hint": "إيقاف الدواء لفترة قد يسمح لمستقبلات الدوبامين الزائدة بالعودة لعددها الطبيعي."}, {"q": "Neuroleptic Malignant Syndrome (NMS) is a fatal reaction presenting with:", "options": ["A) Severe Hypothermia and flaccidity", "B) 'Lead-pipe' muscle rigidity, high fever, and altered mental status", "C) Bradycardia", "D) Hypotension only"], "correct": 1, "hint": "متلازمة خبيثة وقاتلة تتميز بالتخشب العضلي الشديد والحرارة العالية."}, {"q": "The specific pharmacological treatment for Neuroleptic Malignant Syndrome (NMS) includes:", "options": ["A) Epinephrine", "B) Dantrolene or Bromocriptine", "C) Haloperidol IV", "D) Atropine"], "correct": 1, "hint": "الدانترولين لترخية العضلات المتخشبة، والبروموكريبتين لتنشيط الدوبامين المفقود."}, {"q": "Which of the following is considered a 'High-Potency' typical antipsychotic?", "options": ["A) Chlorpromazine", "B) Thioridazine", "C) Haloperidol", "D) Clozapine"], "correct": 2, "hint": "الهالوبيريدول عالي الفعالية، يحتاج جرعات صغيرة، لكنه يسبب EPS بشكل عنيف."}, {"q": "Haloperidol has very low anticholinergic activity. Consequently, it produces:", "options": ["A) No side effects", "B) Extrapyramidal effects MORE frequently", "C) Severe constipation", "D) Retinal deposits"], "correct": 1, "hint": "لأنه لا يغلق الأسيتيل كولين ليعادل الكفة، يختل الميزان بشدة مسبباً تشنجات حركية."}, {"q": "Why does Thioridazine cause FEWER extrapyramidal disturbances compared to Haloperidol?", "options": ["A) It doesn't block D2", "B) It strongly blocks cholinergic activity (potent antimuscarinic), restoring the balance", "C) It is an atypical", "D) It enhances GABA"], "correct": 1, "hint": "يغلق الأسيتيل كولين في نفس الوقت، مما يعيد توازن الحركة ويقلل التشنجات."}, {"q": "Which typical neuroleptics are available as slow-release 'depot' injections for non-compliant patients?", "options": ["A) Clozapine and Risperidone", "B) Fluphenazine and Haloperidol", "C) Thioridazine and Chlorpromazine", "D) Ziprasidone"], "correct": 1, "hint": "المرضى الذين يرفضون أخذ الحبوب يومياً، يتم إعطاؤهم حقنة (Depot) تكفي لأسابيع."}, {"q": "Promethazine is classified structurally as a neuroleptic but is mainly used clinically to treat:", "options": ["A) Severe schizophrenia", "B) Pruritus (Itching) and allergies due to strong antihistamine properties", "C) Epilepsy", "D) Bipolar disorder"], "correct": 1, "hint": "يُستخدم كمضاد قوي للحساسية والهرش، وليس كعلاج أساسي للفصام."}, {"q": "Clozapine has a uniquely high affinity for which dopamine receptor subtype?", "options": ["A) D1", "B) D2", "C) D3", "D) D4"], "correct": 3, "hint": "ارتباطه بمستقبلات D4 والسيروتونين يجعله دواءً سحرياً بدون إحداث تشنجات (EPS)."}, {"q": "Clozapine is reserved for refractory schizophrenia because it carries a 1-2% risk of:", "options": ["A) Severe weight loss", "B) Fatal Agranulocytosis (requires regular CBC)", "C) Renal failure", "D) Blindness"], "correct": 1, "hint": "قد يمسح كرات الدم البيضاء تماماً، فيموت المريض من أي عدوى بكتيرية بسيطة."}, {"q": "Significant weight gain and metabolic syndrome are MOST problematically associated with:", "options": ["A) Haloperidol", "B) Olanzapine and Clozapine", "C) Ziprasidone", "D) Aripiprazole"], "correct": 1, "hint": "رغم أمانها الحركي، إلا أنها تسبب سمنة مفرطة وارتفاعاً في السكر."}, {"q": "Which atypical antipsychotic is highly notable for treating Bipolar Depression as well?", "options": ["A) Quetiapine", "B) Haloperidol", "C) Fluphenazine", "D) Thioridazine"], "correct": 0, "hint": "الكويتيابين والأولانزابين تعمل كمثبتات للمزاج ممتازة في مرض ثنائي القطب."}, {"q": "Ziprasidone causes minimal weight gain but is strictly contraindicated in patients with:", "options": ["A) Asthma", "B) Cardiac arrhythmias (Prolongs QT interval)", "C) Peptic ulcers", "D) Diabetes"], "correct": 1, "hint": "قد يدخل مريض القلب في رفرفة بطينية مميتة."}, {"q": "Aripiprazole stands out from other antipsychotics because it has a uniquely LOW potential for EPS and hyperprolactinemia due to being a:", "options": ["A) Pure D2 antagonist", "B) Partial dopamine agonist", "C) Pure serotonin agonist", "D) Cholinergic blocker"], "correct": 1, "hint": "يعمل كـ 'Partial Agonist'، مما يحافظ على مستوى متوازن من الدوبامين لا هو عالي ولا منعدم."}, {"q": "Which atypical antipsychotic is frequently utilized in the treatment of Autism to manage irritability?", "options": ["A) Clozapine", "B) Risperidone", "C) Quetiapine", "D) Fluphenazine"], "correct": 1, "hint": "الريسبيريدون دواء ممتاز لتقليل العدوانية والتهيج في الأطفال المصابين بالتوحد."}, {"q": "Are neuroleptic drugs curative for schizophrenia?", "options": ["A) Yes, completely", "B) No, they are not curative; they only manage the symptoms", "C) Yes, if taken for 1 year", "D) They cure the negative symptoms only"], "correct": 1, "hint": "الأدوية 'تُهدي' الأعراض فقط لتسمح للمريض بالاندماج في المجتمع، لكنها لا تعالج الخلل الجيني."}, {"q": "Antipsychotics may lower the seizure threshold. They should be used with extreme caution in:", "options": ["A) Asthmatics", "B) Epileptic patients", "C) Diabetics", "D) Hypertensives"], "correct": 1, "hint": "أدوية الفصام تزيد من نشاط الدماغ الكهربائي وتجعل مريض الصرع عرضة لنوبات أكثر."}, {"q": "Levodopa interacts with antipsychotics by:", "options": ["A) Enhancing the antipsychotic effect", "B) Having its Parkinson's effect blocked by the antipsychotic", "C) Causing Serotonin Syndrome", "D) Increasing sedation"], "correct": 1, "hint": "ليفودوبا يزود الدوبامين، ومضادات الذهان تغلق المستقبلات. إعطاؤهما معاً يبطل مفعول ليفودوبا."}, {"q": "According to the doctor, prescribing neuroleptics involves 'trial and error' because:", "options": ["A) Doctors guess randomly", "B) Selection depends on matching side effect profiles to individual patient sensitivity", "C) Placebos work better", "D) Typicals never work"], "correct": 1, "hint": "نختار الدواء بناءً على تحمل المريض للأعراض الجانبية (Sedation, EPS, Weight gain)."}, {"q": "Which of the following is considered a 'First-line' Atypical antipsychotic drug that shows fewer relapses than Haloperidol?", "options": ["A) Chlorpromazine", "B) Risperidone", "C) Thioridazine", "D) Fluphenazine"], "correct": 1, "hint": "الريسبيريدون دواء خط أول ممتاز، يقلل الانتكاسات ويحافظ على استقرار المريض."}, {"q": "[مراجعة سريعة] Positive symptoms of Schizophrenia include which of the following?", "options": ["A) Blunted affect", "B) Hallucinations and Delusions", "C) Social withdrawal", "D) Anhedonia"], "correct": 1, "hint": "الأعراض الإيجابية تعني 'إضافة' شيء غير طبيعي لشخصية المريض، كالهلاوس السمعية والضلالات."}, {"q": "[مراجعة سريعة] Psychosis and positive symptoms are hypothesized to result from excessive Dopamine activity in which brain pathway?", "options": ["A) Nigrostriatal", "B) Mesolimbic", "C) Tuberoinfundibular", "D) Mesocortical"], "correct": 1, "hint": "نظام الـ Mesolimbic هو المسؤول عن الهلاوس عند زيادة الدوبامين فيه."}, {"q": "[مراجعة سريعة] Negative symptoms of Schizophrenia (like apathy and social withdrawal) respond better to:", "options": ["A) Low-potency typicals", "B) High-potency typicals", "C) Atypical antipsychotics (2nd Gen)", "D) Benzodiazepines"], "correct": 2, "hint": "الأدوية الحديثة (Atypicals) تعالج الانطواء والتبلد العاطفي بكفاءة أعلى من الأدوية القديمة."}, {"q": "[مراجعة سريعة] Blocking Dopamine receptors in the Nigrostriatal pathway causes which unwanted effect?", "options": ["A) Therapeutic antipsychotic effect", "B) Extrapyramidal Symptoms (EPS)", "C) Hyperprolactinemia", "D) Sedation"], "correct": 1, "hint": "نظام الـ Nigrostriatal يتحكم بالحركة، وغلق الدوبامين فيه يسبب رعشة وتيبس (أعراض تشبه مرض باركنسون)."}, {"q": "[مراجعة سريعة] Blocking Dopamine receptors in the Tuberoinfundibular pathway leads to:", "options": ["A) Extrapyramidal Symptoms", "B) Hyperprolactinemia (elevated prolactin)", "C) Worsening of negative symptoms", "D) Powerful anti-emetic effect"], "correct": 1, "hint": "الدوبامين يمنع إفراز البرولاكتين. غلق المستقبلات يزيل هذه 'الفرملة' فيرتفع هرمون الحليب."}, {"q": "[مراجعة سريعة] Typical (First-Generation) antipsychotics primarily exert their main therapeutic effect by blocking:", "options": ["A) Serotonin 5-HT2A", "B) Dopamine D2 receptors", "C) Histamine H1", "D) Muscarinic M1"], "correct": 1, "hint": "الأدوية القديمة تعتمد كلياً وتنافسياً على غلق مستقبلات الدوبامين D2."}, {"q": "[مراجعة سريعة] Why do Atypical antipsychotics have a significantly lower incidence of EPS compared to Typicals?", "options": ["A) They do not block Dopamine at all", "B) They strongly block Serotonin (5-HT2A) receptors alongside D2 blockade", "C) They block Muscarinic receptors exclusively", "D) They are metabolized much faster"], "correct": 1, "hint": "الغلق المزدوج (السيروتونين والدوبامين) يحمي المريض من التشنجات الحركية الخطيرة."}, {"q": "[مراجعة سريعة] Antipsychotics are effective anti-emetics because they block D2-dopaminergic receptors in the:", "options": ["A) Vestibular apparatus", "B) Chemoreceptor Trigger Zone (CTZ)", "C) Vagus nerve", "D) Cortex"], "correct": 1, "hint": "توقف القيء الكيميائي (في الـ CTZ)، ولكنها لا تفيد في دوار الحركة."}, {"q": "[مراجعة سريعة] Which of the following is NOT effectively treated by neuroleptics?", "options": ["A) Drug-induced nausea", "B) Motion sickness", "C) Schizophrenia positive symptoms", "D) Tourette's associated tics"], "correct": 1, "hint": "دوار البحر (Motion sickness) يعتمد على الهيستامين والأسيتيل كولين، وليس الدوبامين."}, {"q": "[مراجعة سريعة] Sedation from antipsychotic drugs is primarily due to the potent blockade of which receptor?", "options": ["A) Dopamine D2", "B) Histamine H1", "C) Serotonin 5-HT2A", "D) Alpha-1"], "correct": 1, "hint": "غلق الهيستامين (كما في أدوية الحساسية القديمة) هو ما يسبب النعاس العميق."}, {"q": "[مراجعة سريعة] Orthostatic hypotension associated with antipsychotics is caused by the blockade of:", "options": ["A) Muscarinic receptors", "B) Alpha-1 Adrenergic receptors", "C) Histamine receptors", "D) Dopamine receptors"], "correct": 1, "hint": "الأوعية تفقد قدرتها على الانقباض عند الوقوف بسبب غلق مستقبلات ألفا، فيهبط الضغط."}, {"q": "[مراجعة سريعة] A patient on a neuroleptic presents with dry mouth, blurred vision, and urinary retention. This is due to:", "options": ["A) Dopamine blockade", "B) Alpha-1 blockade", "C) Antimuscarinic (Anticholinergic) blockade", "D) Histamine blockade"], "correct": 2, "hint": "هذه هي الأعراض الكلاسيكية لغلق مستقبلات الكولين."}, {"q": "[مراجعة سريعة] Neuroleptics can cause 'Poikilothermia'. This means body temperature:", "options": ["A) Is fixed at 40°C", "B) Fluctuates with the environment because the hypothalamus is depressed", "C) Drops dangerously low at night", "D) Causes severe sweating"], "correct": 1, "hint": "الدواء يعطل 'ترموستات' الجسم في الهايبوثلامس."}, {"q": "[مراجعة سريعة] If an elderly patient has BPH (enlarged prostate), which typical antipsychotic should be heavily avoided?", "options": ["A) Haloperidol", "B) Thioridazine", "C) Fluphenazine", "D) Pimozide"], "correct": 1, "hint": "الثيوريدازين له خصائص مضادة للكولين قوية جداً ستزيد من احتباس البول فوراً."}, {"q": "[مراجعة سريعة] Sexual dysfunction, infertility, and amenorrhea in patients taking typical antipsychotics are primarily due to:", "options": ["A) Serotonin blockade", "B) Histamine blockade", "C) Elevation of Prolactin", "D) Alpha-blockade"], "correct": 2, "hint": "بسبب غلق الدوبامين في الغدة النخامية (Tuberoinfundibular pathway)."}, {"q": "[مراجعة سريعة] A patient arrives at the ER with a fixed, twisting of the neck and sustained muscle contractions after starting a neuroleptic. Diagnosis?", "options": ["A) Tardive Dyskinesia", "B) Acute Dystonia", "C) Akathisia", "D) NMS"], "correct": 1, "hint": "التوتر العضلي الحاد (Dystonia) يحدث مبكراً ويسبب تشنجات مؤلمة في الرقبة أو الوجه."}, {"q": "[مراجعة سريعة] Acute Dystonia and Parkinson-like EPS are treated immediately by administering:", "options": ["A) Levodopa", "B) Anticholinergic drugs (e.g., Benztropine)", "C) Diazepam", "D) Dantrolene"], "correct": 1, "hint": "البنزتروبين (مضاد الكولين) هو 'الترياق' السريع لفك التشنج العضلي العنيف."}, {"q": "[مراجعة سريعة] If a patient experiencing Acute Dystonia is incorrectly given Levodopa instead of Benztropine, what will happen?", "options": ["A) Immediate cure", "B) The Levodopa's effect will be blocked by the neuroleptic, rendering it useless", "C) The patient falls asleep", "D) The dystonia resolves instantly"], "correct": 1, "hint": "إعطاء ليفودوبا لمريض يتعاطى مضاد ذهان هو مضيعة للوقت لأن المستقبلات مغلقة أصلاً بالدواء."}, {"q": "[مراجعة سريعة] A patient taking Fluphenazine exhibits severe motor restlessness, an inability to sit still, and constant pacing. This is:", "options": ["A) Dystonia", "B) Akathisia", "C) Tardive Dyskinesia", "D) Parkinsonism"], "correct": 1, "hint": "الأكاثيسيا هي شعور داخلي قاتل بعدم الراحة يجبر المريض على المشي باستمرار."}, {"q": "[مراجعة سريعة] Tardive Dyskinesia (involuntary tongue/lip movements) after long-term use is believed to be caused by:", "options": ["A) Dopamine depletion", "B) Compensatory up-regulation and supersensitivity of Dopamine receptors", "C) Serotonin excess", "D) Acetylcholine deficiency"], "correct": 1, "hint": "يصنع المخ مستقبلات جديدة تعويضية حساسة جداً للدوبامين، فتحدث حركات لاإرادية."}, {"q": "[مراجعة سريعة] A 'drug holiday' (prolonged period without the neuroleptic) may be attempted specifically to help diminish the symptoms of:", "options": ["A) Acute Dystonia", "B) Tardive Dyskinesia", "C) Akathisia", "D) NMS"], "correct": 1, "hint": "إيقاف الدواء لفترة قد يسمح لمستقبلات الدوبامين الزائدة بالعودة لعددها الطبيعي."}, {"q": "[مراجعة سريعة] Neuroleptic Malignant Syndrome (NMS) is a fatal reaction presenting with:", "options": ["A) Severe Hypothermia and flaccidity", "B) 'Lead-pipe' muscle rigidity, high fever, and altered mental status", "C) Bradycardia", "D) Hypotension only"], "correct": 1, "hint": "متلازمة خبيثة وقاتلة تتميز بالتخشب العضلي الشديد والحرارة العالية."}, {"q": "[مراجعة سريعة] The specific pharmacological treatment for Neuroleptic Malignant Syndrome (NMS) includes:", "options": ["A) Epinephrine", "B) Dantrolene or Bromocriptine", "C) Haloperidol IV", "D) Atropine"], "correct": 1, "hint": "الدانترولين لترخية العضلات المتخشبة، والبروموكريبتين لتنشيط الدوبامين المفقود."}, {"q": "[مراجعة سريعة] Which of the following is considered a 'High-Potency' typical antipsychotic?", "options": ["A) Chlorpromazine", "B) Thioridazine", "C) Haloperidol", "D) Clozapine"], "correct": 2, "hint": "الهالوبيريدول عالي الفعالية، يحتاج جرعات صغيرة، لكنه يسبب EPS بشكل عنيف."}, {"q": "[مراجعة سريعة] Haloperidol has very low anticholinergic activity. Consequently, it produces:", "options": ["A) No side effects", "B) Extrapyramidal effects MORE frequently", "C) Severe constipation", "D) Retinal deposits"], "correct": 1, "hint": "لأنه لا يغلق الأسيتيل كولين ليعادل الكفة، يختل الميزان بشدة مسبباً تشنجات حركية."}, {"q": "[مراجعة سريعة] Why does Thioridazine cause FEWER extrapyramidal disturbances compared to Haloperidol?", "options": ["A) It doesn't block D2", "B) It strongly blocks cholinergic activity (potent antimuscarinic), restoring the balance", "C) It is an atypical", "D) It enhances GABA"], "correct": 1, "hint": "يغلق الأسيتيل كولين في نفس الوقت، مما يعيد توازن الحركة ويقلل التشنجات."}, {"q": "[مراجعة سريعة] Which typical neuroleptics are available as slow-release 'depot' injections for non-compliant patients?", "options": ["A) Clozapine and Risperidone", "B) Fluphenazine and Haloperidol", "C) Thioridazine and Chlorpromazine", "D) Ziprasidone"], "correct": 1, "hint": "المرضى الذين يرفضون أخذ الحبوب يومياً، يتم إعطاؤهم حقنة (Depot) تكفي لأسابيع."}, {"q": "[مراجعة سريعة] Promethazine is classified structurally as a neuroleptic but is mainly used clinically to treat:", "options": ["A) Severe schizophrenia", "B) Pruritus (Itching) and allergies due to strong antihistamine properties", "C) Epilepsy", "D) Bipolar disorder"], "correct": 1, "hint": "يُستخدم كمضاد قوي للحساسية والهرش، وليس كعلاج أساسي للفصام."}, {"q": "[مراجعة سريعة] Clozapine has a uniquely high affinity for which dopamine receptor subtype?", "options": ["A) D1", "B) D2", "C) D3", "D) D4"], "correct": 3, "hint": "ارتباطه بمستقبلات D4 والسيروتونين يجعله دواءً سحرياً بدون إحداث تشنجات (EPS)."}, {"q": "[مراجعة سريعة] Clozapine is reserved for refractory schizophrenia because it carries a 1-2% risk of:", "options": ["A) Severe weight loss", "B) Fatal Agranulocytosis (requires regular CBC)", "C) Renal failure", "D) Blindness"], "correct": 1, "hint": "قد يمسح كرات الدم البيضاء تماماً، فيموت المريض من أي عدوى بكتيرية بسيطة."}, {"q": "[مراجعة سريعة] Significant weight gain and metabolic syndrome are MOST problematically associated with:", "options": ["A) Haloperidol", "B) Olanzapine and Clozapine", "C) Ziprasidone", "D) Aripiprazole"], "correct": 1, "hint": "رغم أمانها الحركي، إلا أنها تسبب سمنة مفرطة وارتفاعاً في السكر."}, {"q": "[مراجعة سريعة] Which atypical antipsychotic is highly notable for treating Bipolar Depression as well?", "options": ["A) Quetiapine", "B) Haloperidol", "C) Fluphenazine", "D) Thioridazine"], "correct": 0, "hint": "الكويتيابين والأولانزابين تعمل كمثبتات للمزاج ممتازة في مرض ثنائي القطب."}, {"q": "[مراجعة سريعة] Ziprasidone causes minimal weight gain but is strictly contraindicated in patients with:", "options": ["A) Asthma", "B) Cardiac arrhythmias (Prolongs QT interval)", "C) Peptic ulcers", "D) Diabetes"], "correct": 1, "hint": "قد يدخل مريض القلب في رفرفة بطينية مميتة."}, {"q": "[مراجعة سريعة] Aripiprazole stands out from other antipsychotics because it has a uniquely LOW potential for EPS and hyperprolactinemia due to being a:", "options": ["A) Pure D2 antagonist", "B) Partial dopamine agonist", "C) Pure serotonin agonist", "D) Cholinergic blocker"], "correct": 1, "hint": "يعمل كـ 'Partial Agonist'، مما يحافظ على مستوى متوازن من الدوبامين لا هو عالي ولا منعدم."}, {"q": "[مراجعة سريعة] Which atypical antipsychotic is frequently utilized in the treatment of Autism to manage irritability?", "options": ["A) Clozapine", "B) Risperidone", "C) Quetiapine", "D) Fluphenazine"], "correct": 1, "hint": "الريسبيريدون دواء ممتاز لتقليل العدوانية والتهيج في الأطفال المصابين بالتوحد."}, {"q": "[مراجعة سريعة] Are neuroleptic drugs curative for schizophrenia?", "options": ["A) Yes, completely", "B) No, they are not curative; they only manage the symptoms", "C) Yes, if taken for 1 year", "D) They cure the negative symptoms only"], "correct": 1, "hint": "الأدوية 'تُهدي' الأعراض فقط لتسمح للمريض بالاندماج في المجتمع، لكنها لا تعالج الخلل الجيني."}, {"q": "[مراجعة سريعة] Antipsychotics may lower the seizure threshold. They should be used with extreme caution in:", "options": ["A) Asthmatics", "B) Epileptic patients", "C) Diabetics", "D) Hypertensives"], "correct": 1, "hint": "أدوية الفصام تزيد من نشاط الدماغ الكهربائي وتجعل مريض الصرع عرضة لنوبات أكثر."}, {"q": "[مراجعة سريعة] Levodopa interacts with antipsychotics by:", "options": ["A) Enhancing the antipsychotic effect", "B) Having its Parkinson's effect blocked by the antipsychotic", "C) Causing Serotonin Syndrome", "D) Increasing sedation"], "correct": 1, "hint": "ليفودوبا يزود الدوبامين، ومضادات الذهان تغلق المستقبلات. إعطاؤهما معاً يبطل مفعول ليفودوبا."}, {"q": "[مراجعة سريعة] According to the doctor, prescribing neuroleptics involves 'trial and error' because:", "options": ["A) Doctors guess randomly", "B) Selection depends on matching side effect profiles to individual patient sensitivity", "C) Placebos work better", "D) Typicals never work"], "correct": 1, "hint": "نختار الدواء بناءً على تحمل المريض للأعراض الجانبية (Sedation, EPS, Weight gain)."}, {"q": "[مراجعة سريعة] Which of the following is considered a 'First-line' Atypical antipsychotic drug that shows fewer relapses than Haloperidol?", "options": ["A) Chlorpromazine", "B) Risperidone", "C) Thioridazine", "D) Fluphenazine"], "correct": 1, "hint": "الريسبيريدون دواء خط أول ممتاز، يقلل الانتكاسات ويحافظ على استقرار المريض."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const hintBox = document.getElementById('hint-box');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const progressText = document.getElementById('progress-text');
+        const quizBox = document.getElementById('quiz-box');
+        const resultBox = document.getElementById('result-box');
+        const scoreText = document.getElementById('score-text');
+
+        function loadQuestion() {
+            answered = false;
+            hintBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            hintBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const currentQ = questionsData[currentQuestionIndex];
+            progressText.innerText = `السؤال ${currentQuestionIndex + 1} من ${questionsData.length}`;
+            questionTextElement.innerText = `Q${currentQuestionIndex + 1}: ${currentQ.q}`;
+            
+            hintBox.innerHTML = `<strong>💡 تلميح:</strong> ${currentQ.hint}`;
+
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index, btn, currentQ.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, btnElement, correctIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+            
+            hintBtn.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizBox.style.display = 'none';
+            resultBox.style.display = 'block';
+            scoreText.innerText = score;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>

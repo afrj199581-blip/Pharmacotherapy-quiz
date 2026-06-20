@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacotherapy 2: Lecture 3 Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .quiz-container {
+            background: #ffffff;
+            width: 90%;
+            max-width: 650px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #e1e8ed;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .header h1 { margin: 0; color: #2c3e50; font-size: 24px; }
+        .header p { margin: 5px 0 0; color: #e74c3c; font-size: 15px; font-weight: bold;}
+        .progress {
+            font-size: 15px;
+            color: #7f8c8d;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: #ecf0f1;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-size: 18px;
+            color: #1a252f;
+            font-weight: 700;
+            margin-bottom: 20px;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+        }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            direction: ltr;
+        }
+        .option-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 15px;
+            color: #2c3e50;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 500;
+        }
+        .option-btn:hover:not(:disabled) {
+            background-color: #ecf0f1;
+            border-color: #95a5a6;
+        }
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24 !important;
+        }
+        .option-btn:disabled { cursor: not-allowed; }
+        
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            border-top: 2px solid #e1e8ed;
+            padding-top: 20px;
+        }
+        .hint-btn, .next-btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .hint-btn { background-color: #ffeaa7; color: #d35400; display: none;}
+        .hint-btn:hover { background-color: #f1c40f; color: #fff; }
+        .next-btn { background-color: #3498db; color: #ffffff; display: none; }
+        .next-btn:hover { background-color: #2980b9; }
+        
+        .hint-box {
+            background-color: #fff3cd;
+            border-right: 5px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 15px;
+            color: #856404;
+            border-radius: 4px 0 0 4px;
+            display: none;
+            line-height: 1.6;
+            animation: fadeIn 0.5s;
+        }
+        .hint-box strong { color: #d35400; }
+        
+        .result-container { text-align: center; display: none; }
+        .result-container h2 { color: #2c3e50; font-size: 30px; }
+        .result-container p { color: #7f8c8d; font-size: 20px; font-weight: bold;}
+        .restart-btn {
+            background-color: #2ecc71; color: white; border: none; padding: 15px 30px;
+            border-radius: 8px; font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-size: 18px; cursor: pointer; margin-top: 25px;
+        }
+        .restart-btn:hover { background-color: #27ae60; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        @media (max-width: 480px) {
+            .quiz-container { padding: 20px; width: 95%; }
+            .question-text { font-size: 16px; }
+            .option-btn { font-size: 14px; padding: 12px; }
+            .hint-btn, .next-btn { font-size: 14px; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz-box">
+        <div class="header">
+            <h1>Pharmacotherapy 2 💊</h1>
+            <p>Interactive Quiz: Lecture 3 (Migraine & Opioids - 100 Qs)</p>
+        </div>
+        
+        <div class="progress" id="progress-text">السؤال 1 من 100</div>
+        
+        <div class="question-text" id="question-text"></div>
+        <div class="options-container" id="options-container"></div>
+        
+        <div class="hint-box" id="hint-box"></div>
+        
+        <div class="actions">
+            <button class="hint-btn" id="hint-btn" onclick="showHint()">إظهار التلميح 💡</button>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">التالي ⏭️</button>
+        </div>
+    </div>
+
+    <div class="quiz-container result-container" id="result-box">
+        <h2>النتيجة النهائية 🏆</h2>
+        <p>لقد أجبت بشكل صحيح على <span id="score-text" style="color:#27ae60; font-size: 28px;">0</span> من أصل 100 سؤال.</p>
+        <button class="restart-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+    </div>
+
+    <script>
+        const questionsData = [{"q": "According to the vascular theory, the visual 'aura' preceding a migraine is caused by:", "options": ["A) Massive vasodilation", "B) Sequential cranial vasoconstriction", "C) Histamine release", "D) Platelet aggregation"], "correct": 1, "hint": "الأورا (مثل زغللة العين) تنتج عن انقباض الأوعية الدموية بالدماغ، يعقبها تمدد وعائي يسبب الألم."}, {"q": "The throbbing, pulsating pain phase of a migraine attack is primarily characterized by:", "options": ["A) Vasoconstriction", "B) Cranial vasodilation", "C) Nerve demyelination", "D) Muscle spasms"], "correct": 1, "hint": "تمدد الأوعية الدموية هو ما يسبب النبض والألم الشديد في الصداع النصفي."}, {"q": "Sumatriptan aborts acute migraine attacks by acting as an agonist at which specific receptors?", "options": ["A) Dopamine D2", "B) Serotonin 5-HT1B/1D", "C) Alpha-1 adrenergic", "D) GABA-A"], "correct": 1, "hint": "أدوية التريبتان تقبض الأوعية الدموية المتمددة عبر تنشيط مستقبلات السيروتونين 5-HT1D."}, {"q": "Triptans are absolutely contraindicated in patients with which of the following conditions?", "options": ["A) Asthma", "B) Ischemic heart disease (Angina/MI)", "C) Peptic ulcers", "D) Renal failure"], "correct": 1, "hint": "نظراً لقدرتها القوية على قبض الأوعية، قد تتسبب في تشنج الشرايين التاجية للمرضى المعرضين لأمراض القلب."}, {"q": "Which of the following is the mechanism of action of Ergotamine in treating acute migraines?", "options": ["A) Direct vasodilation", "B) Non-selective cranial and peripheral vasoconstriction", "C) Blocking serotonin", "D) Inhibiting COX-2"], "correct": 1, "hint": "الإرجوتامين قابض قوي للأوعية الدموية، ولكنه أقل تخصصاً من التريبتان وله آثار جانبية أكثر."}, {"q": "Ergotamine is classified as Pregnancy Category X because it causes:", "options": ["A) Fetal blindness", "B) Severe uterine contractions and potential abortion", "C) Gestational diabetes", "D) Maternal hypotension"], "correct": 1, "hint": "مادة الإرجوتامين تقبض العضلات الملساء، مما يثير انقباضات الرحم ويهدد بإسقاط الجنين."}, {"q": "Propranolol is used effectively for migraine prophylaxis because it:", "options": ["A) Stops acute attacks instantly", "B) Blocks beta-receptors, allowing unopposed alpha-adrenergic activity to prevent vasodilation", "C) Induces sleep", "D) Dilates cranial vessels"], "correct": 1, "hint": "حاصرات بيتا تعمل كوقاية عن طريق منع التمدد الوعائي الذي يسبب الصداع."}, {"q": "Calcium-channel antagonists (like Verapamil) help migraine patients primarily by:", "options": ["A) Curing the disease", "B) Reducing the frequency of attacks", "C) Stopping the pain of an active attack", "D) Increasing cranial blood flow"], "correct": 1, "hint": "تستخدم للوقاية لتقليل عدد مرات حدوث الصداع شهرياً، لكنها لا توقف الهجمة النشطة."}, {"q": "A patient is having a mild, infrequent migraine attack. The recommended first-line treatment is:", "options": ["A) Fentanyl IV", "B) Immediate ingestion of NSAIDs or Acetaminophen", "C) Sumatriptan", "D) Haloperidol"], "correct": 1, "hint": "في الهجمات الخفيفة وفي بدايتها، المسكنات العادية تفي بالغرض تماماً."}, {"q": "Topiramate and Valproic acid are antiepileptic drugs that are also highly effective for:", "options": ["A) Gout prophylaxis", "B) Migraine prophylaxis", "C) Curing schizophrenia", "D) Asthma"], "correct": 1, "hint": "تُستخدم هذه الأدوية بكثرة في الوقاية المستمرة من الصداع النصفي وتقليل الإثارة العصبية."}, {"q": "A patient describes her migraine as 'alternating hemicrania'. What does this mean?", "options": ["A) Painless headache", "B) The headache changes sides (right to left) in different attacks", "C) Bilateral tension", "D) Accompanied by seizures"], "correct": 1, "hint": "الصداع النصفي قد يغير مكانه من النصف الأيمن للأيسر في هجمات مختلفة."}, {"q": "Which mechanism makes Triptans superior to Ergotamine?", "options": ["A) They cause vasodilation", "B) They selectively constrict cranial vessels and inhibit pain peptide release without severe systemic vasoconstriction", "C) They are safe in pregnancy", "D) They have a 1-month half-life"], "correct": 1, "hint": "التريبتان أكثر تخصصاً (Selective) لأوعية الدماغ وأقل إحداثاً للآثار الجانبية الشاملة."}, {"q": "Triptans inhibit the release of pain neurotransmitters from which cranial nerve?", "options": ["A) Vagus nerve", "B) Trigeminal nerve", "C) Optic nerve", "D) Facial nerve"], "correct": 1, "hint": "تمنع العصب الخامس (Trigeminal) من إفراز الببتيدات المسببة للالتهاب والألم."}, {"q": "Which route of administration is preferred for Sumatriptan in a patient with severe migraine-induced vomiting?", "options": ["A) Oral tablet", "B) Subcutaneous injection or nasal spray", "C) Enteric-coated pill", "D) IV infusion"], "correct": 1, "hint": "إذا كان المريض يتقيأ، فالحبوب الفموية لن تفيد، ويُفضل الحقن تحت الجلد أو البخاخ الأنفي."}, {"q": "A side effect of Triptans related to their mechanism of action is:", "options": ["A) Severe diarrhea", "B) Chest tightness and coronary vasospasm", "C) Hypoglycemia", "D) Tremors"], "correct": 1, "hint": "بسبب قبضها للأوعية، قد تسبب شعوراً بضيق في الصدر يجب مراقبته."}, {"q": "Migraine prophylaxis is indicated when attacks occur more frequently than:", "options": ["A) Once a year", "B) 2-3 times per month or if they are severely debilitating", "C) Every 5 years", "D) Only during pregnancy"], "correct": 1, "hint": "لا نلجأ للوقاية المستمرة إلا إذا كان الصداع يعطل حياة المريض بتكراره الشديد."}, {"q": "Amitriptyline is used in migraine management as a:", "options": ["A) Acute abortive agent", "B) Prophylactic agent (Tricyclic antidepressant)", "C) Anti-emetic", "D) Vasodilator"], "correct": 1, "hint": "مضادات الاكتئاب ثلاثية الحلقات فعالة جداً في الوقاية من الصداع النصفي."}, {"q": "The primary goal of abortive therapy in migraines is to:", "options": ["A) Prevent attacks from happening next month", "B) Stop or reverse the progression of an acute attack", "C) Lower blood pressure", "D) Increase heart rate"], "correct": 1, "hint": "العلاج الإجهاضي (Abortive) يهدف لوقف الهجمة الحالية فوراً."}, {"q": "Ergotamine is often combined with caffeine in oral preparations to:", "options": ["A) Induce sleep", "B) Enhance its absorption and vasoconstrictive effect", "C) Prevent tachycardia", "D) Relieve stomach pain"], "correct": 1, "hint": "الكافيين يحسن امتصاص الإرجوتامين ويزيد من قبض الأوعية الدموية."}, {"q": "Overuse of acute migraine medications (like Triptans or analgesics) can lead to:", "options": ["A) Permanent cure", "B) Medication-overuse headaches (Rebound headaches)", "C) Brain tumors", "D) Blindness"], "correct": 1, "hint": "استخدام المسكنات بكثرة يسبب 'صداع ارتدادي' أسوأ من الصداع الأصلي."}, {"q": "Which phase of a migraine attack is characterized by fatigue, yawning, and food cravings before the aura?", "options": ["A) Pain phase", "B) Prodrome phase", "C) Postdrome phase", "D) Resolution"], "correct": 1, "hint": "مرحلة البادرة (Prodrome) تسبق الأورا والصداع بساعات أو أيام."}, {"q": "In migraine pathophysiology, which neuropeptide is heavily implicated in causing neurogenic inflammation?", "options": ["A) Acetylcholine", "B) CGRP (Calcitonin Gene-Related Peptide)", "C) Dopamine", "D) Insulin"], "correct": 1, "hint": "CGRP هو ببتيد يفرز أثناء الصداع ويوسع الأوعية ويسبب الألم."}, {"q": "Sumatriptan should not be taken within 24 hours of Ergotamine because:", "options": ["A) They cancel each other out", "B) Synergistic prolonged vasoconstriction can cause severe ischemia", "C) It causes immediate coma", "D) It dissolves the stomach lining"], "correct": 1, "hint": "الجمع بين قابضين قويين للأوعية قد يسبب نقص تروية خطير (Ischemia)."}, {"q": "A patient with uncontrolled hypertension should avoid which migraine medication?", "options": ["A) Acetaminophen", "B) Triptans and Ergotamine", "C) Propranolol", "D) Aspirin"], "correct": 1, "hint": "لأنها ترفع ضغط الدم بسبب انقباض الأوعية الدموية الشامل."}, {"q": "Which prophylactic migraine drug has a known side effect of weight loss and cognitive dulling?", "options": ["A) Valproic acid", "B) Topiramate", "C) Propranolol", "D) Verapamil"], "correct": 1, "hint": "التوبيراميت يسبب النحافة وضعف التركيز (يُسمى أحياناً Dopamax كدعابة)."}, {"q": "Valproic acid is effective for migraine prophylaxis but is strictly avoided in:", "options": ["A) Men", "B) Pregnant women (due to teratogenicity)", "C) Children over 12", "D) Asthma patients"], "correct": 1, "hint": "الفالبروات يسبب تشوهات خلقية خطيرة (الشق الشوكي)."}, {"q": "Verapamil is preferred for migraine prophylaxis in patients who also suffer from:", "options": ["A) Hypertension or Angina", "B) Hypotension", "C) Liver failure", "D) Asthma only"], "correct": 0, "hint": "لأنه خافض للضغط وموسع لشرايين القلب، فيعالج الحالتين معاً."}, {"q": "Which of the following describes a 'migraine without aura'?", "options": ["A) Classic migraine", "B) Common migraine", "C) Cluster headache", "D) Tension headache"], "correct": 1, "hint": "الصداع الشائع (Common) يأتي بدون زغللة، بينما الكلاسيكي يأتي بأورا."}, {"q": "Botulinum toxin (Botox) injections are an FDA-approved prophylaxis for:", "options": ["A) Mild headaches", "B) Chronic migraines (≥15 days/month)", "C) Acute gout", "D) Seizures"], "correct": 1, "hint": "يستخدم حقن البوتوكس للحالات المزمنة جداً لإرخاء عضلات الرأس ومنع الألم."}, {"q": "A major side effect of Ergotamine toxicity (Ergotism) is:", "options": ["A) Severe vasospasm leading to gangrene of extremities", "B) Excessive hair growth", "C) Hyperthermia", "D) Miosis"], "correct": 0, "hint": "التسمم بالإرجوت يقبض الأطراف لدرجة منع الدم تماماً، مما قد يسبب غرغرينا."}, {"q": "The primary analgesic properties of opioids are mediated by which receptor?", "options": ["A) Kappa", "B) Delta", "C) Mu (μ)", "D) Sigma"], "correct": 2, "hint": "مستقبلات الميو (Mu) هي الأساس في تسكين الألم القوي، والنشوة، وتثبيط التنفس."}, {"q": "Opioids inhibit neurotransmitter release presynaptically by decreasing the influx of:", "options": ["A) Sodium", "B) Calcium (Ca2+)", "C) Chloride", "D) Potassium"], "correct": 1, "hint": "غلق قنوات الكالسيوم يمنع الحويصلات من إفراز النواقل المحفزة للألم."}, {"q": "Postsynaptically, opioids inhibit nerve firing by increasing the efflux of:", "options": ["A) Sodium", "B) Potassium (K+)", "C) Calcium", "D) Magnesium"], "correct": 1, "hint": "خروج البوتاسيوم الموجب يترك الخلية سالبة جداً (Hyperpolarized)."}, {"q": "Morphine provides relief from severe pain primarily by:", "options": ["A) Decreasing the physical sensation of pain only", "B) Altering the brain's perception of pain (patient feels pain but doesn't care)", "C) Causing general anesthesia", "D) Paralyzing peripheral nerves"], "correct": 1, "hint": "المريض يشعر بالألم ولكنه لا ينزعج منه، دون أن يفقد وعيه."}, {"q": "The most common cause of death in acute opioid overdose is:", "options": ["A) Fatal arrhythmias", "B) Respiratory depression", "C) Severe constipation", "D) Anaphylactic shock"], "correct": 1, "hint": "المورفين يقلل استجابة مركز التنفس لثاني أكسيد الكربون، فيتوقف المريض عن التنفس."}, {"q": "A diagnostic sign of Morphine overdose to which NO tolerance develops is:", "options": ["A) Mydriasis", "B) Miosis (pinpoint pupils)", "C) Tachycardia", "D) Hyperthermia"], "correct": 1, "hint": "الحدقة الدبوسية والإمساك هما العرضان الوحيدان اللذان لا يعتاد الجسم عليهما أبداً."}, {"q": "Why is Morphine strictly contraindicated in severe bronchial asthma?", "options": ["A) It blocks Beta-2 receptors", "B) It causes Histamine release from mast cells", "C) It causes pulmonary edema", "D) It paralyzes the diaphragm"], "correct": 1, "hint": "إفراز الهيستامين يسبب انقباضاً شديداً في الشعب الهوائية، مما يخنق مريض الربو."}, {"q": "Morphine typically causes vomiting by directly stimulating the:", "options": ["A) Enteric nervous system", "B) Vestibular apparatus", "C) Chemoreceptor Trigger Zone (CTZ)", "D) Vagus nerve"], "correct": 2, "hint": "يحفز مركز القيء في الدماغ مباشرة (CTZ)."}, {"q": "How does Morphine affect the gastrointestinal tract?", "options": ["A) Massive diarrhea", "B) Decreases motility and increases sphincter tone, causing constipation", "C) Gastric ulcers", "D) Increases bile flow"], "correct": 1, "hint": "يعصر العضلات الدائرية للأمعاء ويغلق الصمامات، مما يوقف حركة الأمعاء."}, {"q": "Morphine is contraindicated in biliary colic because it:", "options": ["A) Dissolves gallstones", "B) Increases biliary tract pressure via sphincter of Oddi constriction", "C) Causes gallbladder rupture", "D) Decreases bile production"], "correct": 1, "hint": "يزيد من الضغط داخل القنوات المرارية، مما يضاعف ألم المغص المراري."}, {"q": "Which synthetic opioid has anticholinergic activity, causing pupil DILATION instead of miosis?", "options": ["A) Morphine", "B) Fentanyl", "C) Meperidine (Pethidine)", "D) Methadone"], "correct": 2, "hint": "الميبيريدين هو الاستثناء الشهير في عائلة الأفيونات؛ يوسع الحدقة ولا يضيقها."}, {"q": "Meperidine is preferred over morphine in obstetrics (labor) because it:", "options": ["A) Is completely safe for the fetus", "B) Has less effect on prolonging uterine contractions", "C) Prevents postpartum hemorrhage", "D) Induces sleep"], "correct": 1, "hint": "لا يعطل انقباضات الرحم بشكل كبير مثل المورفين، مما يجعله آمناً نسبياً لتسكين آلام الولادة."}, {"q": "High or repetitive doses of Meperidine can cause convulsions due to the accumulation of:", "options": ["A) Normeperidine", "B) Morphine", "C) Acetylcholine", "D) Histamine"], "correct": 0, "hint": "الميتابوليت السام 'نورميبيريدين' يثير الجهاز العصبي المركزي ويسبب تشنجات."}, {"q": "A fatal drug interaction resulting in Serotonin Syndrome occurs when Meperidine is combined with:", "options": ["A) NSAIDs", "B) Monoamine Oxidase Inhibitors (MAOIs)", "C) Beta-blockers", "D) Calcium channel blockers"], "correct": 1, "hint": "مزيج قاتل يرفع حرارة الجسم لدرجات مميتة ويسبب تشنجات."}, {"q": "Methadone is the drug of choice for the detoxification of heroin addicts because:", "options": ["A) It is a pure antagonist", "B) It causes a milder withdrawal syndrome due to its long half-life", "C) It is not addictive", "D) It cures the receptors"], "correct": 1, "hint": "لأن مفعوله طويل جداً، فإنه يسحب الهيروين من الجسم ببطء ويقلل حدة أعراض الانسحاب."}, {"q": "Fentanyl is heavily used in cardiac surgery because it:", "options": ["A) Lasts for 24 hours", "B) Maintains stable hemodynamics without affecting contractility", "C) Causes hypotension", "D) Is a partial agonist"], "correct": 1, "hint": "لا يؤثر على عضلة القلب ولا يفرز هيستامين، مما يجعله مثالياً لمرضى القلب."}, {"q": "A Fentanyl transdermal patch is absolutely contraindicated in:", "options": ["A) Chronic cancer pain", "B) Acute or post-operative pain in opioid-naive patients", "C) Palliative care", "D) Severe back pain"], "correct": 1, "hint": "لصقة الفنتانيل مخصصة فقط لمن لديهم مناعة (Tolerance) للأفيون لتجنب توقف التنفس."}, {"q": "Codeine's analgesic effect is significantly lower than morphine's because it must first be converted into:", "options": ["A) Norcodeine", "B) Heroin", "C) Morphine (via CYP2D6)", "D) Dextromethorphan"], "correct": 2, "hint": "الكودايين (Prodrug) يحتاج لإنزيمات الكبد ليتحول إلى مورفين ليعطي تأثيراً مسكناً."}, {"q": "Dextromethorphan has replaced Codeine in cough syrups because it:", "options": ["A) Is 10x more potent", "B) Has no analgesic action and low abuse potential", "C) Cures viral infections", "D) Induces sleep"], "correct": 1, "hint": "آمن ولا يسبب الإدمان، وفعال جداً في تثبيط السعال (Antitussive)."}, {"q": "Propoxyphene is a methadone derivative. Which of its isomers is strictly used as an ANTITUSSIVE?", "options": ["A) Dextro-isomer", "B) Levo-isomer", "C) Both", "D) Neither"], "correct": 1, "hint": "الإيزومر 'Levo' مضاد للسعال فقط، بينما 'Dextro' مسكن."}, {"q": "If Pentazocine (mixed agonist-antagonist) is given to a Heroin addict, what will occur?", "options": ["A) Immediate pain relief", "B) Enhanced euphoria", "C) Precipitation of severe withdrawal symptoms", "D) Respiratory arrest"], "correct": 2, "hint": "سيطرد الهيروين من المستقبلات ويعمل كمضاد، مما يدخل المدمن في صدمة انسحاب فورية."}, {"q": "Buprenorphine is widely used for opiate detoxification. It acts at the Mu receptor as a:", "options": ["A) Full agonist", "B) Pure antagonist", "C) Partial agonist", "D) Inverse agonist"], "correct": 2, "hint": "كمحفز جزئي، يعطي المريض راحة من الانسحاب ولكن بـ 'سقف' يمنع النشوة العالية."}, {"q": "Tramadol provides analgesia via weak Mu receptor binding and primarily by:", "options": ["A) Releasing dopamine", "B) Inhibiting the reuptake of norepinephrine and serotonin", "C) Blocking sodium channels", "D) Antagonizing GABA"], "correct": 1, "hint": "يجمع بين كونه مسكناً أفيونياً ومضاداً للاكتئاب."}, {"q": "Which opioid carries a specific warning for causing SEIZURES, especially with SSRI antidepressants?", "options": ["A) Morphine", "B) Tramadol", "C) Fentanyl", "D) Methadone"], "correct": 1, "hint": "الترامادول يرفع السيروتونين، ودمجه مع أدوية الاكتئاب يسبب 'متلازمة السيروتونين' والتشنجات."}, {"q": "Which drug is a pure competitive antagonist administered IV to rapidly reverse opioid coma?", "options": ["A) Naltrexone", "B) Naloxone", "C) Buprenorphine", "D) Methadone"], "correct": 1, "hint": "النالوكزون (Narcan) هو حقنة الإنقاذ في الطوارئ وتعمل خلال 30 ثانية."}, {"q": "What is a critical limitation of Naloxone when treating an overdose?", "options": ["A) Causes fatal arrhythmias", "B) Its duration of action is short (1-2 hours), meaning the patient may relapse into a coma", "C) Only works on synthetic opioids", "D) Requires continuous oral dosing"], "correct": 1, "hint": "يجب إبقاء المريض تحت الملاحظة لأن النالوكزون يختفي من الجسم قبل الأفيون."}, {"q": "Naltrexone differs from Naloxone primarily because Naltrexone:", "options": ["A) Is a partial agonist", "B) Has a long duration of action (48 hours) and is orally active for maintenance therapy", "C) Is used only IV", "D) Causes severe withdrawal in normal people"], "correct": 1, "hint": "يستخدم كحبة يومية لحماية المتعافين من الانتكاسة."}, {"q": "Tolerance develops to the respiratory depressant and euphoric effects of morphine, but NEVER to:", "options": ["A) Sedation", "B) Miosis and Constipation", "C) Vasodilation", "D) Antitussive effects"], "correct": 1, "hint": "المدمن سيظل يعاني من إمساك مزمن وحدقة عين دبوسية مهما طالت مدة التعاطي."}, {"q": "The intense suffering experienced upon abrupt cessation of opioid use in a dependent individual is called:", "options": ["A) Placebo effect", "B) Withdrawal Syndrome", "C) Ceiling effect", "D) Hyperalgesic state"], "correct": 1, "hint": "أعراض الانسحاب هي القوة الخفية التي تجبر المدمن على الاستمرار في التعاطي هرباً من الألم."}, {"q": "Opioids inhibit Gonadotropin-releasing hormone (GnRH), which leads to:", "options": ["A) Increased testosterone", "B) Decreased testosterone and libido", "C) Hyperglycemia", "D) Enhanced fertility"], "correct": 1, "hint": "الأفيون يثبط المحور الهرموني مسبباً العقم والضعف الجنسي."}, {"q": "A patient with which pre-existing condition may experience vastly extended effects from opioids?", "options": ["A) Hyperthyroidism", "B) Adrenal insufficiency or Hypothyroidism (Myxedema)", "C) Diabetes mellitus", "D) Peptic ulcer"], "correct": 1, "hint": "مرضى قصور الغدة الدرقية والكظرية لديهم بطء شديد في الأيض، مما يجعل الأفيون خطراً جداً."}, {"q": "The primary driving force compelling a late-stage addict to continue seeking opioids is:", "options": ["A) The intense initial euphoria", "B) Peer pressure", "C) The absolute terror of experiencing the severe Withdrawal Syndrome", "D) Pain management"], "correct": 2, "hint": "تجنب آلام الانسحاب المبرحة يصبح هو الدافع الأوحد للاستمرار."}, {"q": "Combining Opioids with CNS depressants like Benzodiazepines or Alcohol is extremely dangerous due to:", "options": ["A) Enhanced euphoria", "B) Synergistic and fatal Respiratory Depression", "C) Increased alertness", "D) Immediate tolerance reversal"], "correct": 1, "hint": "كلا الدوائين يثبطان مركز التنفس، ودمجهما يؤدي لتوقف التنفس والموت المؤكد."}, {"q": "Which opioid receptor mediates the severe dysphoria and hallucinations occasionally seen with some mixed opioids?", "options": ["A) Mu", "B) Kappa", "C) Delta", "D) Sigma"], "correct": 1, "hint": "مستقبلات الكابا مسؤولة عن التأثيرات النفسية السيئة والهلوسة."}, {"q": "Morphine causes urinary retention by:", "options": ["A) Destroying bladder muscle", "B) Increasing ADH secretion and inhibiting the voiding reflex", "C) Enlarging the prostate", "D) Inducing dehydration"], "correct": 1, "hint": "يمنع الإحساس بالحاجة للتبول ويزيد الهرمون المانع لإدرار البول."}, {"q": "Opioids are typically avoided in patients with head injuries because they:", "options": ["A) Cause bleeding", "B) Depress respiration, leading to CO2 retention and dangerous elevation of intracranial pressure", "C) Cause seizures", "D) Destroy brain cells directly"], "correct": 1, "hint": "تراكم ثاني أكسيد الكربون يوسع أوعية المخ ويرفع الضغط داخل الجمجمة."}, {"q": "Which of the following is NOT an effect of Morphine?", "options": ["A) Miosis", "B) Constipation", "C) Diarrhea", "D) Histamine release"], "correct": 2, "hint": "المورفين يسبب إمساكاً شديداً وليس إسهالاً."}, {"q": "The withdrawal syndrome from opioids typically presents with symptoms that are:", "options": ["A) Identical to the drug's effects", "B) The exact OPPOSITE of the drug's acute effects (e.g., mydriasis, diarrhea, agitation)", "C) Completely asymptomatic", "D) Only psychological"], "correct": 1, "hint": "لأن الأفيون يسبب إمساك وضيق حدقة، فإن الانسحاب يسبب إسهال وتوسع في الحدقة."}, {"q": "Which opioid has a unique risk of causing cardiac arrhythmias (QT prolongation) at high doses?", "options": ["A) Morphine", "B) Codeine", "C) Methadone", "D) Fentanyl"], "correct": 2, "hint": "الميثادون معروف بأنه قد يؤثر على كهربية القلب في الجرعات العالية."}, {"q": "Loperamide and Diphenoxylate are opioids used exclusively for:", "options": ["A) Severe pain", "B) Cough suppression", "C) Treating diarrhea", "D) Anesthesia"], "correct": 2, "hint": "هذه الأفيونات لا تعبر للمخ، وتستخدم فقط لوقف الإسهال عن طريق شل حركة الأمعاء."}, {"q": "Which statement about partial agonists (like Buprenorphine) is true?", "options": ["A) They have no side effects", "B) They exhibit a 'ceiling effect' for respiratory depression", "C) They are purely antagonists", "D) They cause massive euphoria"], "correct": 1, "hint": "تأثيرها له سقف لا يتجاوزه مهما زادت الجرعة، مما يجعلها آمنة نسبياً."}, {"q": "Nalbuphine is preferred over Pentazocine in patients with cardiac disease because it:", "options": ["A) Is 100x stronger", "B) Does not increase heart rate or blood pressure", "C) Cures arrhythmias", "D) Dilates coronary arteries"], "correct": 1, "hint": "لا يزيد العبء على عضلة القلب كما يفعل البنتازوسين."}, {"q": "Fentanyl is available in which unique dosage form for chronic pain management?", "options": ["A) Eye drops", "B) Transdermal patch", "C) Rectal suppository", "D) Inhaler"], "correct": 1, "hint": "لصقة الجلد توفر تسكيناً مستمراً لمرضى السرطان."}, {"q": "Codeine relies on which liver enzyme to be converted into its active form?", "options": ["A) CYP3A4", "B) CYP2D6", "C) CYP1A2", "D) Xanthine oxidase"], "correct": 1, "hint": "بعض الناس يفتقرون لهذا الإنزيم جينياً، فلا يستفيدون من الكودايين."}, {"q": "Propoxyphene was largely withdrawn from the market due to its risk of causing:", "options": ["A) Gastric ulcers", "B) Fatal cardiotoxicity and pulmonary edema", "C) Hair loss", "D) Asthma"], "correct": 1, "hint": "جرعته السامة قريبة جداً من الجرعة العلاجية، وتسبب فشلاً قلبياً."}, {"q": "Opioids are generally ineffective for treating which type of pain?", "options": ["A) Post-operative pain", "B) Neuropathic pain (nerve damage)", "C) Cancer pain", "D) Severe trauma"], "correct": 1, "hint": "آلام الأعصاب (مثل ألم السكري) تستجيب لمضادات الصرع والاكتئاب وليس للأفيونات."}, {"q": "The analgesic effect of Tramadol is mediated by:", "options": ["A) Mu receptors only", "B) Serotonin and Norepinephrine reuptake inhibition plus weak Mu agonism", "C) GABA agonism", "D) COX inhibition"], "correct": 1, "hint": "دواء مزدوج المفعول، وهذا سر فعاليته."}, {"q": "Nalmefene is primarily used for:", "options": ["A) Treating diarrhea", "B) IV reversal of opioid overdose with a longer half-life than Naloxone", "C) Chronic pain", "D) Cough suppression"], "correct": 1, "hint": "بديل طويل المفعول للنالوكزون في الطوارئ."}, {"q": "Which opioid is known to cause a 'rush' or intense euphoria when injected IV, leading to high abuse rates?", "options": ["A) Loperamide", "B) Heroin (Diacetylmorphine)", "C) Codeine", "D) Dextromethorphan"], "correct": 1, "hint": "الهيروين يعبر حاجز الدماغ بسرعة البرق مسبباً النشوة الكبرى."}, {"q": "Tolerance to opioids means the patient requires:", "options": ["A) Smaller doses to achieve the same effect", "B) Larger doses to achieve the same effect", "C) No more medication", "D) A different class of drugs completely"], "correct": 1, "hint": "الاعتياد (Tolerance) يتطلب رفع الجرعة باستمرار للحصول على نفس التسكين."}, {"q": "A patient with pinpoint pupils, coma, and respiratory rate of 6 breaths/min most likely needs immediate administration of:", "options": ["A) Epinephrine", "B) Naloxone", "C) Flumazenil", "D) Atropine"], "correct": 1, "hint": "هذا هو الثالوث الكلاسيكي لتسمم الأفيون، والنالوكزون هو المنقذ."}, {"q": "If a patient on long-term Morphine suddenly stops taking it, withdrawal symptoms usually begin within:", "options": ["A) 10 minutes", "B) 6-12 hours", "C) 1 month", "D) 1 year"], "correct": 1, "hint": "يبدأ الجسد في الانهيار والبحث عن الدواء خلال ساعات قليلة."}, {"q": "Methadone's primary advantage in maintenance therapy is its:", "options": ["A) Intravenous availability", "B) High oral bioavailability and long half-life", "C) Total lack of side effects", "D) Ability to cure hepatitis"], "correct": 1, "hint": "حبة واحدة يومياً تكفي لمنع أعراض الانسحاب وتقليل اشتهاء الهيروين."}, {"q": "Which opioid has the shortest duration of action, making it ideal for brief surgical procedures?", "options": ["A) Morphine", "B) Fentanyl (and derivatives like Remifentanil)", "C) Methadone", "D) Buprenorphine"], "correct": 1, "hint": "يعمل بسرعة ويزول مفعوله بسرعة، مما يسهل إفاقة المريض."}, {"q": "Opioids cause peripheral vasodilation and hypotension largely due to:", "options": ["A) Direct myocardial depression", "B) Histamine release", "C) Alpha-blockade", "D) Beta-blockade"], "correct": 1, "hint": "الهيستامين يوسع الأوعية الدموية مما يسبب هبوطاً في الضغط واحمراراً في الجلد."}, {"q": "Which of the following is NOT an endogenous opioid peptide?", "options": ["A) Endorphins", "B) Enkephalins", "C) Dynorphins", "D) Bradykinin"], "correct": 3, "hint": "البراديكينين هو ناقل للألم، بينما الباقي هي مسكنات طبيعية يفرزها الجسم."}, {"q": "A newborn of a mother who abused heroin during pregnancy will likely experience:", "options": ["A) Enhanced intelligence", "B) Neonatal Abstinence Syndrome (Withdrawal)", "C) Pinpoint pupils for life", "D) No effects"], "correct": 1, "hint": "الطفل يولد مدمناً ويعاني من أعراض انسحاب خطيرة تتطلب علاجاً."}, {"q": "Which opioid is a strong Kappa agonist but a weak Mu antagonist, causing dysphoria?", "options": ["A) Pentazocine", "B) Morphine", "C) Fentanyl", "D) Codeine"], "correct": 0, "hint": "البنتازوسين يحفز الكابا التي تسبب الهلاوس والضيق النفسي."}, {"q": "Buprenorphine is administered via which route for opioid dependence treatment?", "options": ["A) Rectal", "B) Sublingual", "C) Inhaled", "D) Topical cream"], "correct": 1, "hint": "الحبوب توضع تحت اللسان لضمان الامتصاص السريع وتجنب تكسير الكبد."}, {"q": "Naltrexone is effective for opioid dependence, but it is also FDA-approved to treat:", "options": ["A) Alcohol dependence", "B) Smoking cessation", "C) Gambling", "D) Asthma"], "correct": 0, "hint": "يقلل من الرغبة والنشوة المرتبطة بشرب الكحول أيضاً."}, {"q": "Why is pure Oxygen administration dangerous in a patient with severe COPD who has overdosed on opioids?", "options": ["A) It causes fire", "B) It removes their hypoxic drive to breathe, worsening respiratory arrest", "C) It causes immediate seizures", "D) It destroys the lungs"], "correct": 1, "hint": "مرضى الـ COPD يتنفسون بناءً على نقص الأكسجين وليس زيادة الـ CO2. إعطاؤهم أكسجين نقي مع الأفيون يوقف تنفسهم تماماً."}, {"q": "What is the effect of Triptans on the trigeminal nerve?", "options": ["A) Stimulates pain release", "B) Inhibits the release of vasoactive and inflammatory peptides (like CGRP)", "C) Destroys the nerve", "D) Causes demyelination"], "correct": 1, "hint": "التريبتان يهدئ العصب الخامس ويمنعه من إفراز المواد المسببة للالتهاب والألم."}, {"q": "Sumatriptan should NOT be combined with which class of antidepressants due to the risk of Serotonin Syndrome?", "options": ["A) SSRIs or MAOIs", "B) Beta-blockers", "C) Calcium channel blockers", "D) NSAIDs"], "correct": 0, "hint": "التريبتان يعمل على السيروتونين، ودمجه مع هذه الأدوية يرفع السيروتونين لدرجة مميتة."}, {"q": "A patient with frequent migraines also has high blood pressure. The best prophylactic choice is:", "options": ["A) Valproic Acid", "B) Propranolol", "C) Topiramate", "D) Sumatriptan"], "correct": 1, "hint": "البروبرانولول خافض للضغط ومانع ممتاز للصداع النصفي، فيضرب عصفورين بحجر."}, {"q": "Botox injections prevent chronic migraines by:", "options": ["A) Dissolving blood clots", "B) Paralyzing head/neck muscles and blocking pain signals", "C) Vasodilation", "D) Causing sleep"], "correct": 1, "hint": "يرخي عضلات فروة الرأس والرقبة ويقلل الإشارات العصبية للألم."}, {"q": "Ergotamine toxicity (Ergotism) classically presents with:", "options": ["A) Severe diarrhea", "B) Cold, numb, and painful extremities due to intense vasospasm", "C) High fever", "D) Pinpoint pupils"], "correct": 1, "hint": "يسمى 'نار القديس أنتوني'، حيث ينقطع الدم عن الأطراف وقد يؤدي للغرغرينا."}, {"q": "Which non-pharmacological trigger is known to induce migraines?", "options": ["A) Drinking water", "B) Tyramine/Tyramine-containing foods (aged cheese, red wine)", "C) Eating vegetables", "D) Regular sleep"], "correct": 1, "hint": "بعض الأطعمة المحتوية على تيرامين تثير الصداع النصفي بشدة."}, {"q": "Tension-type headaches differ from migraines because they are typically:", "options": ["A) Unilateral and throbbing", "B) Bilateral, band-like, and non-throbbing", "C) Associated with visual aura", "D) Cured by Triptans only"], "correct": 1, "hint": "صداع التوتر يشبه 'عصابة' تضغط على الرأس بالكامل وليس نابضاً."}, {"q": "Cluster headaches are uniquely characterized by:", "options": ["A) Mild bilateral pain", "B) Excruciating, unilateral eye pain with tearing and a runny nose", "C) Lack of pain", "D) Occurring only in women"], "correct": 1, "hint": "ألم عنيف جداً يتركز حول عين واحدة ومصحوب بتدميع واحتقان بالأنف."}, {"q": "Acute attacks of Cluster headaches respond best to Sumatriptan and:", "options": ["A) Paracetamol", "B) 100% Oxygen inhalation", "C) Haloperidol", "D) Aspirin"], "correct": 1, "hint": "استنشاق الأكسجين النقي هو علاج سحري وسريع جداً لصداع العنقود."}];
+        
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const hintBox = document.getElementById('hint-box');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const progressText = document.getElementById('progress-text');
+        const quizBox = document.getElementById('quiz-box');
+        const resultBox = document.getElementById('result-box');
+        const scoreText = document.getElementById('score-text');
+
+        function loadQuestion() {
+            answered = false;
+            hintBox.style.display = 'none';
+            nextBtn.style.display = 'none';
+            hintBtn.style.display = 'none';
+            optionsContainer.innerHTML = '';
+            
+            const currentQ = questionsData[currentQuestionIndex];
+            progressText.innerText = `السؤال ${currentQuestionIndex + 1} من ${questionsData.length}`;
+            questionTextElement.innerText = `Q${currentQuestionIndex + 1}: ${currentQ.q}`;
+            
+            hintBox.innerHTML = `<strong>💡 تلميح:</strong> ${currentQ.hint}`;
+
+            currentQ.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(index, btn, currentQ.correct);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedIndex, btnElement, correctIndex) {
+            if (answered) return;
+            answered = true;
+            
+            const allButtons = optionsContainer.querySelectorAll('.option-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+            
+            hintBtn.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function showHint() {
+            hintBox.style.display = 'block';
+            hintBtn.style.display = 'none';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questionsData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizBox.style.display = 'none';
+            resultBox.style.display = 'block';
+            scoreText.innerText = score;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
