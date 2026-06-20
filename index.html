@@ -12,7 +12,7 @@
         .btn:active { background: #eef2ff; }
         .sub-menu { display: none; }
         .back-btn { background: #64748b; color: white; margin-bottom: 20px; }
-        .solved-btn { border-right: 5px solid #d97706; } /* لون برتقالي لتمييز الأسئلة المحلولة */
+        .solved-btn { border-right: 5px solid #d97706; }
     </style>
 </head>
 <body>
@@ -26,15 +26,50 @@
 
 <div class="container sub-menu" id="solved-menu">
     <div class="btn back-btn" onclick="hideAllMenus()">❮ Back</div>
-    <a href="اسئلة pdf.1.pdf" class="btn">السؤال 1</a>
-    <a href="اسئلة pdf.2.pdf" class="btn">السؤال 2</a>
-    <a href="اسئلة pdf.3.pdf" class="btn">السؤال 3</a>
-    <a href="اسئلة pdf.4.pdf" class="btn">السؤال 4</a>
-    <a href="اسئلة pdf.5.pdf" class="btn">السؤال 5</a>
-    <a href="اسئلة pdf.6.pdf" class="btn">السؤال 6</a>
-    <a href="اسئلة pdf.7.pdf" class="btn">السؤال 7</a>
-    <a href="اسئلة pdf.8.pdf" class="btn">السؤال 8</a>
-    <a href="اسئلة pdf.9.pdf" class="btn">السؤال 9</a>
+    <a href="q1.pdf" class="btn">Question 1</a>
+    <a href="q2.pdf" class="btn">Question 2</a>
+    <a href="q3.pdf" class="btn">Question 3</a>
+    <a href="q4.pdf" class="btn">Question 4</a>
+    <a href="q5.pdf" class="btn">Question 5</a>
+    <a href="q6.pdf" class="btn">Question 6</a>
+    <a href="q7.pdf" class="btn">Question 7</a>
+    <a href="q8.pdf" class="btn">Question 8</a>
+    <a href="q9.pdf" class="btn">Question 9</a>
+    <a href="q10.pdf" class="btn">Question 10</a>
+    <a href="q11.pdf" class="btn">Question 11</a>
+</div>
+
+<div class="container sub-menu" id="quiz-menu">
+    <div class="btn back-btn" onclick="hideAllMenus()">❮ Back</div>
+    <a href="Quiz_1.html" class="btn">Quiz 1</a>
+    <a href="Quiz_2.html" class="btn">Quiz 2</a>
+    <a href="Quiz_3.html" class="btn">Quiz 3</a>
+    <a href="Quiz_Epilepsy.html" class="btn">Epilepsy Quiz</a>
+    <a href="Quiz_Opioids.html" class="btn">Opioids Quiz</a>
+    <a href="Quiz_Neuroleptics.html" class="btn">Neuroleptics Quiz</a>
+    <a href="Quiz_NSAIDS.html" class="btn">NSAIDs Quiz</a>
+    <a href="Quiz_NSAIDS1.html" class="btn">NSAIDs 1 Quiz</a>
+</div>
+
+<script>
+    function showSolvedMenu() { toggle('solved-menu', 'الأسئلة المحلولة'); }
+    function showQuizMenu() { toggle('quiz-menu', 'Phototherapy Quizzes'); }
+    
+    function toggle(menuId, title) {
+        document.getElementById('main-menu').style.display = 'none';
+        document.getElementById(menuId).style.display = 'block';
+        document.getElementById('title').innerText = title;
+    }
+    
+    function hideAllMenus() {
+        document.getElementById('main-menu').style.display = 'block';
+        document.getElementById('solved-menu').style.display = 'none';
+        document.getElementById('quiz-menu').style.display = 'none';
+        document.getElementById('title').innerText = 'Main Menu';
+    }
+</script>
+</body>
+</html>    <a href="اسئلة pdf.9.pdf" class="btn">السؤال 9</a>
     <a href="اسئلة pdf.10.pdf" class="btn">السؤال 10</a>
     <a href="اسئلة pdf.11.pdf" class="btn">السؤال 11</a>
 </div>
