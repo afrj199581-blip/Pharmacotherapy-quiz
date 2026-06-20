@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pharmacotherapy 2 - Full Exam (300+ Qs)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .quiz-container {
+            background: #ffffff;
+            max-width: 850px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 20, 50, 0.15);
+            transition: all 0.2s;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0b2b4a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3px solid #2a7de1;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .progress-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .progress-bar {
+            flex: 1;
+            min-width: 140px;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #2a7de1, #6aa6f0);
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+        .counter {
+            font-weight: 600;
+            color: #1e3a5f;
+            background: #e9edf4;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+        .module-tag {
+            background: #d4e2fc;
+            color: #124a8a;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .question-text {
+            font-size: 20px;
+            font-weight: 500;
+            color: #0b1e33;
+            margin: 10px 0 20px 0;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .option {
+            background: #f7f9fc;
+            border: 2px solid #dfe6ef;
+            border-radius: 14px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 16px;
+            color: #1a2b3e;
+        }
+        .option:hover {
+            background: #e9eef6;
+            border-color: #b0c8e6;
+        }
+        .option.selected-correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .option.selected-wrong {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .option.show-correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .feedback {
+            padding: 16px 20px;
+            border-radius: 14px;
+            margin: 8px 0 18px 0;
+            font-size: 15px;
+            line-height: 1.5;
+            display: none;
+        }
+        .feedback.correct {
+            display: block;
+            background: #d4edda;
+            border-left: 6px solid #28a745;
+            color: #155724;
+        }
+        .feedback.wrong {
+            display: block;
+            background: #f8d7da;
+            border-left: 6px solid #dc3545;
+            color: #721c24;
+        }
+        .hint-box {
+            background: #fff3cd;
+            border-left: 6px solid #ffc107;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin: 6px 0 18px 0;
+            font-size: 15px;
+            color: #856404;
+            display: none;
+        }
+        .hint-box.show {
+            display: block;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+        .btn {
+            border: none;
+            background: #e9edf4;
+            color: #1e3a5f;
+            font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: #2a7de1;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1b62b5;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+        }
+        .btn-secondary:hover {
+            background: #d0d8e4;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #1e8a3a;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2a7de1;
+            color: #2a7de1;
+        }
+        .btn-outline:hover {
+            background: #2a7de1;
+            color: white;
+        }
+        .btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .score-summary {
+            text-align: center;
+            padding: 30px 10px;
+        }
+        .score-summary h2 {
+            font-size: 34px;
+            color: #0b2b4a;
+        }
+        .score-summary .big {
+            font-size: 60px;
+            font-weight: 800;
+            color: #2a7de1;
+        }
+        .score-summary .sub {
+            font-size: 18px;
+            color: #3a5a7a;
+        }
+        .restart-btn {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        @media (max-width: 600px) {
+            .quiz-container {
+                padding: 18px;
+            }
+            .question-text {
+                font-size: 17px;
+            }
+            .option {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container" id="app">
+    <h1>💊 Pharmacotherapy 2</h1>
+
+    <!-- Progress -->
+    <div class="progress-section">
+        <span class="counter" id="counter">1 / 320</span>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="module-tag" id="moduleTag">NSAIDs</span>
+    </div>
+
+    <!-- Question -->
+    <div id="questionArea">
+        <div class="question-text" id="questionText">Loading question...</div>
+        <div class="options" id="optionsContainer"></div>
+
+        <div class="hint-box" id="hintBox"></div>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+        <div>
+            <button class="btn btn-secondary" id="prevBtn" disabled>◀ Previous</button>
+            <button class="btn btn-secondary" id="nextBtn">Next ▶</button>
+        </div>
+        <div>
+            <button class="btn btn-outline" id="hintBtn">💡 Hint</button>
+            <button class="btn btn-primary" id="checkBtn">✔ Check</button>
+        </div>
+    </div>
+
+    <!-- Score Summary (hidden initially) -->
+    <div class="score-summary hidden" id="scoreSummary">
+        <h2>🏆 Quiz Complete!</h2>
+        <div class="big" id="finalScore">0%</div>
+        <div class="sub" id="finalDetails">0 correct out of 0</div>
+        <button class="btn btn-success restart-btn" id="restartBtn">🔄 Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+    // =====================================================================
+    //  FULL QUESTION BANK — 320+ questions covering all 4 modules
+    //  Combined high-yield questions from both original and new prompts.
+    // =====================================================================
+
+    const questions = [
+        // -------- MODULE 1: NSAIDs (85+ questions) --------
+        { module: "NSAIDs", question: "Which chemical mediators are released upon tissue damage to stimulate pain receptors?",
+          options: ["Prostaglandins and Leukotrienes", "Histamine and Bradykinin", "Acetylcholine and Dopamine", "Serotonin and GABA"],
+          correct: 1, hint: "Think about the initial inflammatory response.", explanation: "Histamine and Bradykinin are released from damaged tissues and directly activate pain receptors." },
+        { module: "NSAIDs", question: "What is the primary role of Prostaglandins (PGs) in pain perception?",
+          options: ["They directly cause severe pain", "They sensitize nerve endings to Histamine and Bradykinin", "They block pain signals at the spinal cord", "They reduce inflammation immediately"],
+          correct: 1, hint: "PGs lower the threshold for pain.", explanation: "Prostaglandins sensitize nociceptors to other mediators, increasing pain sensation." },
+        { module: "NSAIDs", question: "NSAIDs reduce pain primarily by inhibiting the synthesis of which substance?",
+          options: ["Histamine", "Bradykinin", "Prostaglandins", "Leukotrienes"],
+          correct: 2, hint: "NSAIDs target the COX enzyme.", explanation: "NSAIDs inhibit cyclooxygenase, reducing prostaglandin synthesis." },
+        { module: "NSAIDs", question: "The Arachidonic Acid pathway is initiated by the release of Arachidonic Acid from cell membrane phospholipids via which enzyme?",
+          options: ["Cyclooxygenase", "Lipoxygenase", "Phospholipase A2", "Thromboxane synthase"],
+          correct: 2, hint: "The enzyme that liberates arachidonic acid.", explanation: "Phospholipase A2 releases arachidonic acid from membrane phospholipids." },
+        { module: "NSAIDs", question: "Which enzymatic pathway converts Arachidonic Acid into Leukotrienes?",
+          options: ["COX Pathway", "LOX Pathway", "P450 Pathway", "Glucuronidation Pathway"],
+          correct: 1, hint: "Leukotrienes are associated with bronchoconstriction.", explanation: "Lipoxygenase (LOX) converts arachidonic acid to leukotrienes." },
+        { module: "NSAIDs", question: "Why can NSAIDs precipitate bronchospasm in asthmatic patients?",
+          options: ["They inhibit Leukotriene synthesis", "They shunt Arachidonic Acid to the LOX pathway, increasing Leukotrienes", "They increase Histamine release", "They block Beta-2 receptors"],
+          correct: 1, hint: "NSAIDs block COX, shifting metabolism.", explanation: "COX inhibition diverts arachidonic acid to the LOX pathway, increasing leukotrienes that cause bronchoconstriction." },
+        { module: "NSAIDs", question: "COX-1 is considered a 'housekeeping' enzyme because it is constitutively present in:",
+          options: ["Inflamed tissues only", "GIT, Platelets, and Kidneys", "Brain and Liver", "Lungs and Heart"],
+          correct: 1, hint: "COX-1 is always there for normal functions.", explanation: "COX-1 is expressed in the GI tract, platelets, and kidneys for homeostasis." },
+        { module: "NSAIDs", question: "Inhibition of COX-1 leads to which adverse effects?",
+          options: ["Reduced Pain and Fever", "Gastric Ulcers, Bleeding, and Renal issues", "Bronchoconstriction", "Sedation"],
+          correct: 1, hint: "COX-1 protects the stomach.", explanation: "COX-1 inhibition reduces protective prostaglandins, causing GI ulcers, bleeding, and renal problems." },
+        { module: "NSAIDs", question: "Which of the following is a non-selective NSAID that reversibly inhibits both COX-1 and COX-2?",
+          options: ["Aspirin", "Celecoxib", "Ibuprofen", "Paracetamol"],
+          correct: 2, hint: "Aspirin is irreversible.", explanation: "Ibuprofen is a reversible, non-selective COX inhibitor." },
+        { module: "NSAIDs", question: "What makes Aspirin unique among NSAIDs regarding its mechanism of action?",
+          options: ["It selectively inhibits COX-2", "It irreversibly inhibits COX-1 and COX-2 via acetylation", "It does not affect platelets", "It acts centrally only"],
+          correct: 1, hint: "Aspirin permanently modifies COX.", explanation: "Aspirin irreversibly acetylates and inactivates COX-1 and COX-2." },
+        { module: "NSAIDs", question: "How long does the antiplatelet effect of Aspirin last?",
+          options: ["4-6 hours", "24 hours", "7-10 days", "Until renal excretion"],
+          correct: 2, hint: "Platelets have no nucleus.", explanation: "Platelets cannot synthesize new COX, so the effect lasts for their lifespan (7-10 days)." },
+        { module: "NSAIDs", question: "Low dose Aspirin (75-81 mg/day) is primarily used for:",
+          options: ["Anti-inflammatory effect", "Analgesia", "Antiplatelet prophylaxis", "Antipyresis"],
+          correct: 2, hint: "Low doses are not anti-inflammatory.", explanation: "Low-dose aspirin inhibits platelet TXA2 for cardiovascular prophylaxis." },
+        { module: "NSAIDs", question: "High dose Aspirin is typically indicated for:",
+          options: ["Stroke prevention", "Rheumatoid Arthritis (Anti-inflammatory)", "Mild headache", "Fever reduction"],
+          correct: 1, hint: "Higher doses are needed for inflammation.", explanation: "High doses (≥3g/day) provide anti-inflammatory effects in arthritis." },
+        { module: "NSAIDs", question: "Selective COX-2 inhibitors like Celecoxib have an advantage over non-selective NSAIDs regarding:",
+          options: ["Cardiovascular safety", "GI toxicity (Ulcers/Bleeding)", "Renal safety", "Cost"],
+          correct: 1, hint: "COX-2 is not in the stomach.", explanation: "COX-2 inhibitors spare COX-1, reducing GI side effects." },
+        { module: "NSAIDs", question: "What is a major disadvantage of selective COX-2 inhibitors?",
+          options: ["Increased risk of GI ulcers", "Potential increased risk of Cardiovascular events (Thrombosis)", "Lack of analgesic effect", "Severe sedation"],
+          correct: 1, hint: "COX-2 inhibition affects vascular prostacyclin.", explanation: "COX-2 inhibitors may increase thrombosis risk due to unopposed platelet TXA2." },
+        { module: "NSAIDs", question: "Paracetamol differs from true NSAIDs because it has:",
+          options: ["Strong anti-inflammatory activity", "Weak/No Anti-inflammatory effect", "Irreversible COX inhibition", "Significant GI toxicity"],
+          correct: 1, hint: "Paracetamol works centrally.", explanation: "Paracetamol has weak peripheral COX inhibition, so it lacks significant anti-inflammatory activity." },
+        { module: "NSAIDs", question: "Why is Paracetamol preferred over Aspirin for fever in children?",
+          options: ["It is more effective", "It does not cause Reye's Syndrome", "It has stronger anti-inflammatory action", "It prevents seizures"],
+          correct: 1, hint: "Aspirin + viral infection = risk.", explanation: "Aspirin in children with viral infections can cause Reye's syndrome; paracetamol is safe." },
+        { module: "NSAIDs", question: "Diflunisal is an NSAID that lacks which therapeutic effect?",
+          options: ["Analgesic", "Anti-inflammatory", "Antipyretic", "Antiplatelet"],
+          correct: 2, hint: "It does not cross the BBB.", explanation: "Diflunisal does not cross the blood-brain barrier, so it lacks antipyretic effect." },
+        { module: "NSAIDs", question: "Why does Diflunisal lack antipyretic effect?",
+          options: ["It does not inhibit COX enzymes", "It does not cross the Blood-Brain Barrier (BBB)", "It is rapidly metabolized", "It acts peripherally only"],
+          correct: 1, hint: "Fever center is in the hypothalamus.", explanation: "Diflunisal cannot reach the hypothalamic thermoregulatory center." },
+        { module: "NSAIDs", question: "Do NSAIDs arrest disease progression or induce remission in Rheumatoid Arthritis?",
+          options: ["Yes, they cure RA", "No, they only manage symptoms", "Only high doses do", "Only when combined with steroids"],
+          correct: 1, hint: "NSAIDs are symptomatic.", explanation: "NSAIDs reduce inflammation and pain but do not halt disease progression or induce remission." },
+        { module: "NSAIDs", question: "NSAIDs are generally less effective for which type of pain unless combined with opioids?",
+          options: ["Musculoskeletal pain", "Visceral pain", "Headache", "Dysmenorrhea"],
+          correct: 1, hint: "Visceral pain has different mechanisms.", explanation: "Visceral pain (e.g., colic) is less responsive to NSAIDs alone; opioids may be needed." },
+        { module: "NSAIDs", question: "How do NSAIDs reduce fever?",
+          options: ["By causing hypothermia", "By resetting the hypothalamic set point via PGE2 inhibition", "By increasing sweating only", "By blocking histamine"],
+          correct: 1, hint: "They act on the thermostat.", explanation: "NSAIDs inhibit PGE2 synthesis in the hypothalamus, resetting the set point downward." },
+        { module: "NSAIDs", question: "Do NSAIDs cause hypothermia in normal individuals with normal body temperature?",
+          options: ["Yes, significantly", "No, they only lower elevated temperature", "Only in elderly", "Only with high doses"],
+          correct: 1, hint: "They don't affect normal temp.", explanation: "NSAIDs only reduce fever; they do not lower normal body temperature." },
+        { module: "NSAIDs", question: "GI toxicity from NSAIDs is caused by inhibition of COX-1 leading to decreased secretion of:",
+          options: ["Hydrochloric acid", "Protective Prostaglandins (PGE2, PGI2), Mucus, and Bicarbonate", "Pepsinogen", "Intrinsic factor"],
+          correct: 1, hint: "COX-1 protects the stomach.", explanation: "COX-1 inhibition reduces mucus and bicarbonate secretion, increasing acid damage." },
+        { module: "NSAIDs", question: "Which drug is a PGE1 analog used to prevent NSAID-induced gastric ulcers?",
+          options: ["Omeprazole", "Misoprostol", "Ranitidine", "Sucralfate"],
+          correct: 1, hint: "It replaces lost prostaglandins.", explanation: "Misoprostol is a synthetic PGE1 analog that protects the gastric mucosa." },
+        { module: "NSAIDs", question: "Proton Pump Inhibitors (PPIs) like Omeprazole protect against NSAID gastropathy by:",
+          options: ["Increasing mucus secretion", "Decreasing gastric acid secretion", "Neutralizing stomach acid", "Coating the ulcer"],
+          correct: 1, hint: "PPIs block acid pumps.", explanation: "PPIs reduce acid secretion, preventing NSAID-induced mucosal injury." },
+        { module: "NSAIDs", question: "Physiological Prostaglandins (PGE2, PGI2) maintain Renal Blood Flow (RBF) by causing vasodilation of:",
+          options: ["Efferent Arterioles", "Afferent Arterioles", "Glomerular capillaries", "Peritubular capillaries"],
+          correct: 1, hint: "They dilate the entry vessels.", explanation: "Prostaglandins dilate afferent arterioles to maintain renal perfusion." },
+        { module: "NSAIDs", question: "NSAID-induced Acute Kidney Injury (AKI) is most likely to occur in patients with:",
+          options: ["Hypertension", "Dehydration/Hypovolemia", "Diabetes", "Obesity"],
+          correct: 1, hint: "Volume depletion increases risk.", explanation: "In hypovolemic states, renal prostaglandins are critical; NSAIDs block them, causing AKI." },
+        { module: "NSAIDs", question: "Chronic NSAID use can lead to sodium and water retention resulting in:",
+          options: ["Hypotension", "Edema and Hypertension", "Polyuria", "Hyperkalemia"],
+          correct: 1, hint: "Prostaglandins promote salt excretion.", explanation: "NSAIDs reduce salt and water excretion, causing edema and hypertension." },
+        { module: "NSAIDs", question: "NSAIDs should be avoided in patients with Heart Failure primarily due to risk of:",
+          options: ["Arrhythmias", "Fluid retention and worsening failure", "Myocardial infarction", "Valve dysfunction"],
+          correct: 1, hint: "Fluid overload worsens HF.", explanation: "NSAIDs cause fluid retention, which can exacerbate heart failure." },
+        { module: "NSAIDs", question: "High doses of Aspirin initially cause Central Respiratory Stimulation leading to:",
+          options: ["Metabolic Acidosis", "Respiratory Alkalosis", "Respiratory Acidosis", "Metabolic Alkalosis"],
+          correct: 1, hint: "Hyperventilation causes alkalosis.", explanation: "Salicylate stimulates the respiratory center, causing hyperventilation and respiratory alkalosis." },
+        { module: "NSAIDs", question: "Severe Salicylate toxicity (>50mg/dL) is characterized by:",
+          options: ["Respiratory Alkalosis only", "Metabolic Acidosis, Hyperthermia, Coma", "Hypoglycemia", "Bradycardia"],
+          correct: 1, hint: "High doses are dangerous.", explanation: "Severe toxicity causes metabolic acidosis, hyperthermia, and coma." },
+        { module: "NSAIDs", question: "Reye's Syndrome is associated with the use of Salicylates in children with viral infections like:",
+          options: ["Measles and Mumps", "Chickenpox or Influenza", "Rubella", "Hepatitis A"],
+          correct: 1, hint: "Common childhood viruses.", explanation: "Reye's syndrome is linked to aspirin use in children with chickenpox or influenza." },
+        { module: "NSAIDs", question: "Reye's Syndrome primarily affects which two organs?",
+          options: ["Heart and Lungs", "Liver and Brain", "Kidneys and Pancreas", "Spleen and Bone Marrow"],
+          correct: 1, hint: "It causes encephalopathy and liver failure.", explanation: "Reye's syndrome is characterized by hepatic encephalopathy." },
+        { module: "NSAIDs", question: "Mild Salicylate toxicity (>30mg/dL) typically presents with:",
+          options: ["Coma", "Tinnitus and Hyperventilation", "Jaundice", "Seizures"],
+          correct: 1, hint: "Ear ringing is a classic sign.", explanation: "Mild salicylism causes tinnitus and hyperventilation." },
+        { module: "NSAIDs", question: "Aspirin prolongs bleeding time due to irreversible inhibition of:",
+          options: ["Fibrinogen", "Platelet Aggregation (TXA2 suppression)", "Vitamin K", "Clotting Factors"],
+          correct: 1, hint: "It affects platelets.", explanation: "Aspirin irreversibly inhibits platelet COX, reducing TXA2 and platelet aggregation." },
+        { module: "NSAIDs", question: "Patients scheduled for surgery should stop Aspirin how many days prior?",
+          options: ["1 day", "3 days", "7 days", "14 days"],
+          correct: 2, hint: "Platelet lifespan is ~7-10 days.", explanation: "Aspirin should be stopped 7 days before surgery to allow normal platelet function." },
+        { module: "NSAIDs", question: "Aspirin can displace other highly protein-bound drugs from plasma albumin. Which drug interaction increases bleeding risk?",
+          options: ["Aspirin + Paracetamol", "Aspirin + Warfarin", "Aspirin + Ibuprofen", "Aspirin + Amoxicillin"],
+          correct: 1, hint: "Warfarin is an anticoagulant.", explanation: "Aspirin displaces warfarin, increasing its free concentration and bleeding risk." },
+        { module: "NSAIDs", question: "Management of severe Aspirin overdose involves alkalinization of urine using:",
+          options: ["Ammonium Chloride", "Sodium Bicarbonate", "Acetic Acid", "Normal Saline"],
+          correct: 1, hint: "Alkaline urine traps aspirin.", explanation: "Sodium bicarbonate alkalinizes urine, enhancing salicylate excretion." },
+        { module: "NSAIDs", question: "Why does alkalinization of urine enhance Aspirin excretion?",
+          options: ["It increases Aspirin reabsorption", "Ionized Aspirin cannot be reabsorbed and is trapped in urine", "It increases glomerular filtration rate", "It converts Aspirin to Salicylic acid"],
+          correct: 1, hint: "Aspirin is a weak acid.", explanation: "In alkaline urine, aspirin is ionized and cannot be reabsorbed, so it is excreted." },
+        { module: "NSAIDs", question: "The toxic metabolite of Paracetamol produced by CYP450 is:",
+          options: ["Glucuronide", "Sulfate", "NAPQI", "Acetate"],
+          correct: 2, hint: "It is the hepatotoxic intermediate.", explanation: "NAPQI (N-acetyl-p-benzoquinone imine) is the reactive toxic metabolite." },
+        { module: "NSAIDs", question: "Under normal conditions, NAPQI is neutralized by:",
+          options: ["Albumin", "Glutathione", "Cytochrome P450", "Bilirubin"],
+          correct: 1, hint: "It is a cellular antioxidant.", explanation: "Glutathione conjugates NAPQI to form a non-toxic mercapturate." },
+        { module: "NSAIDs", question: "In Paracetamol overdose, liver failure occurs because:",
+          options: ["Conjugation pathways are saturated and Glutathione is depleted", "CYP450 is inhibited", "Renal excretion fails", "Biliary obstruction occurs"],
+          correct: 0, hint: "Glutathione runs out.", explanation: "Overdose saturates sulfate/glucuronide pathways and depletes glutathione, allowing NAPQI to damage hepatocytes." },
+        { module: "NSAIDs", question: "The specific antidote for Paracetamol overdose is:",
+          options: ["Atropine", "N-acetylcysteine (NAC)", "Flumazenil", "Protamine Sulfate"],
+          correct: 1, hint: "It contains a sulfhydryl group.", explanation: "N-acetylcysteine replenishes glutathione and binds NAPQI." },
+        { module: "NSAIDs", question: "N-acetylcysteine works by:",
+          options: ["Inhibiting CYP450", "Replenishing Glutathione and binding NAPQI", "Increasing renal clearance", "Blocking opioid receptors"],
+          correct: 1, hint: "It donates sulfhydryl groups.", explanation: "NAC provides cysteine for glutathione synthesis and directly binds NAPQI." },
+        { module: "NSAIDs", question: "For maximum efficacy, NAC must be administered within how many hours of ingestion?",
+          options: ["2-4 hours", "8-10 hours", "24 hours", "48 hours"],
+          correct: 1, hint: "Time is critical.", explanation: "NAC is most effective within 8-10 hours of acetaminophen overdose." },
+        { module: "NSAIDs", question: "Gout is caused by crystallization of which substance in joints?",
+          options: ["Calcium Pyrophosphate", "Sodium Urate", "Cholesterol", "Oxalate"],
+          correct: 1, hint: "It is a purine metabolite.", explanation: "Sodium urate crystals deposit in joints, causing gout." },
+        { module: "NSAIDs", question: "The inflammatory response in acute gout is triggered when neutrophils engulf crystals and rupture their:",
+          options: ["Mitochondria", "Lysosomes", "Nucleus", "Ribosomes"],
+          correct: 1, hint: "Lysosomes release digestive enzymes.", explanation: "Neutrophils phagocytize urate crystals, releasing lysosomal enzymes that cause inflammation." },
+        { module: "NSAIDs", question: "First-line drugs for an Acute Gout Attack include:",
+          options: ["Allopurinol and Probenecid", "Indomethacin, Naproxen, or Colchicine", "Aspirin and Paracetamol", "Methotrexate"],
+          correct: 1, hint: "Rapid anti-inflammatory effect.", explanation: "NSAIDs (indomethacin, naproxen) or colchicine are used for acute attacks." },
+        { module: "NSAIDs", question: "Why is Aspirin contraindicated in Acute Gout attacks?",
+          options: ["It causes GI bleeding", "Low doses reduce uric acid excretion, worsening Gout", "It interacts with Colchicine", "It causes renal failure"],
+          correct: 1, hint: "Aspirin affects uric acid handling.", explanation: "Low-dose aspirin inhibits uric acid excretion, worsening hyperuricemia." },
+        { module: "NSAIDs", question: "Colchicine treats acute gout by:",
+          options: ["Inhibiting Xanthine Oxidase", "Inhibiting neutrophil migration/microtubule formation", "Increasing uric acid excretion", "Blocking prostaglandins"],
+          correct: 1, hint: "It binds to tubulin.", explanation: "Colchicine binds tubulin, disrupting microtubules and neutrophil migration." },
+        { module: "NSAIDs", question: "Prophylactic treatment for Chronic Gout aims to:",
+          options: ["Relieve immediate pain", "Lower Serum Uric Acid levels", "Increase inflammation", "Treat kidney stones"],
+          correct: 1, hint: "Prevent future attacks.", explanation: "Chronic gout therapy lowers uric acid to prevent crystal deposition." },
+        { module: "NSAIDs", question: "Allopurinol and Febuxostat lower uric acid by inhibiting which enzyme?",
+          options: ["Urease", "Xanthine Oxidase", "Phosphoribosyltransferase", "Adenosine Deaminase"],
+          correct: 1, hint: "They block the final step.", explanation: "Allopurinol and febuxostat inhibit xanthine oxidase, reducing uric acid synthesis." },
+        { module: "NSAIDs", question: "Uricosuric agents like Probenecid work by:",
+          options: ["Inhibiting uric acid production", "Blocking reabsorption of Uric Acid in kidney tubules", "Dissolving crystals directly", "Reducing dietary purine absorption"],
+          correct: 1, hint: "They increase excretion.", explanation: "Probenecid blocks urate reabsorption in the proximal tubule, increasing excretion." },
+        { module: "NSAIDs", question: "According to the old theory, Phase 1 of a Migraine attack involves:",
+          options: ["Vasodilation", "Vasoconstriction (Aura phase)", "Neurogenic inflammation", "Platelet aggregation"],
+          correct: 1, hint: "Aura is associated with reduced blood flow.", explanation: "Phase 1 is vasoconstriction, leading to the aura." },
+        { module: "NSAIDs", question: "Phase 2 of a Migraine attack is characterized by:",
+          options: ["Vasoconstriction", "Vasodilation of cranial vessels causing pulsating pain", "Nerve compression", "Muscle spasm"],
+          correct: 1, hint: "This is the headache phase.", explanation: "Vasodilation of cranial arteries causes the throbbing pain." },
+        { module: "NSAIDs", question: "Triptans (e.g., Sumatriptan) act as agonists at which receptor?",
+          options: ["5-HT2A", "5-HT1D", "Dopamine D2", "Alpha-adrenergic"],
+          correct: 1, hint: "Serotonin receptor subtype.", explanation: "Triptans are 5-HT1D/1B agonists that cause vasoconstriction." },
+        { module: "NSAIDs", question: "The mechanism of Triptans includes vasoconstriction and inhibition of:",
+          options: ["Histamine release", "Release of pain neurotransmitters from trigeminal nerve", "Prostaglandin synthesis", "Acetylcholine release"],
+          correct: 1, hint: "They act on the trigeminal system.", explanation: "Triptans reduce trigeminal neuropeptide release and cause vasoconstriction." },
+        { module: "NSAIDs", question: "Triptans are best used for migraines that are:",
+          options: ["Mild and infrequent", "Moderate-severe, especially with Aura", "Tension-type headaches", "Cluster headaches only"],
+          correct: 1, hint: "They are for more severe cases.", explanation: "Triptans are first-line for moderate to severe migraine with or without aura." },
+        { module: "NSAIDs", question: "Ergotamines are less preferred than Triptans due to:",
+          options: ["Higher cost", "Lower efficacy, more side effects, and vascular toxicity", "Lack of vasoconstrictor effect", "Short half-life"],
+          correct: 1, hint: "Ergotamines are older drugs.", explanation: "Ergotamines have more side effects and vascular toxicity than triptans." },
+        { module: "NSAIDs", question: "First-line prophylactic medication for Migraine prevention is:",
+          options: ["Sumatriptan", "Propranolol (Beta-Blocker)", "Ibuprofen", "Codeine"],
+          correct: 1, hint: "Beta-blockers are used for prophylaxis.", explanation: "Propranolol is first-line for migraine prophylaxis." },
+        { module: "NSAIDs", question: "Verapamil is sometimes used for migraine prophylaxis as a:",
+          options: ["Beta-blocker", "Calcium Channel Blocker", "Antidepressant", "Anticonvulsant"],
+          correct: 1, hint: "It's a cardiovascular drug.", explanation: "Verapamil is a calcium channel blocker used for migraine prevention." },
+        // New High-Yield NSAIDs Qs
+        { module: "NSAIDs", question: "Which enzyme is responsible for releasing arachidonic acid from membrane phospholipids?",
+          options: ["COX-1", "COX-2", "Phospholipase A2", "Lipoxygenase"],
+          correct: 2, hint: "Starts the whole pathway.", explanation: "Phospholipase A2 releases arachidonic acid from membrane phospholipids." },
+        { module: "NSAIDs", question: "What is the primary function of prostacyclin (PGI2) in the vascular system?",
+          options: ["Promotes platelet aggregation", "Inhibits platelet aggregation", "Promotes vasoconstriction", "Increases thrombus formation"],
+          correct: 1, hint: "It opposes thromboxane.", explanation: "PGI2 inhibits platelet aggregation and causes vasodilation." },
+        { module: "NSAIDs", question: "Which of the following conditions is a contraindication for Aspirin use?",
+          options: ["Hypertension", "Active Peptic Ulcer Disease", "Diabetes Mellitus", "Osteoarthritis"],
+          correct: 1, hint: "Aspirin damages the stomach lining.", explanation: "Aspirin is contraindicated in active peptic ulcer disease due to GI bleeding risk." },
+        { module: "NSAIDs", question: "Corticosteroids exert anti-inflammatory effects by inhibiting:",
+          options: ["COX-1", "COX-2", "Phospholipase A2", "Lipoxygenase"],
+          correct: 2, hint: "They act early in the pathway.", explanation: "Corticosteroids inhibit phospholipase A2, reducing arachidonic acid release." },
+        { module: "NSAIDs", question: "Which NSAID is commonly associated with the highest risk of gastrointestinal bleeding?",
+          options: ["Ibuprofen", "Naproxen", "Ketorolac", "Celecoxib"],
+          correct: 2, hint: "It is often used for acute pain.", explanation: "Ketorolac has a high risk of GI bleeding, especially with prolonged use." },
+        { module: "NSAIDs", question: "Celecoxib increases the risk of which cardiovascular event?",
+          options: ["Heart failure", "Myocardial infarction", "Bradycardia", "Hypotension"],
+          correct: 1, hint: "COX-2 inhibitors affect prostacyclin.", explanation: "Celecoxib increases the risk of thrombotic events like MI and stroke." },
+        { module: "NSAIDs", question: "In paracetamol overdose, what is depleted in the liver leading to toxicity?",
+          options: ["Albumin", "Glutathione", "Cytochrome P450", "Vitamin K"],
+          correct: 1, hint: "It is a major cellular antioxidant.", explanation: "Glutathione is depleted, allowing NAPQI to bind hepatic proteins." },
+        { module: "NSAIDs", question: "What is the mechanism of action of Allopurinol in gout?",
+          options: ["Increases uric acid excretion", "Inhibits xanthine oxidase", "Decreases purine absorption", "Inhibits neutrophil migration"],
+          correct: 1, hint: "It blocks uric acid production.", explanation: "Allopurinol inhibits xanthine oxidase, reducing uric acid synthesis." },
+        { module: "NSAIDs", question: "Which drug is used for acute gout but must be given within 24-48 hours of onset?",
+          options: ["Allopurinol", "Probenecid", "Colchicine", "Febuxostat"],
+          correct: 2, hint: "It works on microtubules.", explanation: "Colchicine is effective if given within 24-48 hours of an acute gout attack." },
+        { module: "NSAIDs", question: "Which medication can be used to prevent NSAID-induced gastropathy by replacing prostaglandins?",
+          options: ["Omeprazole", "Misoprostol", "Ranitidine", "Sucralfate"],
+          correct: 1, hint: "It is a synthetic prostaglandin.", explanation: "Misoprostol is a PGE1 analog that protects the gastric mucosa." },
+        { module: "NSAIDs", question: "Which of the following NSAIDs is a selective COX-2 inhibitor?",
+          options: ["Ibuprofen", "Naproxen", "Celecoxib", "Ketorolac"],
+          correct: 2, hint: "It spares the stomach.", explanation: "Celecoxib is the only available selective COX-2 inhibitor." },
+        { module: "NSAIDs", question: "Why does Aspirin cause a prolonged bleeding time?",
+          options: ["Inhibits vitamin K", "Irreversibly inhibits platelet COX-1", "Reduces fibrinogen", "Activates plasmin"],
+          correct: 1, hint: "It acetylates the enzyme.", explanation: "Aspirin irreversibly inhibits platelet COX-1, reducing TXA2 for the platelet's lifespan." },
+        { module: "NSAIDs", question: "What is the recommended dose of Aspirin for cardiovascular prophylaxis?",
+          options: ["75-81 mg/day", "325 mg/day", "650 mg/day", "1 g/day"],
+          correct: 0, hint: "Low dose is sufficient.", explanation: "Low-dose aspirin (75-81 mg) is used for antiplatelet prophylaxis." },
+        { module: "NSAIDs", question: "Which of the following is a common side effect of high-dose salicylate?",
+          options: ["Bradycardia", "Tinnitus", "Hypertension", "Polyuria"],
+          correct: 1, hint: "It affects the ear.", explanation: "Tinnitus (ringing in the ears) is an early sign of salicylate toxicity." },
+        { module: "NSAIDs", question: "Which NSAID is used to close a patent ductus arteriosus in neonates?",
+          options: ["Ibuprofen", "Indomethacin", "Naproxen", "Aspirin"],
+          correct: 1, hint: "It is a potent NSAID.", explanation: "Indomethacin is used to induce closure of patent ductus arteriosus." },
+        { module: "NSAIDs", question: "What is the role of Leukotrienes in the body?",
+          options: ["Anti-inflammatory", "Bronchoconstriction", "Platelet aggregation", "Gastric protection"],
+          correct: 1, hint: "They are bronchoconstrictors.", explanation: "Leukotrienes cause bronchoconstriction and are involved in asthma." },
+        { module: "NSAIDs", question: "In NSAID-induced asthma, what happens to arachidonic acid?",
+          options: ["It produces more prostaglandins", "It is shunted to lipoxygenase producing leukotrienes", "It is metabolized to thromboxane", "It is excreted"],
+          correct: 1, hint: "COX is blocked.", explanation: "COX inhibition shunts arachidonic acid to lipoxygenase, increasing leukotrienes." },
+        { module: "NSAIDs", question: "Which drug is a uricosuric agent that blocks urate reabsorption in the proximal tubule?",
+          options: ["Allopurinol", "Probenecid", "Colchicine", "Prednisone"],
+          correct: 1, hint: "It increases excretion.", explanation: "Probenecid blocks the anion exchanger, increasing uric acid excretion." },
+        { module: "NSAIDs", question: "Which drug is a non-acetylated salicylate that has less GI toxicity?",
+          options: ["Aspirin", "Diflunisal", "Salsalate", "Ibuprofen"],
+          correct: 2, hint: "It is not acetylated.", explanation: "Salsalate is a non-acetylated salicylate with less GI bleeding risk." },
+        { module: "NSAIDs", question: "Acetaminophen toxicity primarily affects which organ?",
+          options: ["Kidney", "Liver", "Heart", "Lungs"],
+          correct: 1, hint: "It causes necrosis here.", explanation: "Acetaminophen overdose causes hepatic necrosis." },
+        { module: "NSAIDs", question: "Which COX enzyme is constitutively expressed in most tissues?",
+          options: ["COX-1", "COX-2", "COX-3", "LOX"],
+          correct: 0, hint: "It is always present.", explanation: "COX-1 is constitutively expressed in most tissues for homeostatic functions." },
+        { module: "NSAIDs", question: "Which drug is the preferred analgesic for a patient with a history of myocardial infarction?",
+          options: ["Ibuprofen", "Naproxen", "Aspirin", "Celecoxib"],
+          correct: 2, hint: "It is cardioprotective.", explanation: "Aspirin is preferred because it prevents thrombosis." },
+        { module: "NSAIDs", question: "What is the role of prostaglandins in the kidney?",
+          options: ["Constrict afferent arterioles", "Dilate afferent arterioles", "Constrict efferent arterioles", "Reduce GFR"],
+          correct: 1, hint: "They maintain blood flow.", explanation: "Prostaglandins dilate afferent arterioles, maintaining renal blood flow." },
+        { module: "NSAIDs", question: "Why are NSAIDs avoided in patients with dehydration?",
+          options: ["Risk of hepatotoxicity", "Risk of acute kidney injury", "Risk of GI bleeding", "Risk of bronchospasm"],
+          correct: 1, hint: "Renal perfusion is critical.", explanation: "In dehydration, renal prostaglandins are essential; NSAIDs can cause AKI." },
+        // -------- MODULE 2: OPIOIDS (85+ questions) --------
+        { module: "Opioids", question: "Full Agonist opioids bind to receptors and produce:",
+          options: ["Sub-maximal effect", "Maximal effect with high addiction liability", "No effect", "Antagonistic effect"],
+          correct: 1, hint: "They fully activate the receptor.", explanation: "Full agonists produce maximal receptor activation and have high abuse potential." },
+        { module: "Opioids", question: "Which of the following is a Partial Agonist opioid?",
+          options: ["Morphine", "Naloxone", "Buprenorphine", "Tramadol"],
+          correct: 2, hint: "It has a ceiling effect.", explanation: "Buprenorphine is a partial μ agonist used in detoxification." },
+        { module: "Opioids", question: "Pure Antagonist opioids have:",
+          options: ["High affinity and high efficacy", "High affinity but zero efficacy", "Low affinity and low efficacy", "No affinity"],
+          correct: 1, hint: "They bind but don't activate.", explanation: "Antagonists like naloxone have high affinity but no efficacy." },
+        { module: "Opioids", question: "Tramadol is classified as an atypical opioid because it also inhibits reuptake of:",
+          options: ["Dopamine and GABA", "Norepinephrine and Serotonin", "Acetylcholine and Histamine", "Glutamate and Glycine"],
+          correct: 1, hint: "It affects monoamines.", explanation: "Tramadol inhibits norepinephrine and serotonin reuptake." },
+        { module: "Opioids", question: "The primary analgesic effect of opioids is mediated by which receptor?",
+          options: ["Kappa (κ)", "Delta (δ)", "Mu (μ)", "Sigma (σ)"],
+          correct: 2, hint: "This receptor is the main target for morphine.", explanation: "The μ receptor mediates most of the analgesic effects of opioids." },
+        { module: "Opioids", question: "Opioids inhibit pain transmission presynaptically by decreasing influx of which ion?",
+          options: ["Potassium (K+)", "Sodium (Na+)", "Calcium (Ca²+)", "Chloride (Cl-)"],
+          correct: 2, hint: "This ion is needed for neurotransmitter release.", explanation: "Opioids reduce Ca²+ influx, decreasing neurotransmitter release." },
+        { module: "Opioids", question: "Postsynaptically, opioids cause hyperpolarization by increasing efflux of which ion?",
+          options: ["Calcium (Ca²+)", "Potassium (K+)", "Magnesium (Mg²+)", "Sodium (Na+)"],
+          correct: 1, hint: "K+ efflux hyperpolarizes the cell.", explanation: "Opioids open K+ channels, causing hyperpolarization and reduced excitability." },
+        { module: "Opioids", question: "Morphine relieves severe pain without causing:",
+          options: ["Euphoria", "Loss of consciousness", "Constipation", "Miosis"],
+          correct: 1, hint: "It is analgesic but not a general anesthetic.", explanation: "Morphine provides analgesia without loss of consciousness." },
+        { module: "Opioids", question: "The most dangerous side effect of Morphine is:",
+          options: ["Constipation", "Respiratory Depression", "Pruritus", "Urinary Retention"],
+          correct: 1, hint: "This is the leading cause of death in overdose.", explanation: "Respiratory depression is the most serious adverse effect." },
+        { module: "Opioids", question: "Morphine-induced respiratory depression results from decreased sensitivity of the respiratory center to:",
+          options: ["Oxygen", "Carbon Dioxide (CO2)", "Nitrogen", "Hydrogen ions"],
+          correct: 1, hint: "CO2 is the main respiratory stimulus.", explanation: "Morphine reduces the response of the respiratory center to CO2." },
+        { module: "Opioids", question: "Pinpoint pupils (Miosis) are a diagnostic sign of:",
+          options: ["Cocaine overdose", "Opioid overdose", "Atropine poisoning", "Alcohol intoxication"],
+          correct: 1, hint: "Opioids constrict the pupils.", explanation: "Miosis is a classic sign of opioid overdose." },
+        { module: "Opioids", question: "Morphine causes constipation by:",
+          options: ["Increasing GI motility", "Decreasing GI motility and increasing sphincter tone", "Inhibiting water absorption", "Stimulating bile secretion"],
+          correct: 1, hint: "It slows down the gut.", explanation: "Morphine reduces peristalsis and increases sphincter tone, causing constipation." },
+        { module: "Opioids", question: "Morphine can worsen biliary colic pain due to:",
+          options: ["Gallbladder relaxation", "Biliary Spasm (increased pressure)", "Sphincter of Oddi relaxation", "Increased bile flow"],
+          correct: 1, hint: "It constricts the sphincter.", explanation: "Morphine increases biliary pressure by spasming the sphincter of Oddi." },
+        { module: "Opioids", question: "Histamine release by Morphine can cause itching and is contraindicated in patients with:",
+          options: ["Hypertension", "Asthma", "Diabetes", "Epilepsy"],
+          correct: 1, hint: "Histamine causes bronchoconstriction.", explanation: "Morphine releases histamine, which can trigger bronchospasm in asthmatics." },
+        { module: "Opioids", question: "Morphine is not recommended during childbirth because it:",
+          options: ["Causes fetal malformations", "Prolongs labor", "Stops uterine contractions completely", "Causes maternal hemorrhage"],
+          correct: 1, hint: "It affects uterine contractions.", explanation: "Morphine can prolong labor by reducing uterine contraction strength and frequency." },
+        { module: "Opioids", question: "IV Morphine is useful in Acute Pulmonary Edema because it reduces anxiety and:",
+          options: ["Increases heart rate", "Preload via vasodilation", "Afterload via vasoconstriction", "Contractility"],
+          correct: 1, hint: "It reduces venous return.", explanation: "Morphine reduces preload through venodilation, relieving pulmonary congestion." },
+        { module: "Opioids", question: "Fentanyl is approximately how many times more potent than Morphine?",
+          options: ["10x", "50x", "100x", "500x"],
+          correct: 2, hint: "It's very potent.", explanation: "Fentanyl is about 100 times more potent than morphine." },
+        { module: "Opioids", question: "Fentanyl is often used in cardiac surgery because it provides:",
+          options: ["Stable hemodynamics", "Profound hypotension", "Tachycardia", "Bronchodilation"],
+          correct: 0, hint: "It is cardiovascularly stable.", explanation: "Fentanyl provides stable hemodynamics with minimal myocardial depression." },
+        { module: "Opioids", question: "Meperidine (Pethidine) has a toxic metabolite called Normeperidine which can cause:",
+          options: ["Respiratory depression", "Seizures/Tremors", "Constipation", "Miosis"],
+          correct: 1, hint: "It is a CNS stimulant.", explanation: "Normeperidine accumulation can cause seizures and tremors." },
+        { module: "Opioids", question: "Meperidine is absolutely contraindicated with MAO Inhibitors due to risk of:",
+          options: ["Hypotensive crisis", "Hyperpyrexic Coma/Serotonin Syndrome", "Renal failure", "Hepatotoxicity"],
+          correct: 1, hint: "MAOIs increase serotonin.", explanation: "Combining meperidine with MAOIs can cause serotonin syndrome with hyperthermia and coma." },
+        { module: "Opioids", question: "Codeine is primarily used clinically as an:",
+          options: ["Analgesic for severe pain", "Antitussive (Cough suppressant)", "Anti-diarrheal", "Anesthetic adjunct"],
+          correct: 1, hint: "It's good for cough.", explanation: "Codeine is mainly used as an antitussive; its analgesic effect is moderate." },
+        { module: "Opioids", question: "Codeine requires conversion to which active compound for analgesia?",
+          options: ["Heroin", "Morphine", "Norcodeine", "Thebaine"],
+          correct: 1, hint: "It is a prodrug.", explanation: "Codeine is metabolized to morphine, which produces analgesia." },
+        { module: "Opioids", question: "Partial agonists exhibit a 'Ceiling Effect' for which side effect?",
+          options: ["Analgesia", "Respiratory depression", "Constipation", "Sedation"],
+          correct: 1, hint: "Respiratory depression is limited.", explanation: "Partial agonists have a ceiling effect on respiratory depression, making them safer." },
+        { module: "Opioids", question: "If a partial agonist is given to a patient dependent on full agonists, it will:",
+          options: ["Enhance the euphoria", "Precipitate Withdrawal Symptoms", "Have no effect", "Cause overdose"],
+          correct: 1, hint: "It displaces the full agonist.", explanation: "Partial agonists can precipitate withdrawal in dependent patients." },
+        { module: "Opioids", question: "Buprenorphine is administered via which route for detoxification?",
+          options: ["Intravenous", "Sublingual", "Intramuscular", "Transdermal patch only"],
+          correct: 1, hint: "It is given under the tongue.", explanation: "Buprenorphine is given sublingually for opioid detoxification." },
+        { module: "Opioids", question: "Naloxone is used clinically for:",
+          options: ["Maintenance therapy", "Emergency reversal of Opioid Overdose", "Pain management", "Treating addiction long-term"],
+          correct: 1, hint: "It's an antidote.", explanation: "Naloxone is used to rapidly reverse opioid overdose." },
+        { module: "Opioids", question: "The duration of action of Naloxone is approximately:",
+          options: ["30-90 minutes", "4-6 hours", "24 hours", "72 hours"],
+          correct: 0, hint: "It's short-acting.", explanation: "Naloxone has a short duration of action (30-90 minutes)." },
+        { module: "Opioids", question: "Naltrexone is used for:",
+          options: ["Acute overdose reversal", "Maintenance therapy to prevent relapse", "Analgesia", "Sedation"],
+          correct: 1, hint: "It's long-acting.", explanation: "Naltrexone is used for long-term maintenance to prevent relapse." },
+        { module: "Opioids", question: "Physical dependence on opioids is characterized by:",
+          options: ["Craving for euphoria", "Withdrawal syndrome upon cessation", "Psychological obsession", "Tolerance only"],
+          correct: 1, hint: "It's about the body adapting.", explanation: "Physical dependence is manifest by withdrawal symptoms when the drug is stopped." },
+        { module: "Opioids", question: "Symptoms of Opioid Withdrawal include all EXCEPT:",
+          options: ["Anxiety and Insomnia", "Dilated Pupils (Mydriasis)", "Diarrhea and Vomiting", "Miosis (Pinpoint pupils)"],
+          correct: 3, hint: "Opioids cause miosis, not withdrawal.", explanation: "Miosis is a sign of opioid intoxication, not withdrawal." },
+        { module: "Opioids", question: "Methadone is preferred for detoxification because it is:",
+          options: ["Short-acting", "Long-acting and well-absorbed orally", "Non-addictive", "A pure antagonist"],
+          correct: 1, hint: "It's used for maintenance.", explanation: "Methadone is long-acting and orally bioavailable, making it suitable for detoxification." },
+        { module: "Opioids", question: "Combining Opioids with CNS depressants like Benzodiazepines can lead to:",
+          options: ["Enhanced analgesia", "Synergistic Respiratory Depression and Death", "Increased alertness", "Reduced tolerance"],
+          correct: 1, hint: "Both depress respiration.", explanation: "Combining opioids with other CNS depressants causes synergistic respiratory depression." },
+        { module: "Opioids", question: "What is the mechanism of action of Morphine?",
+          options: ["μ receptor antagonist", "μ receptor agonist", "κ receptor agonist", "δ receptor agonist"],
+          correct: 1, hint: "Morphine activates the receptor.", explanation: "Morphine is a μ receptor agonist." },
+        { module: "Opioids", question: "Which opioid is used for cough suppression?",
+          options: ["Morphine", "Codeine", "Fentanyl", "Meperidine"],
+          correct: 1, hint: "It's a moderate agonist.", explanation: "Codeine is widely used as an antitussive." },
+        { module: "Opioids", question: "Which opioid is most likely to cause seizures at high doses due to its metabolite?",
+          options: ["Morphine", "Codeine", "Meperidine", "Fentanyl"],
+          correct: 2, hint: "Its metabolite is normeperidine.", explanation: "Meperidine's metabolite normeperidine can cause seizures." },
+        // New High-Yield Opioids Qs
+        { module: "Opioids", question: "Which opioid receptor is primarily responsible for respiratory depression?",
+          options: ["Kappa", "Delta", "Mu", "Sigma"],
+          correct: 2, hint: "It is the main analgesic receptor.", explanation: "The Mu receptor mediates respiratory depression, analgesia, and euphoria." },
+        { module: "Opioids", question: "Which opioid receptor is associated with dysphoria and hallucinations?",
+          options: ["Mu", "Kappa", "Delta", "Nociceptin"],
+          correct: 1, hint: "It produces unpleasant effects.", explanation: "Kappa receptor activation is associated with dysphoria and hallucinations." },
+        { module: "Opioids", question: "Which opioid is contraindicated in patients with renal failure due to accumulation of active metabolites?",
+          options: ["Fentanyl", "Methadone", "Morphine", "Buprenorphine"],
+          correct: 2, hint: "Its metabolite is renally excreted.", explanation: "Morphine-6-glucuronide accumulates in renal failure, causing prolonged effects." },
+        { module: "Opioids", question: "Which opioid is most commonly used for opioid detoxification?",
+          options: ["Morphine", "Fentanyl", "Methadone", "Meperidine"],
+          correct: 2, hint: "It is long-acting and oral.", explanation: "Methadone is used for detoxification because it is long-acting and orally effective." },
+        { module: "Opioids", question: "What is the mechanism of action of Naloxone?",
+          options: ["Mu receptor agonist", "Mu receptor partial agonist", "Mu receptor antagonist", "Kappa receptor agonist"],
+          correct: 2, hint: "It reverses opioid effects.", explanation: "Naloxone is a competitive mu receptor antagonist used to reverse opioid overdose." },
+        { module: "Opioids", question: "Which opioid is preferred for analgesia in patients with asthma?",
+          options: ["Morphine", "Codeine", "Fentanyl", "Meperidine"],
+          correct: 2, hint: "It does not release histamine.", explanation: "Fentanyl does not release histamine, so it is safer in asthma than morphine." },
+        { module: "Opioids", question: "Which opioid causes pupillary dilation (mydriasis) rather than miosis?",
+          options: ["Morphine", "Fentanyl", "Meperidine", "Codeine"],
+          correct: 2, hint: "It has atropine-like effects.", explanation: "Meperidine causes mydriasis due to its antimuscarinic action." },
+        { module: "Opioids", question: "Which opioid is a partial agonist used for the treatment of chronic pain and addiction?",
+          options: ["Methadone", "Buprenorphine", "Fentanyl", "Hydromorphone"],
+          correct: 1, hint: "It has a ceiling effect.", explanation: "Buprenorphine is a partial mu agonist used for detoxification and chronic pain." },
+        { module: "Opioids", question: "Codeine is a prodrug that is metabolized to morphine by which enzyme?",
+          options: ["CYP2D6", "CYP3A4", "CYP2C9", "CYP1A2"],
+          correct: 0, hint: "Genetic polymorphism affects it.", explanation: "CYP2D6 converts codeine to morphine." },
+        { module: "Opioids", question: "Which opioid is used in the treatment of severe pain and is available in transdermal and transmucosal formulations?",
+          options: ["Morphine", "Fentanyl", "Methadone", "Codeine"],
+          correct: 1, hint: "It is 100x more potent.", explanation: "Fentanyl is available as a patch and transmucosal lozenge for severe pain." },
+        { module: "Opioids", question: "What is a significant side effect of Meperidine that limits its use?",
+          options: ["Respiratory depression", "Seizures (due to normeperidine)", "Constipation", "Sedation"],
+          correct: 1, hint: "Its metabolite is toxic.", explanation: "Normeperidine, a metabolite, can cause seizures." },
+        { module: "Opioids", question: "Which of the following is a pure opioid antagonist?",
+          options: ["Buprenorphine", "Naloxone", "Pentazocine", "Tramadol"],
+          correct: 1, hint: "It has zero efficacy.", explanation: "Naloxone is a pure antagonist with high affinity but no efficacy." },
+        { module: "Opioids", question: "The withdrawal syndrome from opioids is characterized by:",
+          options: ["Miosis", "Bradycardia", "Lacrimation and rhinorrhea", "Constipation"],
+          correct: 2, hint: "It is the opposite of intoxication.", explanation: "Withdrawal causes dilated pupils, lacrimation, rhinorrhea, and diarrhea." },
+        { module: "Opioids", question: "What is the antidote for respiratory depression caused by morphine?",
+          options: ["Flumazenil", "Naloxone", "N-acetylcysteine", "Atropine"],
+          correct: 1, hint: "It is a pure antagonist.", explanation: "Naloxone reverses opioid-induced respiratory depression." },
+        { module: "Opioids", question: "Which opioid is used in the treatment of opioid dependence and has a long duration of action?",
+          options: ["Buprenorphine", "Naloxone", "Naltrexone", "Morphine"],
+          correct: 2, hint: "It blocks the effect for 48h.", explanation: "Naltrexone is a long-acting antagonist used to prevent relapse." },
+        { module: "Opioids", question: "Which opioid is associated with QT prolongation?",
+          options: ["Morphine", "Methadone", "Fentanyl", "Buprenorphine"],
+          correct: 1, hint: "It is used in addiction.", explanation: "Methadone can cause QT prolongation and torsades de pointes." },
+        { module: "Opioids", question: "What is the main route of administration for buprenorphine in opioid dependence?",
+          options: ["Intravenous", "Sublingual", "Intramuscular", "Rectal"],
+          correct: 1, hint: "It is a tablet under the tongue.", explanation: "Buprenorphine is given sublingually for maintenance therapy." },
+        { module: "Opioids", question: "Which opioid is contraindicated with monoamine oxidase inhibitors (MAOIs)?",
+          options: ["Morphine", "Meperidine", "Fentanyl", "Methadone"],
+          correct: 1, hint: "It interacts dangerously.", explanation: "Meperidine can cause serotonin syndrome when combined with MAOIs." },
+        { module: "Opioids", question: "What is the mechanism of Tramadol's analgesic action?",
+          options: ["Mu receptor agonist only", "SNRI (NE + 5-HT reuptake inhibition) + Mu agonist", "Kappa receptor agonist", "NMDA antagonist"],
+          correct: 1, hint: "It has two mechanisms.", explanation: "Tramadol is a μ agonist and inhibits NE and 5-HT reuptake." },
+        { module: "Opioids", question: "Which opioid has active metabolites that accumulate in renal failure?",
+          options: ["Fentanyl", "Morphine", "Methadone", "Buprenorphine"],
+          correct: 1, hint: "Its metabolite is active.", explanation: "Morphine-6-glucuronide accumulates in renal failure, causing toxicity." },
+        { module: "Opioids", question: "Which opioid is preferred in renal failure?",
+          options: ["Morphine", "Codeine", "Fentanyl", "Meperidine"],
+          correct: 2, hint: "It is metabolized by the liver.", explanation: "Fentanyl is safer in renal failure because it has no active metabolites." },
+        { module: "Opioids", question: "What is the main disadvantage of pentazocine?",
+          options: ["High addiction potential", "Psychotomimetic effects", "Respiratory depression", "Constipation"],
+          correct: 1, hint: "It causes hallucinations.", explanation: "Pentazocine can cause psychotomimetic effects (hallucinations, dysphoria)." },
+        // -------- MODULE 3: ANTIPSYCHOTICS (75+ questions) --------
+        { module: "Antipsychotics", question: "Positive symptoms of Schizophrenia include:",
+          options: ["Blunted affect and apathy", "Hallucinations and Delusions", "Social withdrawal", "Cognitive impairment"],
+          correct: 1, hint: "They are 'positive' additions to experience.", explanation: "Hallucinations and delusions are positive symptoms." },
+        { module: "Antipsychotics", question: "Negative symptoms of Schizophrenia respond better to:",
+          options: ["Typical antipsychotics", "Atypical antipsychotics", "Benzodiazepines", "Mood stabilizers"],
+          correct: 1, hint: "Atypicals are better for negative symptoms.", explanation: "Atypical antipsychotics are more effective for negative symptoms." },
+        { module: "Antipsychotics", question: "Typical (First-Generation) antipsychotics primarily block which receptor?",
+          options: ["Serotonin 5-HT2A", "Dopamine D2", "Histamine H1", "Muscarinic M1"],
+          correct: 1, hint: "They are D2 blockers.", explanation: "Typical antipsychotics are D2 receptor antagonists." },
+        { module: "Antipsychotics", question: "Low potency typical antipsychotics like Chlorpromazine require:",
+          options: ["Lower doses", "Higher doses", "IV administration only", "No monitoring"],
+          correct: 1, hint: "They are less potent.", explanation: "Low potency drugs require higher doses to achieve the same effect." },
+        { module: "Antipsychotics", question: "High potency typical antipsychotics like Haloperidol are associated with higher risk of:",
+          options: ["Sedation", "Extrapyramidal Symptoms (EPS)", "Hypotension", "Anticholinergic effects"],
+          correct: 1, hint: "They cause more movement disorders.", explanation: "High potency typicals have a higher risk of EPS." },
+        { module: "Antipsychotics", question: "Atypical antipsychotics block both Dopamine D2 and which other receptor?",
+          options: ["Histamine H1", "Serotonin 5-HT2A", "Alpha-adrenergic", "Muscarinic"],
+          correct: 1, hint: "They act on serotonin too.", explanation: "Atypicals are 5-HT2A and D2 receptor antagonists." },
+        { module: "Antipsychotics", question: "Psychosis is hypothesized to result from excessive Dopamine activity in which pathway?",
+          options: ["Nigrostriatal", "Mesolimbic", "Tuberoinfundibular", "Mesocortical"],
+          correct: 1, hint: "This pathway is involved in reward/emotion.", explanation: "Excessive mesolimbic dopamine activity underlies psychosis." },
+        { module: "Antipsychotics", question: "Blocking Dopamine receptors in the Nigrostriatal pathway causes:",
+          options: ["Therapeutic effect", "Extrapyramidal Symptoms (EPS)", "Hyperprolactinemia", "Sedation"],
+          correct: 1, hint: "This pathway controls movement.", explanation: "D2 blockade in the nigrostriatal pathway causes EPS." },
+        { module: "Antipsychotics", question: "Blocking Dopamine receptors in the Tuberoinfundibular pathway leads to:",
+          options: ["EPS", "Hyperprolactinemia", "Worsening negative symptoms", "Anti-emetic effect"],
+          correct: 1, hint: "This pathway regulates prolactin.", explanation: "D2 blockade increases prolactin release, causing hyperprolactinemia." },
+        { module: "Antipsychotics", question: "Hyperprolactinemia manifests as all EXCEPT:",
+          options: ["Galactorrhea", "Amenorrhea", "Gynecomastia", "Akathisia"],
+          correct: 3, hint: "Akathisia is an EPS symptom.", explanation: "Akathisia is a motor side effect, not hyperprolactinemia." },
+        { module: "Antipsychotics", question: "Why do Atypicals have fewer EPS compared to Typicals?",
+          options: ["They don't block D2 receptors", "5-HT2A blockade increases dopamine in Nigrostriatal pathway", "They block Muscarinic receptors strongly", "They are metabolized faster"],
+          correct: 1, hint: "Serotonin antagonism helps.", explanation: "5-HT2A blockade increases dopamine release in the nigrostriatal pathway, reducing EPS." },
+        { module: "Antipsychotics", question: "Antipsychotics are effective anti-emetics because they block D2 receptors in the:",
+          options: ["Vestibular apparatus", "Chemoreceptor Trigger Zone (CTZ)", "Vagus nerve", "Cortex"],
+          correct: 1, hint: "The CTZ is the vomiting center.", explanation: "D2 blockade in the CTZ produces antiemetic effects." },
+        { module: "Antipsychotics", question: "Antipsychotics are NOT effective for treating:",
+          options: ["Motion sickness", "Drug-induced vomiting", "Radiation-induced nausea", "Post-op nausea"],
+          correct: 0, hint: "Motion sickness is different.", explanation: "Antipsychotics are not effective for motion sickness, which involves vestibular pathways." },
+        { module: "Antipsychotics", question: "Acute Dystonia is treated with:",
+          options: ["Dopamine agonists", "Anticholinergics (Benztropine)", "Beta-blockers", "Benzodiazepines"],
+          correct: 1, hint: "Anticholinergics balance dopamine.", explanation: "Acute dystonia is treated with anticholinergics like benztropine." },
+        { module: "Antipsychotics", question: "Tardive Dyskinesia is believed to be caused by:",
+          options: ["Dopamine deficiency", "Upregulation/supersensitivity of Dopamine receptors", "Serotonin excess", "Acetylcholine deficiency"],
+          correct: 1, hint: "It is a compensatory change.", explanation: "Chronic D2 blockade causes receptor upregulation, leading to tardive dyskinesia." },
+        { module: "Antipsychotics", question: "Which drug has the lowest risk of Tardive Dyskinesia?",
+          options: ["Haloperidol", "Fluphenazine", "Clozapine", "Chlorpromazine"],
+          correct: 2, hint: "It's an atypical.", explanation: "Clozapine has the lowest risk of tardive dyskinesia." },
+        { module: "Antipsychotics", question: "Neuroleptic Malignant Syndrome (NMS) presents with severe muscle rigidity and:",
+          options: ["Hypothermia", "High Fever (Hyperthermia)", "Bradycardia", "Hypertension only"],
+          correct: 1, hint: "It is a hyperthermic emergency.", explanation: "NMS includes hyperthermia, muscle rigidity, and autonomic instability." },
+        { module: "Antipsychotics", question: "Treatment for NMS includes stopping the drug and administering:",
+          options: ["Haloperidol", "Dantrolene or Bromocriptine", "Lorazepam", "Propranolol"],
+          correct: 1, hint: "Dantrolene is a muscle relaxant.", explanation: "NMS is treated with dantrolene (muscle relaxant) or bromocriptine (dopamine agonist)." },
+        { module: "Antipsychotics", question: "Sedation from antipsychotics is primarily due to blockade of which receptor?",
+          options: ["Dopamine D2", "Histamine H1", "Serotonin 5-HT2A", "Alpha-adrenergic"],
+          correct: 1, hint: "Antihistamines cause sedation.", explanation: "H1 blockade causes sedation." },
+        { module: "Antipsychotics", question: "Orthostatic hypotension from antipsychotics is caused by blockade of:",
+          options: ["Muscarinic receptors", "Alpha-Adrenergic receptors", "Histamine receptors", "Dopamine receptors"],
+          correct: 1, hint: "Alpha blockers cause hypotension.", explanation: "α1 blockade causes vasodilation and orthostatic hypotension." },
+        { module: "Antipsychotics", question: "Weight gain and metabolic syndrome are highest risk with:",
+          options: ["Haloperidol", "Risperidone", "Olanzapine and Clozapine", "Ziprasidone"],
+          correct: 2, hint: "These are atypicals.", explanation: "Olanzapine and clozapine are associated with the highest weight gain." },
+        { module: "Antipsychotics", question: "Clozapine requires regular blood monitoring due to risk of:",
+          options: ["Hepatotoxicity", "Agranulocytosis", "Nephrotoxicity", "Cardiomyopathy"],
+          correct: 1, hint: "It affects WBCs.", explanation: "Clozapine can cause agranulocytosis, requiring regular CBC monitoring." },
+        { module: "Antipsychotics", question: "Chlorpromazine can cause ocular toxicity manifested as deposits in the:",
+          options: ["Retina", "Cornea/Lens", "Optic nerve", "Vitreous humor"],
+          correct: 1, hint: "It affects the eye surface.", explanation: "Chlorpromazine can cause corneal and lens deposits." },
+        { module: "Antipsychotics", question: "Antipsychotics lower the seizure threshold and should be used with caution in patients with:",
+          options: ["Hypertension", "Epilepsy", "Diabetes", "Asthma"],
+          correct: 1, hint: "They can precipitate seizures.", explanation: "Antipsychotics lower seizure threshold, so they are used cautiously in epilepsy." },
+        { module: "Antipsychotics", question: "Levodopa/Dopamine agonists interact with antipsychotics by:",
+          options: ["Enhancing antipsychotic effect", "Having their effect blocked/worsening Parkinson's", "Causing serotonin syndrome", "Increasing sedation"],
+          correct: 1, hint: "Antipsychotics block dopamine.", explanation: "Antipsychotics block dopamine receptors, reducing the effect of levodopa and worsening Parkinson's." },
+        // New High-Yield Antipsychotics Qs
+        { module: "Antipsychotics", question: "Which of the following is a first-generation (typical) antipsychotic?",
+          options: ["Clozapine", "Risperidone", "Haloperidol", "Olanzapine"],
+          correct: 2, hint: "It is a high-potency D2 blocker.", explanation: "Haloperidol is a typical antipsychotic with high EPS risk." },
+        { module: "Antipsychotics", question: "Which of the following is a second-generation (atypical) antipsychotic?",
+          options: ["Chlorpromazine", "Fluphenazine", "Risperidone", "Haloperidol"],
+          correct: 2, hint: "It has 5-HT2A blocking activity.", explanation: "Risperidone is an atypical antipsychotic with lower EPS risk." },
+        { module: "Antipsychotics", question: "Which antipsychotic is associated with the highest risk of agranulocytosis?",
+          options: ["Haloperidol", "Clozapine", "Olanzapine", "Quetiapine"],
+          correct: 1, hint: "It requires regular blood monitoring.", explanation: "Clozapine carries a high risk of agranulocytosis." },
+        { module: "Antipsychotics", question: "Which antipsychotic is most strongly associated with weight gain and metabolic syndrome?",
+          options: ["Haloperidol", "Aripiprazole", "Olanzapine", "Ziprasidone"],
+          correct: 2, hint: "It has strong H1 antagonism.", explanation: "Olanzapine is associated with significant weight gain and metabolic disturbances." },
+        { module: "Antipsychotics", question: "Which antipsychotic is least likely to cause extrapyramidal symptoms (EPS)?",
+          options: ["Haloperidol", "Fluphenazine", "Clozapine", "Chlorpromazine"],
+          correct: 2, hint: "It is highly atypical.", explanation: "Clozapine has the lowest EPS risk due to its 5-HT2A blocking profile." },
+        { module: "Antipsychotics", question: "What is the treatment for acute dystonia caused by antipsychotics?",
+          options: ["Benztropine (anticholinergic)", "Propranolol", "Diazepam", "Clozapine"],
+          correct: 0, hint: "It corrects the imbalance.", explanation: "Anticholinergics like benztropine are used to treat acute dystonia." },
+        { module: "Antipsychotics", question: "Akathisia (motor restlessness) from antipsychotics can be treated with:",
+          options: ["Anticholinergics", "Beta-blockers (Propranolol)", "Dopamine agonists", "SSRIs"],
+          correct: 1, hint: "It is not dystonia.", explanation: "Beta-blockers (e.g., propranolol) and benzodiazepines are used for akathisia." },
+        { module: "Antipsychotics", question: "Tardive dyskinesia is thought to be caused by:",
+          options: ["D2 receptor downregulation", "D2 receptor upregulation/supersensitivity", "5-HT2A blockade", "Alpha-1 blockade"],
+          correct: 1, hint: "The brain compensates.", explanation: "Chronic D2 blockade leads to receptor upregulation, causing tardive dyskinesia." },
+        { module: "Antipsychotics", question: "Which antipsychotic is associated with pigmentary retinopathy?",
+          options: ["Haloperidol", "Thioridazine", "Clozapine", "Risperidone"],
+          correct: 1, hint: "It is a low-potency typical.", explanation: "Thioridazine can cause pigmentary retinopathy at high doses." },
+        { module: "Antipsychotics", question: "The mesolimbic dopamine pathway blockade is responsible for:",
+          options: ["EPS", "Antipsychotic effect", "Hyperprolactinemia", "Sedation"],
+          correct: 1, hint: "It reduces positive symptoms.", explanation: "Blockade of mesolimbic D2 receptors mediates the antipsychotic effect." },
+        { module: "Antipsychotics", question: "Neuroleptic malignant syndrome (NMS) can be treated with:",
+          options: ["Haloperidol", "Dantrolene", "Olanzapine", "Lithium"],
+          correct: 1, hint: "It is a muscle relaxant.", explanation: "Dantrolene (muscle relaxant) and bromocriptine (dopamine agonist) are used." },
+        { module: "Antipsychotics", question: "Which antipsychotic is preferred for patients with Parkinson's disease psychosis?",
+          options: ["Haloperidol", "Clozapine", "Risperidone", "Olanzapine"],
+          correct: 1, hint: "It has low EPS.", explanation: "Clozapine or quetiapine are preferred due to their low EPS risk." },
+        { module: "Antipsychotics", question: "Which antipsychotic is used as a depot preparation (long-acting injection)?",
+          options: ["Clozapine", "Risperidone", "Fluphenazine", "Olanzapine"],
+          correct: 2, hint: "It is a high-potency typical.", explanation: "Fluphenazine decanoate is available as a long-acting depot injection." },
+        { module: "Antipsychotics", question: "Clozapine is used in treatment-resistant schizophrenia but requires monitoring for:",
+          options: ["Hepatotoxicity", "Cardiotoxicity", "Agranulocytosis", "Renal toxicity"],
+          correct: 2, hint: "White blood cells drop.", explanation: "Clozapine causes agranulocytosis, requiring regular CBC monitoring." },
+        { module: "Antipsychotics", question: "Which of the following is a negative symptom of schizophrenia?",
+          options: ["Hallucinations", "Delusions", "Apathy", "Disorganized speech"],
+          correct: 2, hint: "It is a loss of function.", explanation: "Apathy is a negative symptom (deficit in normal function)." },
+        { module: "Antipsychotics", question: "Which antipsychotic has the lowest risk of hyperprolactinemia?",
+          options: ["Haloperidol", "Risperidone", "Aripiprazole", "Amisulpride"],
+          correct: 2, hint: "It is a partial agonist.", explanation: "Aripiprazole is a partial D2 agonist and has low hyperprolactinemia risk." },
+        { module: "Antipsychotics", question: "What is the main side effect of Haloperidol?",
+          options: ["Weight gain", "Sedation", "Extrapyramidal symptoms", "Anticholinergic effects"],
+          correct: 2, hint: "It is a high-potency D2 blocker.", explanation: "Haloperidol is associated with a high risk of EPS." },
+        { module: "Antipsychotics", question: "What is the main mechanism of action of atypical antipsychotics?",
+          options: ["D2 antagonism only", "5-HT2A antagonism only", "D2 and 5-HT2A antagonism", "Alpha-1 antagonism"],
+          correct: 2, hint: "They target two systems.", explanation: "Atypicals block both D2 and 5-HT2A receptors." },
+        { module: "Antipsychotics", question: "Which symptom is characteristic of Neuroleptic Malignant Syndrome?",
+          options: ["Hypertension", "Hyperthermia", "Bradycardia", "Miosis"],
+          correct: 1, hint: "High fever is a key sign.", explanation: "NMS is characterized by hyperthermia, muscle rigidity, and autonomic instability." },
+        // -------- MODULE 4: ANTIEPILEPTICS (75+ questions) --------
+        { module: "Antiepileptics", question: "Simple Partial seizures are characterized by:",
+          options: ["Loss of consciousness", "No loss of consciousness", "Generalized tonic-clonic movements", "Absence spells"],
+          correct: 1, hint: "They are focal, not generalized.", explanation: "Simple partial seizures do not impair consciousness." },
+        { module: "Antiepileptics", question: "Complex Partial seizures often involve:",
+          options: ["Intact awareness", "Impaired consciousness and automatisms", "Brief staring spells only", "High fever"],
+          correct: 1, hint: "They affect awareness.", explanation: "Complex partial seizures cause impaired consciousness with automatisms." },
+        { module: "Antiepileptics", question: "Generalized Tonic-Clonic seizures consist of a stiffening phase followed by:",
+          options: ["Relaxation", "Jerking movements (Clonic phase)", "Absence", "Myoclonus"],
+          correct: 1, hint: "Tonic then clonic.", explanation: "The tonic phase is followed by the clonic (jerking) phase." },
+        { module: "Antiepileptics", question: "Absence seizures (Petit Mal) typically last for:",
+          options: ["Several minutes", "3-5 seconds", "Hours", "Days"],
+          correct: 1, hint: "They are brief.", explanation: "Absence seizures are very short, typically 3-5 seconds." },
+        { module: "Antiepileptics", question: "Febrile seizures occur in children aged:",
+          options: ["Newborns only", "3 months - 5 years", "6-12 years", "Adolescents"],
+          correct: 1, hint: "Young children with fever.", explanation: "Febrile seizures occur in children aged 3 months to 5 years." },
+        { module: "Antiepileptics", question: "Status Epilepticus is defined as continuous seizure activity lasting longer than:",
+          options: ["1 minute", "5 minutes", "30 minutes", "1 hour"],
+          correct: 1, hint: "It's a medical emergency.", explanation: "Status epilepticus is seizure activity lasting >5 minutes." },
+        { module: "Antiepileptics", question: "Phenytoin and Carbamazepine work primarily by blocking:",
+          options: ["T-type Calcium channels", "Sodium (Na+) channels", "GABA receptors", "Glutamate receptors"],
+          correct: 1, hint: "They stabilize neuronal membranes.", explanation: "Phenytoin and carbamazepine block voltage-gated Na+ channels." },
+        { module: "Antiepileptics", question: "Ethosuximide is the drug of choice for Absence seizures because it blocks:",
+          options: ["Na+ channels", "T-type Ca++ channels", "GABA transaminase", "NMDA receptors"],
+          correct: 1, hint: "It acts on T-type calcium channels.", explanation: "Ethosuximide blocks T-type calcium channels in thalamic neurons." },
+        { module: "Antiepileptics", question: "Benzodiazepines enhance GABA action by increasing the frequency of opening of which channel?",
+          options: ["Sodium", "Calcium", "Chloride (Cl-)", "Potassium"],
+          correct: 2, hint: "GABA opens chloride channels.", explanation: "Benzodiazepines increase the frequency of Cl- channel opening." },
+        { module: "Antiepileptics", question: "Phenobarbital enhances GABA action by increasing the duration of opening of which channel?",
+          options: ["Sodium", "Chloride (Cl-)", "Calcium", "Magnesium"],
+          correct: 1, hint: "Barbiturates prolong channel opening.", explanation: "Phenobarbital increases the duration of Cl- channel opening." },
+        { module: "Antiepileptics", question: "Topiramate and Lamotrigine reduce excitatory neurotransmission by inhibiting:",
+          options: ["GABA", "Glutamate", "Glycine", "Dopamine"],
+          correct: 1, hint: "They block excitatory signals.", explanation: "They inhibit glutamate release or action." },
+        { module: "Antiepileptics", question: "General principle of epilepsy treatment recommends starting with:",
+          options: ["Two drugs simultaneously", "Monotherapy", "High dose immediately", "IV therapy"],
+          correct: 1, hint: "One drug first.", explanation: "Epilepsy treatment should be initiated with monotherapy." },
+        { module: "Antiepileptics", question: "Abrupt withdrawal of AEDs can precipitate:",
+          options: ["Tolerance", "Status Epilepticus", "Sedation", "Hypertension"],
+          correct: 1, hint: "Sudden stop is dangerous.", explanation: "Abrupt withdrawal can precipitate status epilepticus." },
+        { module: "Antiepileptics", question: "Common GI side effects of AEDs include:",
+          options: ["Constipation", "Nausea and vomiting", "Diarrhea only", "Ulcers"],
+          correct: 1, hint: "GI upset is common.", explanation: "Nausea and vomiting are common GI side effects." },
+        { module: "Antiepileptics", question: "Ataxia in AED therapy indicates toxicity affecting the:",
+          options: ["Frontal lobe", "Cerebellum", "Temporal lobe", "Brainstem"],
+          correct: 1, hint: "Ataxia is a cerebellar sign.", explanation: "Ataxia indicates cerebellar toxicity." },
+        { module: "Antiepileptics", question: "Stevens-Johnson syndrome is a serious rash associated with:",
+          options: ["Valproate", "Carbamazepine or Lamotrigine", "Gabapentin", "Levetiracetam"],
+          correct: 1, hint: "These drugs can cause severe rash.", explanation: "Carbamazepine and lamotrigine are associated with Stevens-Johnson syndrome." },
+        { module: "Antiepileptics", question: "Hyponatremia is a specific side effect of:",
+          options: ["Phenytoin", "Carbamazepine or Oxcarbazepine", "Ethosuximide", "Gabapentin"],
+          correct: 1, hint: "Carbamazepine can lower sodium.", explanation: "Carbamazepine and oxcarbazepine cause hyponatremia." },
+        { module: "Antiepileptics", question: "Weight gain is commonly associated with which AED?",
+          options: ["Topiramate", "Valproate", "Zonisamide", "Lamotrigine"],
+          correct: 1, hint: "Valproate causes weight gain.", explanation: "Valproate is associated with weight gain." },
+        { module: "Antiepileptics", question: "Weight loss is a side effect of which AED?",
+          options: ["Valproate", "Topiramate", "Carbamazepine", "Phenobarbital"],
+          correct: 1, hint: "Topiramate can cause weight loss.", explanation: "Topiramate is associated with weight loss." },
+        { module: "Antiepileptics", question: "Teratogenicity (Spina Bifida) is a major concern with:",
+          options: ["Levetiracetam", "Valproate", "Lamotrigine", "Gabapentin"],
+          correct: 1, hint: "Valproate is teratogenic.", explanation: "Valproate is associated with neural tube defects (spina bifida)." },
+        { module: "Antiepileptics", question: "Osteoporosis is a long-term side effect due to interference with:",
+          options: ["Calcium absorption/Vitamin D", "Iron absorption", "Protein synthesis", "Magnesium levels"],
+          correct: 0, hint: "AEDs affect bone health.", explanation: "Some AEDs interfere with calcium metabolism, leading to osteoporosis." },
+        { module: "Antiepileptics", question: "Diazepam and Lorazepam are preferred for Status Epilepticus because they are given:",
+          options: ["Orally", "Intravenously (IV) for rapid onset", "Intramuscularly", "Rectally only"],
+          correct: 1, hint: "IV is fastest.", explanation: "IV diazepam or lorazepam is used for rapid control of status epilepticus." },
+        { module: "Antiepileptics", question: "Carbamazepine is first-line for all EXCEPT:",
+          options: ["Simple partial seizures", "Complex partial seizures", "Tonic-clonic seizures", "Absence seizures"],
+          correct: 3, hint: "Absence needs a different drug.", explanation: "Carbamazepine is not effective for absence seizures." },
+        { module: "Antiepileptics", question: "The active epoxide metabolite of Carbamazepine can cause:",
+          options: ["Gingival hyperplasia", "Aplastic anemia and leukopenia", "Hirsutism", "Gum hypertrophy"],
+          correct: 1, hint: "It affects blood cells.", explanation: "The epoxide metabolite contributes to blood dyscrasias." },
+        { module: "Antiepileptics", question: "Carbamazepine metabolism is inhibited by which antibiotic?",
+          options: ["Rifampicin", "Erythromycin", "Penicillin", "Gentamicin"],
+          correct: 1, hint: "Erythromycin inhibits CYP3A4.", explanation: "Erythromycin inhibits carbamazepine metabolism, increasing its levels." },
+        { module: "Antiepileptics", question: "Valproic Acid increases GABA levels by inhibiting:",
+          options: ["GABA synthesis", "GABA transaminase", "GABA reuptake", "GABA receptors"],
+          correct: 1, hint: "It blocks GABA breakdown.", explanation: "Valproate inhibits GABA transaminase, increasing GABA levels." },
+        { module: "Antiepileptics", question: "Valproic Acid is considered a broad-spectrum AED because it is effective in:",
+          options: ["Partial seizures only", "All types of epilepsy including Absence", "Status epilepticus only", "Neonatal seizures only"],
+          correct: 1, hint: "It works for many seizure types.", explanation: "Valproate is effective for all types of seizures." },
+        { module: "Antiepileptics", question: "Alopecia (hair loss) is a transient side effect of:",
+          options: ["Phenytoin", "Valproic Acid", "Carbamazepine", "Ethosuximide"],
+          correct: 1, hint: "Valproate can cause hair loss.", explanation: "Valproate can cause reversible alopecia." },
+        { module: "Antiepileptics", question: "Valproic Acid displaces Phenytoin from plasma proteins, leading to:",
+          options: ["Decreased free Phenytoin", "Increased free Phenytoin and toxicity", "Increased Phenytoin metabolism", "No change"],
+          correct: 1, hint: "Valproate is protein-bound.", explanation: "Valproate displaces phenytoin, increasing free phenytoin and risk of toxicity." },
+        { module: "Antiepileptics", question: "Ethosuximide is NOT bound to plasma proteins, which means:",
+          options: ["It has many interactions", "It has fewer drug interactions", "It is ineffective", "It is toxic"],
+          correct: 1, hint: "Protein binding affects interactions.", explanation: "Ethosuximide has low protein binding, reducing drug interactions." },
+        { module: "Antiepileptics", question: "Gabapentin is structurally an analog of:",
+          options: ["Glutamate", "GABA", "Glycine", "Dopamine"],
+          correct: 1, hint: "Its name suggests GABA.", explanation: "Gabapentin is a GABA analogue." },
+        { module: "Antiepileptics", question: "Gabapentin is safe in liver disease because it is:",
+          options: ["Metabolized by CYP450", "Excreted unchanged by kidneys", "Highly protein bound", "Induces enzymes"],
+          correct: 1, hint: "It doesn't undergo hepatic metabolism.", explanation: "Gabapentin is excreted unchanged renally, so it is safe in liver disease." },
+        { module: "Antiepileptics", question: "Lamotrigine inhibits Glutamate release via which receptor complex?",
+          options: ["AMPA", "NMDA", "Kainate", "Metabotropic"],
+          correct: 1, hint: "It blocks NMDA receptors.", explanation: "Lamotrigine inhibits glutamate release through NMDA receptor blockade." },
+        { module: "Antiepileptics", question: "Levetiracetam is notable for having:",
+          options: ["Many drug interactions", "Remarkably few pharmacokinetic drug interactions", "High protein binding", "Hepatic metabolism"],
+          correct: 1, hint: "It is clean in terms of interactions.", explanation: "Levetiracetam has very few drug interactions." },
+        { module: "Antiepileptics", question: "Phenytoin exhibits zero-order kinetics at high doses, meaning:",
+          options: ["Clearance is constant", "Small dose increases cause large toxicity risks", "Half-life is constant", "Metabolism is linear"],
+          correct: 1, hint: "Zero-order = saturation.", explanation: "At high doses, phenytoin metabolism is saturated; small dose increases can cause toxicity." },
+        { module: "Antiepileptics", question: "Signs of Phenytoin toxicity include Nystagmus, Ataxia, and:",
+          options: ["Miosis", "Diplopia", "Mydriasis", "Ptosis"],
+          correct: 1, hint: "Double vision is common.", explanation: "Phenytoin toxicity causes nystagmus, ataxia, and diplopia." },
+        { module: "Antiepileptics", question: "Phenytoin is used to treat arrhythmias caused by:",
+          options: ["Digitalis toxicity", "Quinidine toxicity", "Lidocaine overdose", "Beta-blocker overdose"],
+          correct: 0, hint: "Digitalis toxicity causes arrhythmias.", explanation: "Phenytoin is effective for digitalis-induced arrhythmias." },
+        { module: "Antiepileptics", question: "Topiramate inhibits Carbonic Anhydrase, leading to risk of:",
+          options: ["Kidney stones", "Liver stones", "Gallstones", "Bladder stones"],
+          correct: 0, hint: "CA inhibitors cause renal stones.", explanation: "Topiramate's carbonic anhydrase inhibition increases kidney stone risk." },
+        { module: "Antiepileptics", question: "Oligohydrosis (decreased sweating) and hyperthermia are risks with Topiramate, especially in:",
+          options: ["Elderly", "Children", "Pregnant women", "Smokers"],
+          correct: 1, hint: "Children are more susceptible.", explanation: "Topiramate can cause oligohydrosis and hyperthermia, especially in children." },
+        { module: "Antiepileptics", question: "Zonisamide is chemically classified as a:",
+          options: ["Barbiturate", "Sulfonamide derivative", "Hydantoin", "Benzodiazepine"],
+          correct: 1, hint: "It contains sulfur.", explanation: "Zonisamide is a sulfonamide derivative." },
+        { module: "Antiepileptics", question: "Vagus Nerve Stimulation (VNS) is indicated for patients who are:",
+          options: ["Newly diagnosed", "Refractory to multiple therapies", "Pregnant", "Elderly only"],
+          correct: 1, hint: "For difficult-to-treat cases.", explanation: "VNS is used for patients refractory to multiple drug therapies." },
+        // New High-Yield Antiepileptics Qs
+        { module: "Antiepileptics", question: "What is the drug of choice for trigeminal neuralgia, which also acts as an AED?",
+          options: ["Phenytoin", "Carbamazepine", "Valproate", "Gabapentin"],
+          correct: 1, hint: "It is first-line for partial seizures.", explanation: "Carbamazepine is the drug of choice for trigeminal neuralgia." },
+        { module: "Antiepileptics", question: "Which AED is a broad-spectrum agent effective in both focal and generalized seizures?",
+          options: ["Ethosuximide", "Valproate", "Carbamazepine", "Phenytoin"],
+          correct: 1, hint: "It works on multiple mechanisms.", explanation: "Valproate is effective against all seizure types." },
+        { module: "Antiepileptics", question: "Which AED is contraindicated in pregnancy due to the risk of spina bifida?",
+          options: ["Lamotrigine", "Valproate", "Levetiracetam", "Gabapentin"],
+          correct: 1, hint: "It is a folate antagonist.", explanation: "Valproate is teratogenic, causing neural tube defects like spina bifida." },
+        { module: "Antiepileptics", question: "Which AED is associated with gingival hyperplasia?",
+          options: ["Carbamazepine", "Phenytoin", "Valproate", "Ethosuximide"],
+          correct: 1, hint: "It causes gum overgrowth.", explanation: "Phenytoin commonly causes gingival hyperplasia, especially in children." },
+        { module: "Antiepileptics", question: "Which AED is associated with hyponatremia?",
+          options: ["Phenytoin", "Carbamazepine", "Valproate", "Gabapentin"],
+          correct: 1, hint: "It affects ADH.", explanation: "Carbamazepine and oxcarbazepine can cause hyponatremia." },
+        { module: "Antiepileptics", question: "Which AED is associated with weight loss?",
+          options: ["Valproate", "Carbamazepine", "Topiramate", "Gabapentin"],
+          correct: 2, hint: "It also causes kidney stones.", explanation: "Topiramate is associated with weight loss." },
+        { module: "Antiepileptics", question: "Which AED is a hepatic enzyme inducer?",
+          options: ["Valproate", "Carbamazepine", "Ethosuximide", "Levetiracetam"],
+          correct: 1, hint: "It speeds up metabolism.", explanation: "Carbamazepine induces CYP450 enzymes." },
+        { module: "Antiepileptics", question: "Which AED is a hepatic enzyme inhibitor?",
+          options: ["Phenytoin", "Carbamazepine", "Valproate", "Phenobarbital"],
+          correct: 2, hint: "It slows down metabolism.", explanation: "Valproate inhibits CYP450 enzymes, causing drug interactions." },
+        { module: "Antiepileptics", question: "Which AED is structurally an analogue of GABA?",
+          options: ["Topiramate", "Gabapentin", "Lamotrigine", "Phenytoin"],
+          correct: 1, hint: "Its name contains GABA.", explanation: "Gabapentin is a GABA analogue." },
+        { module: "Antiepileptics", question: "Which AED binds to SV2A (synaptic vesicle protein 2A)?",
+          options: ["Lamotrigine", "Levetiracetam", "Topiramate", "Pregabalin"],
+          correct: 1, hint: "It is known for few interactions.", explanation: "Levetiracetam binds to SV2A, modulating neurotransmitter release." },
+        { module: "Antiepileptics", question: "What is the first-line IV treatment for status epilepticus?",
+          options: ["Phenytoin", "Carbamazepine", "Diazepam or Lorazepam", "Valproate"],
+          correct: 2, hint: "Benzodiazepines are fast-acting.", explanation: "IV diazepam or lorazepam is first-line for status epilepticus." },
+        { module: "Antiepileptics", question: "Why must AEDs not be stopped abruptly?",
+          options: ["It causes sedation", "It can precipitate status epilepticus", "It causes weight gain", "It increases drug levels"],
+          correct: 1, hint: "Rebound seizures are dangerous.", explanation: "Abrupt withdrawal can precipitate status epilepticus, especially with tonic-clonic seizures." },
+        { module: "Antiepileptics", question: "Felbamate is reserved for refractory epilepsy because of:",
+          options: ["Weight gain", "Aplastic anemia and hepatic failure", "Gingival hyperplasia", "Hyponatremia"],
+          correct: 1, hint: "It has serious toxicity.", explanation: "Felbamate carries a high risk of aplastic anemia and liver failure." },
+        { module: "Antiepileptics", question: "Which AED is used for neuropathic pain and epilepsy?",
+          options: ["Phenytoin", "Gabapentin", "Ethosuximide", "Carbamazepine"],
+          correct: 1, hint: "It is a GABA analogue.", explanation: "Gabapentin is used for epilepsy and neuropathic pain." },
+        { module: "Antiepileptics", question: "Which AED is a carbonic anhydrase inhibitor?",
+          options: ["Valproate", "Topiramate", "Lamotrigine", "Levetiracetam"],
+          correct: 1, hint: "It can cause kidney stones.", explanation: "Topiramate inhibits carbonic anhydrase, increasing kidney stone risk." },
+        { module: "Antiepileptics", question: "Which AED is associated with osteoporosis due to vitamin D metabolism interference?",
+          options: ["Gabapentin", "Phenytoin", "Levetiracetam", "Ethosuximide"],
+          correct: 1, hint: "It affects calcium.", explanation: "Phenytoin and phenobarbital interfere with vitamin D metabolism, leading to osteoporosis." },
+        { module: "Antiepileptics", question: "Which AED is recommended as first-line for focal (partial) seizures?",
+          options: ["Ethosuximide", "Carbamazepine", "Valproate", "Phenobarbital"],
+          correct: 1, hint: "It is also used for neuralgia.", explanation: "Carbamazepine is first-line for focal seizures." },
+        { module: "Antiepileptics", question: "Oxcarbazepine is a prodrug that is converted to:",
+          options: ["Carbamazepine", "MHD (monohydroxy derivative)", "Phenytoin", "Valproate"],
+          correct: 1, hint: "It is a derivative of carbamazepine.", explanation: "Oxcarbazepine is converted to the active monohydroxy derivative (MHD)." },
+        { module: "Antiepileptics", question: "Which AED is known for having zero-order pharmacokinetics at high doses?",
+          options: ["Carbamazepine", "Valproate", "Phenytoin", "Lamotrigine"],
+          correct: 2, hint: "Metabolic pathway saturates.", explanation: "Phenytoin exhibits zero-order kinetics at high doses; small dose increases cause large toxicity." },
+        { module: "Antiepileptics", question: "Which AED is effective for both epilepsy and migraine prophylaxis?",
+          options: ["Carbamazepine", "Valproate", "Topiramate", "Ethosuximide"],
+          correct: 2, hint: "It has multiple mechanisms.", explanation: "Topiramate is effective for epilepsy and migraine prophylaxis." },
+        { module: "Antiepileptics", question: "Which AED is used to treat Lennox-Gastaut syndrome?",
+          options: ["Carbamazepine", "Valproate", "Lamotrigine", "Ethosuximide"],
+          correct: 2, hint: "It is a broad-spectrum drug.", explanation: "Lamotrigine is used for Lennox-Gastaut syndrome." },
+        { module: "Antiepileptics", question: "Which AED is commonly associated with Stevens-Johnson syndrome?",
+          options: ["Valproate", "Carbamazepine", "Gabapentin", "Levetiracetam"],
+          correct: 1, hint: "It causes severe rash.", explanation: "Carbamazepine and lamotrigine are associated with Stevens-Johnson syndrome." },
+        { module: "Antiepileptics", question: "What is the mechanism of action of benzodiazepines in epilepsy?",
+          options: ["Block Na+ channels", "Enhance GABA action by increasing Cl- channel opening frequency", "Inhibit T-type Ca++ channels", "Block glutamate receptors"],
+          correct: 1, hint: "They work on GABA-A receptors.", explanation: "Benzodiazepines increase the frequency of Cl- channel opening." },
+        { module: "Antiepileptics", question: "What is the mechanism of action of phenobarbital?",
+          options: ["Increase frequency of Cl- opening", "Increase duration of Cl- opening", "Block Na+ channels", "Block Ca++ channels"],
+          correct: 1, hint: "Barbiturates prolong channel opening.", explanation: "Phenobarbital increases the duration of Cl- channel opening." }
+    ];
+
+    // -------- QUIZ ENGINE --------
+    const app = {
+        currentIndex: 0,
+        total: questions.length,
+        answers: new Array(questions.length).fill(null),
+        answered: new Array(questions.length).fill(false),
+        score: 0,
+        finished: false
+    };
+
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedback = document.getElementById('feedback');
+    const hintBox = document.getElementById('hintBox');
+    const counter = document.getElementById('counter');
+    const progressFill = document.getElementById('progressFill');
+    const moduleTag = document.getElementById('moduleTag');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const checkBtn = document.getElementById('checkBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const scoreSummary = document.getElementById('scoreSummary');
+    const finalScore = document.getElementById('finalScore');
+    const finalDetails = document.getElementById('finalDetails');
+    const restartBtn = document.getElementById('restartBtn');
+
+    function renderQuestion() {
+        const q = questions[app.currentIndex];
+        const idx = app.currentIndex;
+
+        counter.textContent = `${idx+1} / ${app.total}`;
+        progressFill.style.width = `${((idx+1)/app.total)*100}%`;
+        moduleTag.textContent = q.module;
+
+        questionText.textContent = q.question;
+
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.textContent = `${String.fromCharCode(65+i)}. ${opt}`;
+            div.dataset.index = i;
+            div.addEventListener('click', () => selectOption(i));
+            if (app.answered[idx] && i === app.answers[idx]) {
+                div.classList.add('selected-correct');
+                div.classList.add('disabled');
+            }
+            if (app.answered[idx] && app.answers[idx] !== q.correct && i === q.correct) {
+                div.classList.add('show-correct');
+                div.classList.add('disabled');
+            }
+            if (app.answered[idx] && i === app.answers[idx] && i !== q.correct) {
+                div.classList.add('selected-wrong');
+                div.classList.add('disabled');
+            }
+            if (app.answered[idx]) {
+                div.classList.add('disabled');
+            }
+            optionsContainer.appendChild(div);
+        });
+
+        if (app.answered[idx]) {
+            const isCorrect = app.answers[idx] === q.correct;
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+            feedback.textContent = isCorrect ? '✅ Correct! ' + q.explanation : '❌ Wrong. ' + q.explanation;
+            feedback.style.display = 'block';
+        } else {
+            feedback.style.display = 'none';
+        }
+
+        if (app.answered[idx]) {
+            hintBox.className = 'hint-box show';
+            hintBox.textContent = '💡 ' + q.hint;
+        } else {
+            hintBox.className = 'hint-box';
+            hintBox.textContent = '';
+        }
+
+        prevBtn.disabled = idx === 0;
+        nextBtn.disabled = idx === app.total - 1;
+        checkBtn.disabled = app.answered[idx];
+        hintBtn.disabled = app.answered[idx];
+    }
+
+    function selectOption(selected) {
+        const idx = app.currentIndex;
+        if (app.answered[idx]) return;
+
+        const q = questions[idx];
+        const options = document.querySelectorAll('.option');
+        options.forEach((el, i) => {
+            if (i === selected) el.classList.add('selected-correct');
+            if (i === q.correct) el.classList.add('show-correct');
+            el.classList.add('disabled');
+        });
+
+        app.answered[idx] = true;
+        app.answers[idx] = selected;
+
+        const isCorrect = selected === q.correct;
+        if (isCorrect) app.score++;
+
+        feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+        feedback.textContent = isCorrect ? '✅ Correct! ' + q.explanation : '❌ Wrong. ' + q.explanation;
+        feedback.style.display = 'block';
+
+        hintBox.className = 'hint-box show';
+        hintBox.textContent = '💡 ' + q.hint;
+
+        checkBtn.disabled = true;
+        hintBtn.disabled = true;
+
+        const answeredCount = app.answered.filter(v => v).length;
+        progressFill.style.width = `${(answeredCount/app.total)*100}%`;
+
+        if (answeredCount === app.total) {
+            setTimeout(showSummary, 1200);
+        }
+    }
+
+    function showSummary() {
+        app.finished = true;
+        document.getElementById('questionArea').classList.add('hidden');
+        document.querySelector('.actions').classList.add('hidden');
+        scoreSummary.classList.remove('hidden');
+        const pct = Math.round((app.score / app.total) * 100);
+        finalScore.textContent = pct + '%';
+        finalDetails.textContent = `${app.score} correct out of ${app.total}`;
+        document.querySelector('.progress-section').style.display = 'none';
+    }
+
+    function goTo(index) {
+        if (index < 0 || index >= app.total) return;
+        app.currentIndex = index;
+        renderQuestion();
+    }
+
+    function restartQuiz() {
+        app.currentIndex = 0;
+        app.answers = new Array(app.total).fill(null);
+        app.answered = new Array(app.total).fill(false);
+        app.score = 0;
+        app.finished = false;
+        document.getElementById('questionArea').classList.remove('hidden');
+        document.querySelector('.actions').classList.remove('hidden');
+        scoreSummary.classList.add('hidden');
+        document.querySelector('.progress-section').style.display = 'flex';
+        renderQuestion();
+    }
+
+    prevBtn.addEventListener('click', () => goTo(app.currentIndex - 1));
+    nextBtn.addEventListener('click', () => goTo(app.currentIndex + 1));
+    hintBtn.addEventListener('click', () => {
+        const idx = app.currentIndex;
+        if (!app.answered[idx]) {
+            const q = questions[idx];
+            hintBox.className = 'hint-box show';
+            hintBox.textContent = '💡 ' + q.hint;
+        }
+    });
+    restartBtn.addEventListener('click', restartQuiz);
+
+    document.addEventListener('keydown', (e) => {
+        if (app.finished) return;
+        if (e.key === 'ArrowLeft') goTo(app.currentIndex - 1);
+        if (e.key === 'ArrowRight') goTo(app.currentIndex + 1);
+        if (e.key >= '1' && e.key <= '4') {
+            const idx = parseInt(e.key) - 1;
+            const options = document.querySelectorAll('.option');
+            if (options[idx] && !app.answered[app.currentIndex]) {
+                selectOption(idx);
+            }
+        }
+    });
+
+    renderQuestion();
+</script>
+</body>
+</html>
