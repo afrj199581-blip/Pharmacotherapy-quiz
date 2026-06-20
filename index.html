@@ -2,40 +2,41 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hospital Tools</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; text-align: center; }
-        .btn { display: block; background: #2563eb; color: white; padding: 15px; margin: 10px auto; border-radius: 10px; text-decoration: none; max-width: 300px; font-weight: bold; }
-        .sub-menu { display: none; margin-top: 20px; }
-        .back-btn { background: #64748b; }
+        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center; }
+        .btn { display: block; background-color: #1e3a8a; color: white; padding: 20px; margin: 15px auto; font-size: 18px; font-weight: bold; border-radius: 12px; text-decoration: none; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: 0.3s; width: 80%; max-width: 400px; }
+        .btn:hover { background-color: #152b69; }
+        .back-btn { background-color: #64748b; }
+        .sub-menu { display: none; }
     </style>
 </head>
 <body>
 
-<h1>القائمة الرئيسية</h1>
-
 <div id="main-menu">
-    <button class="btn" onclick="show('solved-menu')">أسئلة محلولة</button>
+    <h2 style="color: #1e3a8a;">القائمة الرئيسية</h2>
+    <button class="btn" onclick="show('solved-menu')">أسئلة محلولة (PDF)</button>
     <button class="btn" onclick="show('quiz-menu')">Phototherapy Quiz</button>
 </div>
 
 <div id="solved-menu" class="sub-menu">
-    <button class="btn back-btn" onclick="hide()">رجوع</button>
-    <a href="q1.pdf" class="btn">السؤال 1</a>
-    <a href="q2.pdf" class="btn">السؤال 2</a>
-    <a href="q3.pdf" class="btn">السؤال 3</a>
-    <a href="q4.pdf" class="btn">السؤال 4</a>
-    <a href="q5.pdf" class="btn">السؤال 5</a>
-    <a href="q6.pdf" class="btn">السؤال 6</a>
-    <a href="q7.pdf" class="btn">السؤال 7</a>
-    <a href="q8.pdf" class="btn">السؤال 8</a>
-    <a href="q9.pdf" class="btn">السؤال 9</a>
-    <a href="q10.pdf" class="btn">السؤال 10</a>
-    <a href="q11.pdf" class="btn">السؤال 11</a>
+    <button class="btn back-btn" onclick="hide()">❮ رجوع</button>
+    <a href="q1.pdf" target="_blank" class="btn">السؤال 1</a>
+    <a href="q2.pdf" target="_blank" class="btn">السؤال 2</a>
+    <a href="q3.pdf" target="_blank" class="btn">السؤال 3</a>
+    <a href="q4.pdf" target="_blank" class="btn">السؤال 4</a>
+    <a href="q5.pdf" target="_blank" class="btn">السؤال 5</a>
+    <a href="q6.pdf" target="_blank" class="btn">السؤال 6</a>
+    <a href="q7.pdf" target="_blank" class="btn">السؤال 7</a>
+    <a href="q8.pdf" target="_blank" class="btn">السؤال 8</a>
+    <a href="q9.pdf" target="_blank" class="btn">السؤال 9</a>
+    <a href="q10.pdf" target="_blank" class="btn">السؤال 10</a>
+    <a href="q11.pdf" target="_blank" class="btn">السؤال 11</a>
 </div>
 
 <div id="quiz-menu" class="sub-menu">
-    <button class="btn back-btn" onclick="hide()">رجوع</button>
+    <button class="btn back-btn" onclick="hide()">❮ رجوع</button>
     <a href="Quiz_1.html" class="btn">Quiz 1</a>
     <a href="Quiz_2.html" class="btn">Quiz 2</a>
     <a href="Quiz_3.html" class="btn">Quiz 3</a>
@@ -47,14 +48,8 @@
 </div>
 
 <script>
-    function show(id) { 
-        document.getElementById('main-menu').style.display='none'; 
-        document.getElementById(id).style.display='block'; 
-    }
-    function hide() { 
-        document.getElementById('main-menu').style.display='block'; 
-        document.querySelectorAll('.sub-menu').forEach(e => e.style.display='none'); 
-    }
+    function show(id) { document.getElementById('main-menu').style.display='none'; document.getElementById(id).style.display='block'; }
+    function hide() { document.getElementById('main-menu').style.display='block'; document.querySelectorAll('.sub-menu').forEach(e => e.style.display='none'); }
 </script>
 </body>
 </html>
