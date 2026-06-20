@@ -10,8 +10,9 @@
         .container { width: 90%; max-width: 500px; margin-top: 20px; }
         .btn { display: block; background: white; padding: 18px; margin-bottom: 12px; border-radius: 12px; text-decoration: none; color: #333; font-weight: 600; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-right: 5px solid #2563eb; }
         .btn:active { background: #eef2ff; }
-        #quiz-menu { display: none; }
+        .sub-menu { display: none; }
         .back-btn { background: #64748b; color: white; margin-bottom: 20px; }
+        .solved-btn { border-right: 5px solid #d97706; } /* لون برتقالي لتمييز الأسئلة المحلولة */
     </style>
 </head>
 <body>
@@ -19,11 +20,27 @@
 <div class="header" id="title">Main Menu</div>
 
 <div class="container" id="main-menu">
+    <div class="btn solved-btn" onclick="showSolvedMenu()">أسئلة محلولة</div>
     <div class="btn" onclick="showQuizMenu()">Phototherapy Quiz Final</div>
 </div>
 
-<div class="container" id="quiz-menu">
-    <div class="btn back-btn" onclick="hideQuizMenu()">❮ Back</div>
+<div class="container sub-menu" id="solved-menu">
+    <div class="btn back-btn" onclick="hideAllMenus()">❮ Back</div>
+    <a href="اسئلة pdf.1.pdf" class="btn">السؤال 1</a>
+    <a href="اسئلة pdf.2.pdf" class="btn">السؤال 2</a>
+    <a href="اسئلة pdf.3.pdf" class="btn">السؤال 3</a>
+    <a href="اسئلة pdf.4.pdf" class="btn">السؤال 4</a>
+    <a href="اسئلة pdf.5.pdf" class="btn">السؤال 5</a>
+    <a href="اسئلة pdf.6.pdf" class="btn">السؤال 6</a>
+    <a href="اسئلة pdf.7.pdf" class="btn">السؤال 7</a>
+    <a href="اسئلة pdf.8.pdf" class="btn">السؤال 8</a>
+    <a href="اسئلة pdf.9.pdf" class="btn">السؤال 9</a>
+    <a href="اسئلة pdf.10.pdf" class="btn">السؤال 10</a>
+    <a href="اسئلة pdf.11.pdf" class="btn">السؤال 11</a>
+</div>
+
+<div class="container sub-menu" id="quiz-menu">
+    <div class="btn back-btn" onclick="hideAllMenus()">❮ Back</div>
     <a href="Quiz_1.html" class="btn">Quiz 1</a>
     <a href="Quiz_2.html" class="btn">Quiz 2</a>
     <a href="Quiz_3.html" class="btn">Quiz 3</a>
@@ -35,6 +52,24 @@
 </div>
 
 <script>
+    function showSolvedMenu() { toggle('solved-menu', 'أسئلة محلولة'); }
+    function showQuizMenu() { toggle('quiz-menu', 'Phototherapy Quizzes'); }
+    
+    function toggle(menuId, title) {
+        document.getElementById('main-menu').style.display = 'none';
+        document.getElementById(menuId).style.display = 'block';
+        document.getElementById('title').innerText = title;
+    }
+    
+    function hideAllMenus() {
+        document.getElementById('main-menu').style.display = 'block';
+        document.getElementById('solved-menu').style.display = 'none';
+        document.getElementById('quiz-menu').style.display = 'none';
+        document.getElementById('title').innerText = 'Main Menu';
+    }
+</script>
+</body>
+</html><script>
     function showQuizMenu() {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('quiz-menu').style.display = 'block';
