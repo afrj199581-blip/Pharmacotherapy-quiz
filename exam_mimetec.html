@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Pharmacotherapy 2 – Final Exam (100 Qs)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f2f6fc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 12px;
+        }
+        .exam-container {
+            background: #ffffff;
+            max-width: 780px;
+            width: 100%;
+            padding: 18px 18px 24px;
+            border-radius: 28px;
+            box-shadow: 0 8px 32px rgba(0, 20, 50, 0.12);
+            margin: 8px auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 3px solid #1a5fb0;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+        }
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0b2b4a;
+            letter-spacing: -0.3px;
+        }
+        .badge {
+            background: #d4e2fc;
+            color: #124a8a;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 4px 14px;
+            border-radius: 40px;
+        }
+        .progress-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .counter {
+            font-weight: 600;
+            color: #1e3a5f;
+            background: #e9edf4;
+            padding: 3px 14px;
+            border-radius: 40px;
+            font-size: 14px;
+        }
+        .progress-track {
+            flex: 1;
+            min-width: 100px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #1a5fb0, #5b9cf5);
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+        .module-tag {
+            background: #e9edf4;
+            color: #1e3a5f;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 40px;
+            white-space: nowrap;
+        }
+        .question-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: #0b1e33;
+            margin: 10px 0 16px 0;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .option {
+            background: #f7f9fc;
+            border: 2px solid #dfe6ef;
+            border-radius: 14px;
+            padding: 13px 16px;
+            cursor: pointer;
+            transition: all 0.12s;
+            font-size: 15px;
+            color: #1a2b3e;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .option:active {
+            transform: scale(0.98);
+        }
+        .option.selected {
+            border-color: #1a5fb0;
+            background: #e3edfc;
+        }
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        .hint-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin: 4px 0 14px 0;
+            font-size: 14px;
+            color: #856404;
+            display: none;
+        }
+        .hint-box.visible {
+            display: block;
+        }
+        .nav-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+            margin: 6px 0 4px;
+        }
+        .btn {
+            border: none;
+            background: #e9edf4;
+            color: #1e3a5f;
+            font-weight: 600;
+            padding: 9px 18px;
+            border-radius: 40px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.12s;
+            -webkit-tap-highlight-color: transparent;
+            flex: 1 1 auto;
+            min-width: 70px;
+            text-align: center;
+        }
+        .btn:active {
+            transform: scale(0.96);
+        }
+        .btn-primary {
+            background: #1a5fb0;
+            color: white;
+        }
+        .btn-primary:active {
+            background: #124a8a;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1a5fb0;
+            color: #1a5fb0;
+        }
+        .btn-outline:active {
+            background: #e3edfc;
+        }
+        .btn:disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .btn-hint {
+            background: #ffc107;
+            color: #1e3a5f;
+        }
+        .btn-hint:active {
+            background: #e6ab00;
+        }
+        .btn-group {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .btn-group .btn {
+            flex: 0 1 auto;
+        }
+
+        /* ===== RESULTS PAGE ===== */
+        .results {
+            display: none;
+            padding: 8px 0;
+        }
+        .results.visible {
+            display: block;
+        }
+        .results .big-score {
+            font-size: 48px;
+            font-weight: 800;
+            color: #1a5fb0;
+            text-align: center;
+            margin: 6px 0 2px;
+        }
+        .results .sub-score {
+            text-align: center;
+            font-size: 16px;
+            color: #3a5a7a;
+            margin-bottom: 16px;
+        }
+        .results .review-item {
+            background: #f7f9fc;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-left: 5px solid #28a745;
+        }
+        .results .review-item.wrong {
+            border-left-color: #dc3545;
+        }
+        .results .review-item .q {
+            font-weight: 600;
+            font-size: 15px;
+            color: #0b1e33;
+        }
+        .results .review-item .your-answer {
+            font-size: 14px;
+            color: #721c24;
+            margin-top: 4px;
+        }
+        .results .review-item .correct-answer {
+            font-size: 14px;
+            color: #155724;
+            margin-top: 2px;
+        }
+        .results .review-item .explanation {
+            font-size: 14px;
+            color: #3a5a7a;
+            margin-top: 6px;
+            background: #e9edf4;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+        .results .restart-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 18px;
+        }
+        .results .restart-btn:active {
+            transform: scale(0.97);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @media (max-width: 480px) {
+            .exam-container {
+                padding: 14px;
+                border-radius: 20px;
+            }
+            .question-text {
+                font-size: 16px;
+            }
+            .option {
+                font-size: 14px;
+                padding: 11px 14px;
+            }
+            .header h1 {
+                font-size: 17px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 8px 14px;
+                min-width: 60px;
+            }
+            .results .big-score {
+                font-size: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="exam-container" id="app">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>💊 Final Exam</h1>
+        <span class="badge">100 Qs</span>
+    </div>
+
+    <!-- QUIZ AREA (visible during exam) -->
+    <div id="quizArea">
+        <div class="progress-area">
+            <span class="counter" id="counter">1 / 100</span>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="module-tag" id="moduleTag">NSAIDs</span>
+        </div>
+
+        <div class="question-text" id="questionText">Loading question...</div>
+
+        <div class="options" id="optionsContainer"></div>
+
+        <div class="hint-box" id="hintBox"></div>
+
+        <div class="nav-area">
+            <div class="btn-group">
+                <button class="btn btn-outline" id="prevBtn" disabled>◀ Prev</button>
+                <button class="btn btn-outline" id="nextBtn">Next ▶</button>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-hint" id="hintBtn">💡 Hint</button>
+                <button class="btn btn-primary" id="submitBtn">✔ Submit</button>
+            </div>
+        </div>
+        <div style="text-align:center; margin-top: 8px; font-size:13px; color:#8a9bb5;">
+            <span id="answeredCount">0</span> of <span id="totalCount">100</span> answered
+        </div>
+    </div>
+
+    <!-- RESULTS AREA (hidden until finish) -->
+    <div class="results" id="resultsArea">
+        <div class="big-score" id="finalScore">0%</div>
+        <div class="sub-score" id="finalDetails">0 correct out of 100</div>
+        <div id="reviewContainer"></div>
+        <button class="restart-btn" id="restartBtn">🔄 Restart Exam</button>
+    </div>
+
+</div>
+
+<script>
+    // =====================================================================
+    //  100 HIGH-YIELD QUESTIONS – compiled from the question bank & Dr's focus
+    //  All modules: NSAIDs (~25), Opioids (~25), Antipsychotics (~25), Antiepileptics (~25)
+    // =====================================================================
+
+    const questions = [
+        // -------- NSAIDs (25) --------
+        { module: "NSAIDs", question: "Which chemical mediators are released upon tissue damage to stimulate pain receptors?",
+          options: ["Prostaglandins and Leukotrienes", "Histamine and Bradykinin", "Acetylcholine and Dopamine", "Serotonin and GABA"],
+          correct: 1, hint: "Think about the initial inflammatory response." },
+        { module: "NSAIDs", question: "What is the primary role of Prostaglandins (PGs) in pain perception?",
+          options: ["They directly cause severe pain", "They sensitize nerve endings to Histamine and Bradykinin", "They block pain signals at the spinal cord", "They reduce inflammation immediately"],
+          correct: 1, hint: "PGs lower the threshold for pain." },
+        { module: "NSAIDs", question: "NSAIDs reduce pain primarily by inhibiting the synthesis of which substance?",
+          options: ["Histamine", "Bradykinin", "Prostaglandins", "Leukotrienes"],
+          correct: 2, hint: "NSAIDs target the COX enzyme." },
+        { module: "NSAIDs", question: "The Arachidonic Acid pathway is initiated by the release of Arachidonic Acid from cell membrane phospholipids via which enzyme?",
+          options: ["Cyclooxygenase", "Lipoxygenase", "Phospholipase A2", "Thromboxane synthase"],
+          correct: 2, hint: "The enzyme that liberates arachidonic acid." },
+        { module: "NSAIDs", question: "Which enzymatic pathway converts Arachidonic Acid into Leukotrienes?",
+          options: ["COX Pathway", "LOX Pathway", "P450 Pathway", "Glucuronidation Pathway"],
+          correct: 1, hint: "Leukotrienes are associated with bronchoconstriction." },
+        { module: "NSAIDs", question: "Why can NSAIDs precipitate bronchospasm in asthmatic patients?",
+          options: ["They inhibit Leukotriene synthesis", "They shunt Arachidonic Acid to the LOX pathway, increasing Leukotrienes", "They increase Histamine release", "They block Beta-2 receptors"],
+          correct: 1, hint: "NSAIDs block COX, shifting metabolism." },
+        { module: "NSAIDs", question: "COX-1 is considered a 'housekeeping' enzyme because it is constitutively present in:",
+          options: ["Inflamed tissues only", "GIT, Platelets, and Kidneys", "Brain and Liver", "Lungs and Heart"],
+          correct: 1, hint: "COX-1 is always there for normal functions." },
+        { module: "NSAIDs", question: "Inhibition of COX-1 leads to which adverse effects?",
+          options: ["Reduced Pain and Fever", "Gastric Ulcers, Bleeding, and Renal issues", "Bronchoconstriction", "Sedation"],
+          correct: 1, hint: "COX-1 protects the stomach." },
+        { module: "NSAIDs", question: "What makes Aspirin unique among NSAIDs regarding its mechanism of action?",
+          options: ["It selectively inhibits COX-2", "It irreversibly inhibits COX-1 and COX-2 via acetylation", "It does not affect platelets", "It acts centrally only"],
+          correct: 1, hint: "Aspirin permanently modifies COX." },
+        { module: "NSAIDs", question: "How long does the antiplatelet effect of Aspirin last?",
+          options: ["4-6 hours", "24 hours", "7-10 days", "Until renal excretion"],
+          correct: 2, hint: "Platelets have no nucleus." },
+        { module: "NSAIDs", question: "Low dose Aspirin (75-81 mg/day) is primarily used for:",
+          options: ["Anti-inflammatory effect", "Analgesia", "Antiplatelet prophylaxis", "Antipyresis"],
+          correct: 2, hint: "Low doses are not anti-inflammatory." },
+        { module: "NSAIDs", question: "Selective COX-2 inhibitors like Celecoxib have an advantage over non-selective NSAIDs regarding:",
+          options: ["Cardiovascular safety", "GI toxicity (Ulcers/Bleeding)", "Renal safety", "Cost"],
+          correct: 1, hint: "COX-2 is not in the stomach." },
+        { module: "NSAIDs", question: "What is a major disadvantage of selective COX-2 inhibitors?",
+          options: ["Increased risk of GI ulcers", "Potential increased risk of Cardiovascular events (Thrombosis)", "Lack of analgesic effect", "Severe sedation"],
+          correct: 1, hint: "COX-2 inhibition affects vascular prostacyclin." },
+        { module: "NSAIDs", question: "Paracetamol differs from true NSAIDs because it has:",
+          options: ["Strong anti-inflammatory activity", "Weak/No Anti-inflammatory effect", "Irreversible COX inhibition", "Significant GI toxicity"],
+          correct: 1, hint: "Paracetamol works centrally." },
+        { module: "NSAIDs", question: "Why is Paracetamol preferred over Aspirin for fever in children?",
+          options: ["It is more effective", "It does not cause Reye's Syndrome", "It has stronger anti-inflammatory action", "It prevents seizures"],
+          correct: 1, hint: "Aspirin + viral infection = risk." },
+        { module: "NSAIDs", question: "Diflunisal is an NSAID that lacks which therapeutic effect?",
+          options: ["Analgesic", "Anti-inflammatory", "Antipyretic", "Antiplatelet"],
+          correct: 2, hint: "It does not cross the BBB." },
+        { module: "NSAIDs", question: "GI toxicity from NSAIDs is caused by inhibition of COX-1 leading to decreased secretion of:",
+          options: ["Hydrochloric acid", "Protective Prostaglandins (PGE2, PGI2), Mucus, and Bicarbonate", "Pepsinogen", "Intrinsic factor"],
+          correct: 1, hint: "COX-1 protects the stomach." },
+        { module: "NSAIDs", question: "Which drug is a PGE1 analog used to prevent NSAID-induced gastric ulcers?",
+          options: ["Omeprazole", "Misoprostol", "Ranitidine", "Sucralfate"],
+          correct: 1, hint: "It replaces lost prostaglandins." },
+        { module: "NSAIDs", question: "Proton Pump Inhibitors (PPIs) like Omeprazole protect against NSAID gastropathy by:",
+          options: ["Increasing mucus secretion", "Decreasing gastric acid secretion", "Neutralizing stomach acid", "Coating the ulcer"],
+          correct: 1, hint: "PPIs block acid pumps." },
+        { module: "NSAIDs", question: "Physiological Prostaglandins (PGE2, PGI2) maintain Renal Blood Flow (RBF) by causing vasodilation of:",
+          options: ["Efferent Arterioles", "Afferent Arterioles", "Glomerular capillaries", "Peritubular capillaries"],
+          correct: 1, hint: "They dilate the entry vessels." },
+        { module: "NSAIDs", question: "NSAID-induced Acute Kidney Injury (AKI) is most likely to occur in patients with:",
+          options: ["Hypertension", "Dehydration/Hypovolemia", "Diabetes", "Obesity"],
+          correct: 1, hint: "Volume depletion increases risk." },
+        { module: "NSAIDs", question: "Mild Salicylate toxicity (>30mg/dL) typically presents with:",
+          options: ["Coma", "Tinnitus and Hyperventilation", "Jaundice", "Seizures"],
+          correct: 1, hint: "Ear ringing is a classic sign." },
+        { module: "NSAIDs", question: "Management of severe Aspirin overdose involves alkalinization of urine using:",
+          options: ["Ammonium Chloride", "Sodium Bicarbonate", "Acetic Acid", "Normal Saline"],
+          correct: 1, hint: "Alkaline urine traps aspirin." },
+        { module: "NSAIDs", question: "The toxic metabolite of Paracetamol produced by CYP450 is:",
+          options: ["Glucuronide", "Sulfate", "NAPQI", "Acetate"],
+          correct: 2, hint: "It is the hepatotoxic intermediate." },
+        { module: "NSAIDs", question: "The specific antidote for Paracetamol overdose is:",
+          options: ["Atropine", "N-acetylcysteine (NAC)", "Flumazenil", "Protamine Sulfate"],
+          correct: 1, hint: "It contains a sulfhydryl group." },
+
+        // -------- OPIOIDS (25) --------
+        { module: "Opioids", question: "The primary analgesic effect of opioids is mediated by which receptor?",
+          options: ["Kappa (κ)", "Delta (δ)", "Mu (μ)", "Sigma (σ)"],
+          correct: 2, hint: "This receptor is the main target for morphine." },
+        { module: "Opioids", question: "Opioids inhibit pain transmission presynaptically by decreasing influx of which ion?",
+          options: ["Potassium (K+)", "Sodium (Na+)", "Calcium (Ca²+)", "Chloride (Cl-)"],
+          correct: 2, hint: "This ion is needed for neurotransmitter release." },
+        { module: "Opioids", question: "Postsynaptically, opioids cause hyperpolarization by increasing efflux of which ion?",
+          options: ["Calcium (Ca²+)", "Potassium (K+)", "Magnesium (Mg²+)", "Sodium (Na+)"],
+          correct: 1, hint: "K+ efflux hyperpolarizes the cell." },
+        { module: "Opioids", question: "Morphine relieves severe pain without causing:",
+          options: ["Euphoria", "Loss of consciousness", "Constipation", "Miosis"],
+          correct: 1, hint: "It is analgesic but not a general anesthetic." },
+        { module: "Opioids", question: "The most dangerous side effect of Morphine is:",
+          options: ["Constipation", "Respiratory Depression", "Pruritus", "Urinary Retention"],
+          correct: 1, hint: "This is the leading cause of death in overdose." },
+        { module: "Opioids", question: "Morphine-induced respiratory depression results from decreased sensitivity of the respiratory center to:",
+          options: ["Oxygen", "Carbon Dioxide (CO2)", "Nitrogen", "Hydrogen ions"],
+          correct: 1, hint: "CO2 is the main respiratory stimulus." },
+        { module: "Opioids", question: "Pinpoint pupils (Miosis) are a diagnostic sign of:",
+          options: ["Cocaine overdose", "Opioid overdose", "Atropine poisoning", "Alcohol intoxication"],
+          correct: 1, hint: "Opioids constrict the pupils." },
+        { module: "Opioids", question: "Morphine causes constipation by:",
+          options: ["Increasing GI motility", "Decreasing GI motility and increasing sphincter tone", "Inhibiting water absorption", "Stimulating bile secretion"],
+          correct: 1, hint: "It slows down the gut." },
+        { module: "Opioids", question: "Histamine release by Morphine can cause itching and is contraindicated in patients with:",
+          options: ["Hypertension", "Asthma", "Diabetes", "Epilepsy"],
+          correct: 1, hint: "Histamine causes bronchoconstriction." },
+        { module: "Opioids", question: "IV Morphine is useful in Acute Pulmonary Edema because it reduces anxiety and:",
+          options: ["Increases heart rate", "Preload via vasodilation", "Afterload via vasoconstriction", "Contractility"],
+          correct: 1, hint: "It reduces venous return." },
+        { module: "Opioids", question: "Fentanyl is approximately how many times more potent than Morphine?",
+          options: ["10x", "50x", "100x", "500x"],
+          correct: 2, hint: "It's very potent." },
+        { module: "Opioids", question: "Fentanyl is often used in cardiac surgery because it provides:",
+          options: ["Stable hemodynamics", "Profound hypotension", "Tachycardia", "Bronchodilation"],
+          correct: 0, hint: "It is cardiovascularly stable." },
+        { module: "Opioids", question: "Meperidine (Pethidine) has a toxic metabolite called Normeperidine which can cause:",
+          options: ["Respiratory depression", "Seizures/Tremors", "Constipation", "Miosis"],
+          correct: 1, hint: "It is a CNS stimulant." },
+        { module: "Opioids", question: "Meperidine is absolutely contraindicated with MAO Inhibitors due to risk of:",
+          options: ["Hypotensive crisis", "Hyperpyrexic Coma/Serotonin Syndrome", "Renal failure", "Hepatotoxicity"],
+          correct: 1, hint: "MAOIs increase serotonin." },
+        { module: "Opioids", question: "Codeine is primarily used clinically as an:",
+          options: ["Analgesic for severe pain", "Antitussive (Cough suppressant)", "Anti-diarrheal", "Anesthetic adjunct"],
+          correct: 1, hint: "It's good for cough." },
+        { module: "Opioids", question: "Partial agonists exhibit a 'Ceiling Effect' for which side effect?",
+          options: ["Analgesia", "Respiratory depression", "Constipation", "Sedation"],
+          correct: 1, hint: "Respiratory depression is limited." },
+        { module: "Opioids", question: "Buprenorphine is administered via which route for detoxification?",
+          options: ["Intravenous", "Sublingual", "Intramuscular", "Transdermal patch only"],
+          correct: 1, hint: "It is given under the tongue." },
+        { module: "Opioids", question: "Naloxone is used clinically for:",
+          options: ["Maintenance therapy", "Emergency reversal of Opioid Overdose", "Pain management", "Treating addiction long-term"],
+          correct: 1, hint: "It's an antidote." },
+        { module: "Opioids", question: "The duration of action of Naloxone is approximately:",
+          options: ["30-90 minutes", "4-6 hours", "24 hours", "72 hours"],
+          correct: 0, hint: "It's short-acting." },
+        { module: "Opioids", question: "Naltrexone is used for:",
+          options: ["Acute overdose reversal", "Maintenance therapy to prevent relapse", "Analgesia", "Sedation"],
+          correct: 1, hint: "It's long-acting." },
+        { module: "Opioids", question: "Symptoms of Opioid Withdrawal include all EXCEPT:",
+          options: ["Anxiety and Insomnia", "Dilated Pupils (Mydriasis)", "Diarrhea and Vomiting", "Miosis (Pinpoint pupils)"],
+          correct: 3, hint: "Opioids cause miosis, not withdrawal." },
+        { module: "Opioids", question: "Methadone is preferred for detoxification because it is:",
+          options: ["Short-acting", "Long-acting and well-absorbed orally", "Non-addictive", "A pure antagonist"],
+          correct: 1, hint: "It's used for maintenance." },
+        { module: "Opioids", question: "Which opioid is preferred for analgesia in patients with asthma?",
+          options: ["Morphine", "Codeine", "Fentanyl", "Meperidine"],
+          correct: 2, hint: "It does not release histamine." },
+        { module: "Opioids", question: "Which opioid causes pupillary dilation (mydriasis) rather than miosis?",
+          options: ["Morphine", "Fentanyl", "Meperidine", "Codeine"],
+          correct: 2, hint: "It has atropine-like effects." },
+        { module: "Opioids", question: "Combining Opioids with CNS depressants like Benzodiazepines can lead to:",
+          options: ["Enhanced analgesia", "Synergistic Respiratory Depression and Death", "Increased alertness", "Reduced tolerance"],
+          correct: 1, hint: "Both depress respiration." },
+
+        // -------- ANTIPSYCHOTICS (25) --------
+        { module: "Antipsychotics", question: "Positive symptoms of Schizophrenia include:",
+          options: ["Blunted affect and apathy", "Hallucinations and Delusions", "Social withdrawal", "Cognitive impairment"],
+          correct: 1, hint: "They are 'positive' additions to experience." },
+        { module: "Antipsychotics", question: "Negative symptoms of Schizophrenia respond better to:",
+          options: ["Typical antipsychotics", "Atypical antipsychotics", "Benzodiazepines", "Mood stabilizers"],
+          correct: 1, hint: "Atypicals are better for negative symptoms." },
+        { module: "Antipsychotics", question: "Typical (First-Generation) antipsychotics primarily block which receptor?",
+          options: ["Serotonin 5-HT2A", "Dopamine D2", "Histamine H1", "Muscarinic M1"],
+          correct: 1, hint: "They are D2 blockers." },
+        { module: "Antipsychotics", question: "High potency typical antipsychotics like Haloperidol are associated with higher risk of:",
+          options: ["Sedation", "Extrapyramidal Symptoms (EPS)", "Hypotension", "Anticholinergic effects"],
+          correct: 1, hint: "They cause more movement disorders." },
+        { module: "Antipsychotics", question: "Atypical antipsychotics block both Dopamine D2 and which other receptor?",
+          options: ["Histamine H1", "Serotonin 5-HT2A", "Alpha-adrenergic", "Muscarinic"],
+          correct: 1, hint: "They act on serotonin too." },
+        { module: "Antipsychotics", question: "Psychosis is hypothesized to result from excessive Dopamine activity in which pathway?",
+          options: ["Nigrostriatal", "Mesolimbic", "Tuberoinfundibular", "Mesocortical"],
+          correct: 1, hint: "This pathway is involved in reward/emotion." },
+        { module: "Antipsychotics", question: "Blocking Dopamine receptors in the Nigrostriatal pathway causes:",
+          options: ["Therapeutic effect", "Extrapyramidal Symptoms (EPS)", "Hyperprolactinemia", "Sedation"],
+          correct: 1, hint: "This pathway controls movement." },
+        { module: "Antipsychotics", question: "Blocking Dopamine receptors in the Tuberoinfundibular pathway leads to:",
+          options: ["EPS", "Hyperprolactinemia", "Worsening negative symptoms", "Anti-emetic effect"],
+          correct: 1, hint: "This pathway regulates prolactin." },
+        { module: "Antipsychotics", question: "Hyperprolactinemia manifests as all EXCEPT:",
+          options: ["Galactorrhea", "Amenorrhea", "Gynecomastia", "Akathisia"],
+          correct: 3, hint: "Akathisia is an EPS symptom." },
+        { module: "Antipsychotics", question: "Why do Atypicals have fewer EPS compared to Typicals?",
+          options: ["They don't block D2 receptors", "5-HT2A blockade increases dopamine in Nigrostriatal pathway", "They block Muscarinic receptors strongly", "They are metabolized faster"],
+          correct: 1, hint: "Serotonin antagonism helps." },
+        { module: "Antipsychotics", question: "Antipsychotics are effective anti-emetics because they block D2 receptors in the:",
+          options: ["Vestibular apparatus", "Chemoreceptor Trigger Zone (CTZ)", "Vagus nerve", "Cortex"],
+          correct: 1, hint: "The CTZ is the vomiting center." },
+        { module: "Antipsychotics", question: "Antipsychotics are NOT effective for treating:",
+          options: ["Motion sickness", "Drug-induced vomiting", "Radiation-induced nausea", "Post-op nausea"],
+          correct: 0, hint: "Motion sickness is different." },
+        { module: "Antipsychotics", question: "Acute Dystonia is treated with:",
+          options: ["Dopamine agonists", "Anticholinergics (Benztropine)", "Beta-blockers", "Benzodiazepines"],
+          correct: 1, hint: "Anticholinergics balance dopamine." },
+        { module: "Antipsychotics", question: "Tardive Dyskinesia is believed to be caused by:",
+          options: ["Dopamine deficiency", "Upregulation/supersensitivity of Dopamine receptors", "Serotonin excess", "Acetylcholine deficiency"],
+          correct: 1, hint: "It is a compensatory change." },
+        { module: "Antipsychotics", question: "Which drug has the lowest risk of Tardive Dyskinesia?",
+          options: ["Haloperidol", "Fluphenazine", "Clozapine", "Chlorpromazine"],
+          correct: 2, hint: "It's an atypical." },
+        { module: "Antipsychotics", question: "Neuroleptic Malignant Syndrome (NMS) presents with severe muscle rigidity and:",
+          options: ["Hypothermia", "High Fever (Hyperthermia)", "Bradycardia", "Hypertension only"],
+          correct: 1, hint: "It is a hyperthermic emergency." },
+        { module: "Antipsychotics", question: "Treatment for NMS includes stopping the drug and administering:",
+          options: ["Haloperidol", "Dantrolene or Bromocriptine", "Lorazepam", "Propranolol"],
+          correct: 1, hint: "Dantrolene is a muscle relaxant." },
+        { module: "Antipsychotics", question: "Sedation from antipsychotics is primarily due to blockade of which receptor?",
+          options: ["Dopamine D2", "Histamine H1", "Serotonin 5-HT2A", "Alpha-adrenergic"],
+          correct: 1, hint: "Antihistamines cause sedation." },
+        { module: "Antipsychotics", question: "Orthostatic hypotension from antipsychotics is caused by blockade of:",
+          options: ["Muscarinic receptors", "Alpha-Adrenergic receptors", "Histamine receptors", "Dopamine receptors"],
+          correct: 1, hint: "Alpha blockers cause hypotension." },
+        { module: "Antipsychotics", question: "Weight gain and metabolic syndrome are highest risk with:",
+          options: ["Haloperidol", "Risperidone", "Olanzapine and Clozapine", "Ziprasidone"],
+          correct: 2, hint: "These are atypicals." },
+        { module: "Antipsychotics", question: "Clozapine requires regular blood monitoring due to risk of:",
+          options: ["Hepatotoxicity", "Agranulocytosis", "Nephrotoxicity", "Cardiomyopathy"],
+          correct: 1, hint: "It affects WBCs." },
+        { module: "Antipsychotics", question: "Chlorpromazine can cause ocular toxicity manifested as deposits in the:",
+          options: ["Retina", "Cornea/Lens", "Optic nerve", "Vitreous humor"],
+          correct: 1, hint: "It affects the eye surface." },
+        { module: "Antipsychotics", question: "Antipsychotics lower the seizure threshold and should be used with caution in patients with:",
+          options: ["Hypertension", "Epilepsy", "Diabetes", "Asthma"],
+          correct: 1, hint: "They can precipitate seizures." },
+        { module: "Antipsychotics", question: "Levodopa/Dopamine agonists interact with antipsychotics by:",
+          options: ["Enhancing antipsychotic effect", "Having their effect blocked/worsening Parkinson's", "Causing serotonin syndrome", "Increasing sedation"],
+          correct: 1, hint: "Antipsychotics block dopamine." },
+        { module: "Antipsychotics", question: "Which antipsychotic is associated with the highest risk of agranulocytosis?",
+          options: ["Haloperidol", "Clozapine", "Olanzapine", "Quetiapine"],
+          correct: 1, hint: "It requires regular blood monitoring." },
+
+        // -------- ANTIEPILEPTICS (25) --------
+        { module: "Antiepileptics", question: "Simple Partial seizures are characterized by:",
+          options: ["Loss of consciousness", "No loss of consciousness", "Generalized tonic-clonic movements", "Absence spells"],
+          correct: 1, hint: "They are focal, not generalized." },
+        { module: "Antiepileptics", question: "Complex Partial seizures often involve:",
+          options: ["Intact awareness", "Impaired consciousness and automatisms", "Brief staring spells only", "High fever"],
+          correct: 1, hint: "They affect awareness." },
+        { module: "Antiepileptics", question: "Generalized Tonic-Clonic seizures consist of a stiffening phase followed by:",
+          options: ["Relaxation", "Jerking movements (Clonic phase)", "Absence", "Myoclonus"],
+          correct: 1, hint: "Tonic then clonic." },
+        { module: "Antiepileptics", question: "Absence seizures (Petit Mal) typically last for:",
+          options: ["Several minutes", "3-5 seconds", "Hours", "Days"],
+          correct: 1, hint: "They are brief." },
+        { module: "Antiepileptics", question: "Febrile seizures occur in children aged:",
+          options: ["Newborns only", "3 months - 5 years", "6-12 years", "Adolescents"],
+          correct: 1, hint: "Young children with fever." },
+        { module: "Antiepileptics", question: "Status Epilepticus is defined as continuous seizure activity lasting longer than:",
+          options: ["1 minute", "5 minutes", "30 minutes", "1 hour"],
+          correct: 1, hint: "It's a medical emergency." },
+        { module: "Antiepileptics", question: "Phenytoin and Carbamazepine work primarily by blocking:",
+          options: ["T-type Calcium channels", "Sodium (Na+) channels", "GABA receptors", "Glutamate receptors"],
+          correct: 1, hint: "They stabilize neuronal membranes." },
+        { module: "Antiepileptics", question: "Ethosuximide is the drug of choice for Absence seizures because it blocks:",
+          options: ["Na+ channels", "T-type Ca++ channels", "GABA transaminase", "NMDA receptors"],
+          correct: 1, hint: "It acts on T-type calcium channels." },
+        { module: "Antiepileptics", question: "Benzodiazepines enhance GABA action by increasing the frequency of opening of which channel?",
+          options: ["Sodium", "Calcium", "Chloride (Cl-)", "Potassium"],
+          correct: 2, hint: "GABA opens chloride channels." },
+        { module: "Antiepileptics", question: "Phenobarbital enhances GABA action by increasing the duration of opening of which channel?",
+          options: ["Sodium", "Chloride (Cl-)", "Calcium", "Magnesium"],
+          correct: 1, hint: "Barbiturates prolong channel opening." },
+        { module: "Antiepileptics", question: "Topiramate and Lamotrigine reduce excitatory neurotransmission by inhibiting:",
+          options: ["GABA", "Glutamate", "Glycine", "Dopamine"],
+          correct: 1, hint: "They block excitatory signals." },
+        { module: "Antiepileptics", question: "General principle of epilepsy treatment recommends starting with:",
+          options: ["Two drugs simultaneously", "Monotherapy", "High dose immediately", "IV therapy"],
+          correct: 1, hint: "One drug first." },
+        { module: "Antiepileptics", question: "Abrupt withdrawal of AEDs can precipitate:",
+          options: ["Tolerance", "Status Epilepticus", "Sedation", "Hypertension"],
+          correct: 1, hint: "Sudden stop is dangerous." },
+        { module: "Antiepileptics", question: "Ataxia in AED therapy indicates toxicity affecting the:",
+          options: ["Frontal lobe", "Cerebellum", "Temporal lobe", "Brainstem"],
+          correct: 1, hint: "Ataxia is a cerebellar sign." },
+        { module: "Antiepileptics", question: "Stevens-Johnson syndrome is a serious rash associated with:",
+          options: ["Valproate", "Carbamazepine or Lamotrigine", "Gabapentin", "Levetiracetam"],
+          correct: 1, hint: "These drugs can cause severe rash." },
+        { module: "Antiepileptics", question: "Hyponatremia is a specific side effect of:",
+          options: ["Phenytoin", "Carbamazepine or Oxcarbazepine", "Ethosuximide", "Gabapentin"],
+          correct: 1, hint: "Carbamazepine can lower sodium." },
+        { module: "Antiepileptics", question: "Weight gain is commonly associated with which AED?",
+          options: ["Topiramate", "Valproate", "Zonisamide", "Lamotrigine"],
+          correct: 1, hint: "Valproate causes weight gain." },
+        { module: "Antiepileptics", question: "Weight loss is a side effect of which AED?",
+          options: ["Valproate", "Topiramate", "Carbamazepine", "Phenobarbital"],
+          correct: 1, hint: "Topiramate can cause weight loss." },
+        { module: "Antiepileptics", question: "Teratogenicity (Spina Bifida) is a major concern with:",
+          options: ["Levetiracetam", "Valproate", "Lamotrigine", "Gabapentin"],
+          correct: 1, hint: "Valproate is teratogenic." },
+        { module: "Antiepileptics", question: "Diazepam and Lorazepam are preferred for Status Epilepticus because they are given:",
+          options: ["Orally", "Intravenously (IV) for rapid onset", "Intramuscularly", "Rectally only"],
+          correct: 1, hint: "IV is fastest." },
+        { module: "Antiepileptics", question: "Carbamazepine is first-line for all EXCEPT:",
+          options: ["Simple partial seizures", "Complex partial seizures", "Tonic-clonic seizures", "Absence seizures"],
+          correct: 3, hint: "Absence needs a different drug." },
+        { module: "Antiepileptics", question: "The active epoxide metabolite of Carbamazepine can cause:",
+          options: ["Gingival hyperplasia", "Aplastic anemia and leukopenia", "Hirsutism", "Gum hypertrophy"],
+          correct: 1, hint: "It affects blood cells." },
+        { module: "Antiepileptics", question: "Valproic Acid increases GABA levels by inhibiting:",
+          options: ["GABA synthesis", "GABA transaminase", "GABA reuptake", "GABA receptors"],
+          correct: 1, hint: "It blocks GABA breakdown." },
+        { module: "Antiepileptics", question: "Valproic Acid is considered a broad-spectrum AED because it is effective in:",
+          options: ["Partial seizures only", "All types of epilepsy including Absence", "Status epilepticus only", "Neonatal seizures only"],
+          correct: 1, hint: "It works for many seizure types." },
+        { module: "Antiepileptics", question: "Signs of Phenytoin toxicity include Nystagmus, Ataxia, and:",
+          options: ["Miosis", "Diplopia", "Mydriasis", "Ptosis"],
+          correct: 1, hint: "Double vision is common." }
+    ];
+
+    // =====================================================================
+    //  QUIZ ENGINE
+    // =====================================================================
+
+    const state = {
+        current: 0,
+        answers: new Array(questions.length).fill(null), // selected option index
+        total: questions.length
+    };
+
+    const DOM = {
+        questionText: document.getElementById('questionText'),
+        optionsContainer: document.getElementById('optionsContainer'),
+        hintBox: document.getElementById('hintBox'),
+        counter: document.getElementById('counter'),
+        progressFill: document.getElementById('progressFill'),
+        moduleTag: document.getElementById('moduleTag'),
+        prevBtn: document.getElementById('prevBtn'),
+        nextBtn: document.getElementById('nextBtn'),
+        hintBtn: document.getElementById('hintBtn'),
+        submitBtn: document.getElementById('submitBtn'),
+        answeredCount: document.getElementById('answeredCount'),
+        totalCount: document.getElementById('totalCount'),
+        quizArea: document.getElementById('quizArea'),
+        resultsArea: document.getElementById('resultsArea'),
+        finalScore: document.getElementById('finalScore'),
+        finalDetails: document.getElementById('finalDetails'),
+        reviewContainer: document.getElementById('reviewContainer'),
+        restartBtn: document.getElementById('restartBtn')
+    };
+
+    let hintActive = false;
+
+    function renderQuestion() {
+        const idx = state.current;
+        const q = questions[idx];
+        const selected = state.answers[idx];
+
+        DOM.counter.textContent = `${idx+1} / ${state.total}`;
+        DOM.progressFill.style.width = `${((idx+1)/state.total)*100}%`;
+        DOM.moduleTag.textContent = q.module;
+        DOM.questionText.textContent = q.question;
+
+        // Render options
+        DOM.optionsContainer.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            if (selected === i) div.classList.add('selected');
+            div.textContent = `${String.fromCharCode(65+i)}. ${opt}`;
+            div.dataset.index = i;
+            div.addEventListener('click', () => selectOption(i));
+            DOM.optionsContainer.appendChild(div);
+        });
+
+        // Hint
+        DOM.hintBox.classList.remove('visible');
+        hintActive = false;
+
+        // Count answered
+        const answered = state.answers.filter(a => a !== null).length;
+        DOM.answeredCount.textContent = answered;
+        DOM.totalCount.textContent = state.total;
+
+        // Buttons
+        DOM.prevBtn.disabled = idx === 0;
+        DOM.nextBtn.disabled = idx === state.total - 1;
+        DOM.submitBtn.disabled = selected !== null;
+    }
+
+    function selectOption(index) {
+        const idx = state.current;
+        if (state.answers[idx] !== null) return; // already answered
+
+        state.answers[idx] = index;
+
+        // Visual feedback: highlight selected
+        const options = DOM.optionsContainer.querySelectorAll('.option');
+        options.forEach((el, i) => {
+            el.classList.toggle('selected', i === index);
+        });
+
+        DOM.submitBtn.disabled = false;
+        const answered = state.answers.filter(a => a !== null).length;
+        DOM.answeredCount.textContent = answered;
+    }
+
+    function showHint() {
+        const q = questions[state.current];
+        DOM.hintBox.textContent = '💡 ' + q.hint;
+        DOM.hintBox.classList.add('visible');
+        hintActive = true;
+    }
+
+    function goTo(index) {
+        if (index < 0 || index >= state.total) return;
+        state.current = index;
+        renderQuestion();
+    }
+
+    function finishExam() {
+        const answered = state.answers.filter(a => a !== null).length;
+        if (answered < state.total) {
+            if (!confirm(`You have answered ${answered} out of ${state.total}. Submit anyway?`)) return;
+        }
+
+        let correct = 0;
+        let wrongList = [];
+
+        questions.forEach((q, i) => {
+            const userAns = state.answers[i];
+            if (userAns === null) {
+                wrongList.push({ ...q, userAns: null, isCorrect: false });
+                return;
+            }
+            if (userAns === q.correct) {
+                correct++;
+            } else {
+                wrongList.push({ ...q, userAns: userAns, isCorrect: false });
+            }
+        });
+
+        const pct = Math.round((correct / state.total) * 100);
+
+        DOM.finalScore.textContent = pct + '%';
+        DOM.finalDetails.textContent = `${correct} correct out of ${state.total}`;
+
+        // Build review
+        let html = '';
+        wrongList.forEach((q, i) => {
+            const userText = q.userAns !== null ? q.options[q.userAns] : 'Not answered';
+            const correctText = q.options[q.correct];
+            html += `
+                <div class="review-item wrong">
+                    <div class="q">${i+1}. ${q.module}: ${q.question}</div>
+                    <div class="your-answer">❌ Your answer: ${userText}</div>
+                    <div class="correct-answer">✅ Correct answer: ${correctText}</div>
+                    <div class="explanation">💡 ${q.hint}</div>
+                </div>
+            `;
+        });
+
+        if (wrongList.length === 0) {
+            html = `<div style="text-align:center; padding:20px; background:#d4edda; border-radius:16px; font-size:18px;">🎉 Perfect score! You got all 100 correct!</div>`;
+        }
+
+        DOM.reviewContainer.innerHTML = html;
+
+        DOM.quizArea.classList.add('hidden');
+        DOM.resultsArea.classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function restartExam() {
+        state.answers = new Array(state.total).fill(null);
+        state.current = 0;
+        DOM.quizArea.classList.remove('hidden');
+        DOM.resultsArea.classList.remove('visible');
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =====================================================================
+    //  EVENT LISTENERS
+    // =====================================================================
+
+    DOM.prevBtn.addEventListener('click', () => goTo(state.current - 1));
+    DOM.nextBtn.addEventListener('click', () => goTo(state.current + 1));
+    DOM.hintBtn.addEventListener('click', showHint);
+    DOM.submitBtn.addEventListener('click', finishExam);
+    DOM.restartBtn.addEventListener('click', restartExam);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (!DOM.quizArea.classList.contains('hidden')) {
+            if (e.key === 'ArrowLeft') goTo(state.current - 1);
+            if (e.key === 'ArrowRight') goTo(state.current + 1);
+            if (e.key === 'h' || e.key === 'H') showHint();
+            if (e.key === 'Enter') {
+                const selected = state.answers[state.current];
+                if (selected !== null) finishExam();
+            }
+            if (e.key >= '1' && e.key <= '4') {
+                const idx = parseInt(e.key) - 1;
+                const opt = DOM.optionsContainer.querySelectorAll('.option')[idx];
+                if (opt && state.answers[state.current] === null) selectOption(idx);
+            }
+        }
+    });
+
+    // =====================================================================
+    //  INIT
+    // =====================================================================
+
+    renderQuestion();
+</script>
+</body>
+</html>
